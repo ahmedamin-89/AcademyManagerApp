@@ -22,6 +22,21 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-font",
+      {
+        "fonts": [
+          "./assets/fonts/CondensedBlack.ttf",
+          "./assets/fonts/CondensedLight.ttf",
+          "./assets/fonts/ExpandedBlack.ttf",
+          "./assets/fonts/NormalBlack.ttf",
+          "./assets/fonts/SemiExpandedBlack.ttf",
+          "./assets/fonts/UltraCondensedBlack.ttf",
+          "./assets/fonts/UltraCondensedBold.ttf",
+          "./assets/fonts/UltraCondensedMedium.ttf"
+        ]
+      }
+    ]
   }
 }
