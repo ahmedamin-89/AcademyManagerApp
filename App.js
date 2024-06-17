@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { ImageBackground, Pressable, StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -9,8 +8,11 @@ import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import Header from "./components/UI/Header/Header";
+import ClubScreen from "./screens/ClubScreen";
+import backgroundImage from "./assets/images/bg.jpg";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -27,7 +29,7 @@ const TabNavigator = () => {
       case "Home2":
         iconName = focused ? "calendar" : "calendar-outline";
         break;
-      case "Home3":
+      case "Club":
         iconName = focused ? "people" : "people-outline";
         break;
       case "Home4":
@@ -65,6 +67,7 @@ const TabNavigator = () => {
           backgroundColor:
             selectedTab === route.name ? "#fff" : colorScheme.black,
         },
+
         tabBarIcon: ({ color, size, focused }) =>
           renderIcon(route, color, size, focused),
         tabBarButton: (props) => (
@@ -76,6 +79,8 @@ const TabNavigator = () => {
             }}
           />
         ),
+
+        header: () => <Header />,
       })}
       sceneContainerStyle={{
         backgroundColor: colorScheme.black,
@@ -92,8 +97,8 @@ const TabNavigator = () => {
         options={{ tabBarLabel: "Schedule" }}
       />
       <Tab.Screen
-        name="Home3"
-        component={HomeScreen}
+        name="Club"
+        component={ClubScreen}
         options={{ tabBarLabel: "Club" }}
       />
       <Tab.Screen
@@ -111,9 +116,7 @@ const StackNavigator = () => {
       screenOptions={{
         headerShown: false,
       }}
-      sceneContainerStyle={{
-        backgroundColor: colorScheme.black,
-      }}
+      sceneContainerStyle={{}}
     >
       <Stack.Screen name="Tab" component={TabNavigator} />
     </Stack.Navigator>
@@ -132,28 +135,21 @@ export default function App() {
     "Ultra-Condensed-Medium": require("./assets/fonts/UltraCondensedMedium.ttf"),
   });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded || fontError) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded, fontError]);
-
   if (!fontsLoaded && !fontError) {
     return null;
   }
 
   return (
     <NavigationContainer>
-      <StackNavigator />
+      <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
+        <StackNavigator />
+      </ImageBackground>
     </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  backgroundImage: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
   },
 });
