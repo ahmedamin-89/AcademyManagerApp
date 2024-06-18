@@ -12,7 +12,7 @@ import backgroundImage from "../assets/images/bg.jpg";
 
 const HomeScreen = () => {
   return (
-    <ScrollView contentStyle={styles.container}>
+    <ScrollView style={styles.container}>
       <HomeStats />
     </ScrollView>
   );
@@ -23,7 +23,6 @@ export default HomeScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     // justifyContent: "center",
     // make the image centered
     padding: 10,
