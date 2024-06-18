@@ -8,7 +8,7 @@ import {
 import React from "react";
 import kids from "../../assets/images/hussein.png";
 
-const ViewPlayersCard = () => {
+const ViewPlayersCard = ({}) => {
   return (
     <Pressable
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
-    fontSize: 41,
+    fontSize: 44,
     fontWeight: "bold",
     fontFamily: "Ultra-Condensed-Black",
   },

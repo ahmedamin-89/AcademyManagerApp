@@ -2,14 +2,19 @@ import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import ViewPlayersCard from "../components/Club/ViewPlayersCard";
 import SecondaryClubCard from "../components/Club/SecondaryClubCard";
-import backgroundImage from "../assets/images/bg.png";
+import coachBackgroundImage from "../assets/images/coaches.png";
+import teamBackgroundImage from "../assets/images/teamPic.png";
+
 const ClubScreen = () => {
   return (
     <View style={styles.container}>
       <ViewPlayersCard />
       <View style={styles.secondaryCards}>
-        <SecondaryClubCard text="Teams" />
-        <SecondaryClubCard text="Coaches" />
+        <SecondaryClubCard backgroundImage={teamBackgroundImage} text="Teams" />
+        <SecondaryClubCard
+          backgroundImage={coachBackgroundImage}
+          text="Coaches"
+        />
       </View>
     </View>
   );

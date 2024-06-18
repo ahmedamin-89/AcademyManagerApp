@@ -1,10 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { ImageBackground } from "expo-image";
 
-const SecondaryClubCard = ({ text }) => {
+const SecondaryClubCard = ({ text, backgroundImage }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>{text}</Text>
+      <ImageBackground
+        source={backgroundImage}
+        style={styles.imageBackground}
+        contentFit="cover"
+        resizeMode="cover"
+      >
+        <View style={styles.overlay} />
+
+        <Text style={styles.text}>{text}</Text>
+      </ImageBackground>
     </View>
   );
 };
@@ -15,10 +25,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#1e1e1e",
     borderRadius: 10,
-    justifyContent: "center",
-    alignItems: "center",
     flex: 1,
-    padding: 5,
     height: 100,
     shadowColor: "white",
     shadowOffset: { width: 0, height: 1 },
@@ -26,10 +33,24 @@ const styles = StyleSheet.create({
     shadowRadius: 2.84,
     elevation: 5,
   },
+  imageBackground: {
+    flex: 1,
+    width: "100%",
+    borderRadius: 10,
+    overflow: "hidden",
+    padding: 5,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   text: {
     color: "white",
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
     fontFamily: "Condensed-Black",
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "black",
+    opacity: 0.35,
   },
 });
