@@ -6,11 +6,13 @@ import {
   View,
 } from "react-native";
 import React from "react";
-import kids from "../../assets/images/hussein.jpeg";
+import kids from "../../assets/images/hussein.png";
 
 const ViewPlayersCard = () => {
   return (
-    <Pressable style={styles.container}>
+    <Pressable
+      style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
+    >
       <ImageBackground
         source={kids}
         style={styles.imageBackground}
@@ -32,9 +34,9 @@ const styles = StyleSheet.create({
     height: 220,
     borderRadius: 24,
     shadowColor: "white",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.15,
-    shadowRadius: 2.84,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.19,
+    shadowRadius: 3.84,
     elevation: 5,
   },
   imageBackground: {
@@ -51,7 +53,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
-    fontSize: 30,
+    fontSize: 41,
     fontWeight: "bold",
     fontFamily: "Ultra-Condensed-Black",
   },

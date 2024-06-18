@@ -12,7 +12,7 @@ const HomeStats = () => {
     <View style={styles.container}>
       <NumberStatCard
         title="Players"
-        number="25"
+        number="425"
         icon={<Image source={playersIcon} style={{ width: 40, height: 40 }} />}
       />
       <NumberStatCard

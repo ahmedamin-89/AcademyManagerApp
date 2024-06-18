@@ -6,18 +6,11 @@ import backgroundImage from "../assets/images/bg.png";
 const ClubScreen = () => {
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={backgroundImage}
-        resizeMode="cover"
-        style={{ flex: 1, padding: 20, gap: 20 }}
-        imageStyle={{ alignSelf: "center" }}
-      >
-        <ViewPlayersCard />
-        <View style={styles.secondaryCards}>
-          <SecondaryClubCard text="Teams" />
-          <SecondaryClubCard text="Coaches" />
-        </View>
-      </ImageBackground>
+      <ViewPlayersCard />
+      <View style={styles.secondaryCards}>
+        <SecondaryClubCard text="Teams" />
+        <SecondaryClubCard text="Coaches" />
+      </View>
     </View>
   );
 };
@@ -27,6 +20,8 @@ export default ClubScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 12,
+    gap: 20,
   },
   secondaryCards: {
     flexDirection: "row",

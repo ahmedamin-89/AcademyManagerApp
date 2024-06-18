@@ -2,7 +2,7 @@ import { ImageBackground, Pressable, StyleSheet, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./screens/HomeScreen";
+import StaffDashboard from "./screens/Staff/StaffDashboard";
 import colorScheme from "./constants/colorScheme";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState, useCallback } from "react";
@@ -11,6 +11,7 @@ import * as SplashScreen from "expo-splash-screen";
 import Header from "./components/UI/Header/Header";
 import ClubScreen from "./screens/ClubScreen";
 import backgroundImage from "./assets/images/bg.jpg";
+import { StatusBar } from "expo-status-bar";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -88,12 +89,12 @@ const TabNavigator = () => {
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={StaffDashboard}
         options={{ tabBarLabel: "Home" }}
       />
       <Tab.Screen
         name="Home2"
-        component={HomeScreen}
+        component={StaffDashboard}
         options={{ tabBarLabel: "Schedule" }}
       />
       <Tab.Screen
@@ -103,7 +104,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen
         name="Home4"
-        component={HomeScreen}
+        component={StaffDashboard}
         options={{ tabBarLabel: "More" }}
       />
     </Tab.Navigator>
@@ -141,6 +142,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
+      <StatusBar style="light" />
       <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
         <StackNavigator />
       </ImageBackground>
