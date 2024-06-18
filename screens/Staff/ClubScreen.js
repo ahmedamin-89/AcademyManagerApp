@@ -1,9 +1,9 @@
 import { ImageBackground, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import ViewPlayersCard from "../components/Club/ViewPlayersCard";
-import SecondaryClubCard from "../components/Club/SecondaryClubCard";
-import coachBackgroundImage from "../assets/images/coaches.png";
-import teamBackgroundImage from "../assets/images/teamPic.png";
+import SecondaryClubCard from "../../components/Club/SecondaryClubCard";
+import coachBackgroundImage from "../../assets/images/coaches.png";
+import teamBackgroundImage from "../../assets/images/teamPic.png";
+import ViewPlayersCard from "../../components/Club/ViewPlayersCard";
 
 const ClubScreen = () => {
   return (

@@ -7,10 +7,13 @@ import {
 } from "react-native";
 import React from "react";
 import kids from "../../assets/images/hussein.png";
+import { useNavigation } from "@react-navigation/native";
 
 const ViewPlayersCard = ({}) => {
+  const navigation = useNavigation();
   return (
     <Pressable
+      onPress={() => navigation.navigate("Players")}
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
     >
       <ImageBackground
@@ -31,8 +34,8 @@ export default ViewPlayersCard;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "#1e1e1e",
-    height: 220,
-    borderRadius: 24,
+    height: 210,
+    borderRadius: 13,
     shadowColor: "white",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.19,
@@ -41,7 +44,7 @@ const styles = StyleSheet.create({
   },
   imageBackground: {
     flex: 1,
-    borderRadius: 24,
+    borderRadius: 13,
     overflow: "hidden",
     justifyContent: "center",
     alignItems: "center",

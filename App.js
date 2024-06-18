@@ -9,9 +9,10 @@ import React, { useState, useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import Header from "./components/UI/Header/Header";
-import ClubScreen from "./screens/ClubScreen";
+import ClubScreen from "./screens/Staff/ClubScreen";
 import backgroundImage from "./assets/images/bg.jpg";
 import { StatusBar } from "expo-status-bar";
+import PlayersScreen from "./screens/Staff/PlayersScreen";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -116,10 +117,22 @@ const StackNavigator = () => {
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
+        contentStyle: {
+          backgroundColor: colorScheme.black,
+        },
       }}
-      sceneContainerStyle={{}}
+      sceneContainerStyle={{
+        backgroundColor: colorScheme.black,
+      }}
     >
       <Stack.Screen name="Tab" component={TabNavigator} />
+      <Stack.Screen
+        name="Players"
+        options={{
+          headerShown: true,
+        }}
+        component={PlayersScreen}
+      />
     </Stack.Navigator>
   );
 };
@@ -143,15 +156,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <StatusBar style="light" />
-      <ImageBackground source={backgroundImage} style={styles.backgroundImage}>
-        <StackNavigator />
-      </ImageBackground>
+      <StackNavigator />
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  backgroundImage: {
-    flex: 1,
-  },
-});
