@@ -1,4 +1,10 @@
-import { ImageBackground, StyleSheet, Text, View } from "react-native";
+import {
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import React from "react";
 import PlayerCard from "../components/UI/PlayerCard/PlayerCard";
 import HomeStats from "../components/Home/HomeStats";
@@ -6,16 +12,9 @@ import backgroundImage from "../assets/images/bg.jpg";
 
 const HomeScreen = () => {
   return (
-    <View style={styles.container}>
-      {/* <ImageBackground
-        source={backgroundImage}
-        resizeMode="cover"
-        style={styles.bgImage}
-        imageStyle={{ alignSelf: "center" }}
-      > */}
+    <ScrollView contentStyle={styles.container}>
       <HomeStats />
-      {/* </ImageBackground> */}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -27,6 +26,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     // justifyContent: "center",
     // make the image centered
+    padding: 10,
+    paddingTop: 20,
   },
   bgImage: {
     flex: 1,
