@@ -17,6 +17,7 @@ import BackButton from "./components/Buttons/BackButton";
 import ScheduleScreen from "./screens/Staff/ScheduleScreen";
 import PlayerDetailsScreen from "./screens/PlayerDetailsScreen";
 import StaffSettings from "./screens/Staff/StaffSettings";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -179,8 +180,10 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <StatusBar style="light" />
-      <StackNavigator />
+      <GestureHandlerRootView>
+        <StatusBar style="light" />
+        <StackNavigator />
+      </GestureHandlerRootView>
     </NavigationContainer>
   );
 }

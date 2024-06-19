@@ -4,7 +4,9 @@ import { ImageBackground } from "expo-image";
 
 const SecondaryClubCard = ({ text, backgroundImage }) => {
   return (
-    <Pressable style={styles.container}>
+    <Pressable
+      style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
+    >
       <ImageBackground
         source={backgroundImage}
         style={styles.imageBackground}

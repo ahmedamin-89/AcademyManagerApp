@@ -1,4 +1,4 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, View } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import SearchBar from "../../components/UI/SearchBar";
