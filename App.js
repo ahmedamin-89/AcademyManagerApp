@@ -15,6 +15,7 @@ import { StatusBar } from "expo-status-bar";
 import PlayersScreen from "./screens/Staff/PlayersScreen";
 import BackButton from "./components/Buttons/BackButton";
 import ScheduleScreen from "./screens/Staff/ScheduleScreen";
+import PlayerDetailsScreen from "./screens/PlayerDetailsScreen";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -146,6 +147,14 @@ const StackNavigator = () => {
           headerShown: true,
         }}
         component={PlayersScreen}
+      />
+      <Stack.Screen
+        name="PlayerDetails"
+        options={{
+          headerShown: true,
+          title: "Player Details",
+        }}
+        component={PlayerDetailsScreen}
       />
     </Stack.Navigator>
   );

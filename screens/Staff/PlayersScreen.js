@@ -46,7 +46,14 @@ const PlayersScreen = ({ navigation }) => {
           data={playersData}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => {
-            return <PlayerSearchCard {...item} />;
+            return (
+              <PlayerSearchCard
+                onPress={() => {
+                  navigation.navigate("PlayerDetails", { player: item });
+                }}
+                {...item}
+              />
+            );
           }}
         />
       </View>
