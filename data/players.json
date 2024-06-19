@@ -1,0 +1,64 @@
+{
+  "players": [
+    {
+      "id": 1,
+      "name": "Lionel Messi",
+      "position": "Forward",
+      "team": "Paris Saint-Germain"
+    },
+    {
+      "id": 2,
+      "name": "Cristiano Ronaldo",
+      "position": "Forward",
+      "team": "Manchester United"
+    },
+    {
+      "id": 3,
+      "name": "Neymar Jr",
+      "position": "Forward",
+      "team": "Paris Saint-Germain"
+    },
+    {
+      "id": 4,
+      "name": "Kevin De Bruyne",
+      "position": "Midfielder",
+      "team": "Manchester City"
+    },
+    {
+      "id": 5,
+      "name": "Robert Lewandowski",
+      "position": "Striker",
+      "team": "Bayern Munich"
+    },
+    {
+      "id": 6,
+      "name": "Kylian Mbappe",
+      "position": "Forward",
+      "team": "Paris Saint-Germain"
+    },
+    {
+      "id": 7,
+      "name": "Mohamed Salah",
+      "position": "Forward",
+      "team": "Liverpool"
+    },
+    {
+      "id": 8,
+      "name": "Karim Benzema",
+      "position": "Forward",
+      "team": "Real Madrid"
+    },
+    {
+      "id": 9,
+      "name": "Harry Kane",
+      "position": "Forward",
+      "team": "Tottenham Hotspur"
+    },
+    {
+      "id": 10,
+      "name": "Joshua Kimmich",
+      "position": "Midfielder",
+      "team": "Bayern Munich"
+    }
+  ]
+}

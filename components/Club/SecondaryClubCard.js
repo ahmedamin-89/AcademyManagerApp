@@ -1,21 +1,20 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { ImageBackground } from "expo-image";
 
 const SecondaryClubCard = ({ text, backgroundImage }) => {
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container}>
       <ImageBackground
         source={backgroundImage}
         style={styles.imageBackground}
         contentFit="cover"
-        resizeMode="cover"
       >
         <View style={styles.overlay} />
 
         <Text style={styles.text}>{text}</Text>
       </ImageBackground>
-    </View>
+    </Pressable>
   );
 };
 

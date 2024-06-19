@@ -13,6 +13,8 @@ import ClubScreen from "./screens/Staff/ClubScreen";
 import backgroundImage from "./assets/images/bg.jpg";
 import { StatusBar } from "expo-status-bar";
 import PlayersScreen from "./screens/Staff/PlayersScreen";
+import BackButton from "./components/Buttons/BackButton";
+import ScheduleScreen from "./screens/Staff/ScheduleScreen";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -28,7 +30,7 @@ const TabNavigator = () => {
       case "Home":
         iconName = focused ? "home" : "home-outline";
         break;
-      case "Home2":
+      case "Schedule":
         iconName = focused ? "calendar" : "calendar-outline";
         break;
       case "Club":
@@ -94,8 +96,8 @@ const TabNavigator = () => {
         options={{ tabBarLabel: "Home" }}
       />
       <Tab.Screen
-        name="Home2"
-        component={StaffDashboard}
+        name="Schedule"
+        component={ScheduleScreen}
         options={{ tabBarLabel: "Schedule" }}
       />
       <Tab.Screen
@@ -119,6 +121,18 @@ const StackNavigator = () => {
         headerShown: false,
         contentStyle: {
           backgroundColor: colorScheme.black,
+        },
+        headerLeft: () => <BackButton />,
+        headerStyle: {
+          backgroundColor: colorScheme.black,
+          borderBottomColor: "transparent",
+          borderBottomWidth: 0,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        headerTintColor: colorScheme.white,
+        headerTitleStyle: {
+          fontFamily: "Condensed-Black",
         },
       }}
       sceneContainerStyle={{
