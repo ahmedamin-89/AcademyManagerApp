@@ -16,6 +16,7 @@ import PlayersScreen from "./screens/Staff/PlayersScreen";
 import BackButton from "./components/Buttons/BackButton";
 import ScheduleScreen from "./screens/Staff/ScheduleScreen";
 import PlayerDetailsScreen from "./screens/PlayerDetailsScreen";
+import StaffSettings from "./screens/Staff/StaffSettings";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -37,7 +38,7 @@ const TabNavigator = () => {
       case "Club":
         iconName = focused ? "people" : "people-outline";
         break;
-      case "Home4":
+      case "More":
         iconName = focused
           ? "ellipsis-horizontal"
           : "ellipsis-horizontal-outline";
@@ -107,8 +108,8 @@ const TabNavigator = () => {
         options={{ tabBarLabel: "Club" }}
       />
       <Tab.Screen
-        name="Home4"
-        component={StaffDashboard}
+        name="More"
+        component={StaffSettings}
         options={{ tabBarLabel: "More" }}
       />
     </Tab.Navigator>

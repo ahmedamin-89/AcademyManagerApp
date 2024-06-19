@@ -29,7 +29,7 @@ const PlayerSearchCard = ({
         </View>
         <View style={styles.stat}>
           <Text style={[styles.text, styles.statText]}>Pos.</Text>
-          <Text style={[styles.text, styles.statText]}>ST</Text>
+          <Text style={[styles.text, styles.statText]}>{position}</Text>
         </View>
       </View>
       <View
