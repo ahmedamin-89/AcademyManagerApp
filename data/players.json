@@ -3,70 +3,70 @@
     {
       "id": 1,
       "name": "Lionel Messi",
-      "position": "Forward",
+      "position": "CF",
       "team": "Paris Saint-Germain",
       "DOB": 1987
     },
     {
       "id": 2,
       "name": "Cristiano Ronaldo",
-      "position": "Forward",
+      "position": "ST",
       "team": "Manchester United",
       "DOB": 1985
     },
     {
       "id": 3,
       "name": "Neymar Jr",
-      "position": "Forward",
+      "position": "LW",
       "team": "Paris Saint-Germain",
       "DOB": 1992
     },
     {
       "id": 4,
       "name": "Kevin De Bruyne",
-      "position": "Midfielder",
+      "position": "CAM",
       "team": "Manchester City",
       "DOB": 1991
     },
     {
       "id": 5,
       "name": "Robert Lewandowski",
-      "position": "Striker",
+      "position": "ST",
       "team": "Bayern Munich",
       "DOB": 1988
     },
     {
       "id": 6,
       "name": "Kylian Mbappe",
-      "position": "Forward",
+      "position": "RW",
       "team": "Paris Saint-Germain",
       "DOB": 1998
     },
     {
       "id": 7,
       "name": "Mohamed Salah",
-      "position": "Forward",
+      "position": "RW",
       "team": "Liverpool",
       "DOB": 1992
     },
     {
       "id": 8,
       "name": "Karim Benzema",
-      "position": "Forward",
+      "position": "CF",
       "team": "Real Madrid",
       "DOB": 1987
     },
     {
       "id": 9,
       "name": "Harry Kane",
-      "position": "Forward",
+      "position": "ST",
       "team": "Tottenham Hotspur",
       "DOB": 1993
     },
     {
       "id": 10,
       "name": "Joshua Kimmich",
-      "position": "Midfielder",
+      "position": "CDM",
       "team": "Bayern Munich",
       "DOB": 1995
     }

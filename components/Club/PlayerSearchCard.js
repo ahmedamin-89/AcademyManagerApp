@@ -15,7 +15,7 @@ const PlayerSearchCard = ({
       onPress={onPress}
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.97 }]}
     >
-      <View style={{ width: "46%" }}>
+      <View style={{ width: "48%" }}>
         <Text style={[styles.text]}>{name}</Text>
       </View>
       <View style={styles.statsContainer}>
@@ -24,7 +24,7 @@ const PlayerSearchCard = ({
           <Text style={[styles.text, styles.statText]}>{DOB}</Text>
         </View>
         <View style={styles.stat}>
-          <Text style={[styles.text, styles.statText]}>Rating</Text>
+          <Text style={[styles.text, styles.statText]}>Rate</Text>
           <Text style={[styles.text, styles.statText]}>{rating}</Text>
         </View>
         <View style={styles.stat}>
@@ -34,7 +34,7 @@ const PlayerSearchCard = ({
       </View>
       <View
         style={{
-          width: "8%",
+          width: "6%",
           height: "100%",
           justifyContent: "center",
           alignItems: "center",
@@ -54,7 +54,7 @@ export default PlayerSearchCard;
 
 const styles = StyleSheet.create({
   container: {
-    height: 90,
+    height: 105,
     width: "100%",
     backgroundColor: colorScheme.black,
     justifyContent: "center",

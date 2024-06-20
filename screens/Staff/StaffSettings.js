@@ -5,7 +5,7 @@ import colorScheme from "../../constants/colorScheme";
 const StaffSettings = () => {
   return (
     <View style={styles.container}>
-      <Text>StaffSettings</Text>
+      <Text style={styles.text}>Staff Settings</Text>
     </View>
   );
 };
@@ -18,5 +18,10 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
     backgroundColor: colorScheme.black,
+  },
+  text: {
+    color: colorScheme.white,
+    fontSize: 24,
+    fontFamily: "Condensed-Black",
   },
 });
