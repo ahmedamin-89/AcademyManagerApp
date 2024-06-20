@@ -7,7 +7,7 @@ const IconButton = ({ text, style, icon }) => {
     <Pressable
       style={({ pressed }) => [
         styles.container,
-        pressed && { opacity: 0.9 },
+        pressed && { opacity: 0.85 },
         style,
       ]}
     >
@@ -22,7 +22,7 @@ export default IconButton;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: colorScheme.green,
-    borderRadius: 10,
+    borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
     paddingVertical: 15,

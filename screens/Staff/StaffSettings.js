@@ -1,11 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colorScheme from "../../constants/colorScheme";
+import PlayerCard from "../../components/UI/PlayerCard/PlayerCard";
 
 const StaffSettings = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Staff Settings</Text>
+      <PlayerCard />
     </View>
   );
 };

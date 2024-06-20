@@ -18,6 +18,9 @@ import ScheduleScreen from "./screens/Staff/ScheduleScreen";
 import PlayerDetailsScreen from "./screens/PlayerDetailsScreen";
 import StaffSettings from "./screens/Staff/StaffSettings";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import CoachesScreen from "./screens/Staff/CoachesScreen";
+import TeamsScreen from "./screens/Staff/TeamsScreen";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -158,6 +161,22 @@ const StackNavigator = () => {
         }}
         component={PlayerDetailsScreen}
       />
+      <Stack.Screen
+        name="Coaches"
+        options={{
+          headerShown: true,
+          title: "Coaches",
+        }}
+        component={CoachesScreen}
+      />
+      <Stack.Screen
+        name="Teams"
+        options={{
+          headerShown: true,
+          title: "Teams",
+        }}
+        component={TeamsScreen}
+      />
     </Stack.Navigator>
   );
 };
@@ -180,7 +199,7 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <GestureHandlerRootView>
+      <GestureHandlerRootView style={{ flex: 1 }}>
         <StatusBar style="light" />
         <StackNavigator />
       </GestureHandlerRootView>

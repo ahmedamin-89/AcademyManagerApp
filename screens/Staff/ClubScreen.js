@@ -5,13 +5,18 @@ import coachBackgroundImage from "../../assets/images/coaches.png";
 import teamBackgroundImage from "../../assets/images/teamPic.png";
 import ViewPlayersCard from "../../components/Club/ViewPlayersCard";
 
-const ClubScreen = () => {
+const ClubScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <ViewPlayersCard />
       <View style={styles.secondaryCards}>
-        <SecondaryClubCard backgroundImage={teamBackgroundImage} text="Teams" />
         <SecondaryClubCard
+          onPress={() => navigation.navigate("Teams")}
+          backgroundImage={teamBackgroundImage}
+          text="Teams"
+        />
+        <SecondaryClubCard
+          onPress={() => navigation.navigate("Coaches")}
           backgroundImage={coachBackgroundImage}
           text="Coaches"
         />

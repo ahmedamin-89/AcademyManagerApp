@@ -2,9 +2,10 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { ImageBackground } from "expo-image";
 
-const SecondaryClubCard = ({ text, backgroundImage }) => {
+const SecondaryClubCard = ({ text, backgroundImage, onPress }) => {
   return (
     <Pressable
+      onPress={onPress}
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
     >
       <ImageBackground
