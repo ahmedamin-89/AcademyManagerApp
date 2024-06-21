@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2.84,
     elevation: 5,
     flexDirection: "row",
-    gap: 4,
+    gap: 6,
   },
   text: {
     color: "white",

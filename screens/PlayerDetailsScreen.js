@@ -1,8 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import colorScheme from "../constants/colorScheme";
 
-const PlayerDetailsScreen = () => {
+const PlayerDetailsScreen = ({ navigation, route }) => {
+  const { name, number, position, height, weight } = route.params.player;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: name,
+    });
+  }, [navigation]);
   return <View style={styles.container}></View>;
 };
 

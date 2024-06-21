@@ -9,8 +9,13 @@ const StaffDashboard = () => {
     <ScrollView style={styles.scrollView} contentStyle={styles.container}>
       <HomeStats />
       <IconButton
+        icon={<Ionicons name="cash" size={28} color="white" />}
+        text="Financials"
+        style={styles.button}
+      />
+      <IconButton
         icon={<Ionicons name="notifications" size={28} color="white" />}
-        text="Send a Notification"
+        text="Notify Members"
         style={styles.button}
       />
     </ScrollView>
@@ -36,7 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    marginVertical: 20,
+    marginTop: 20,
     width: "98%",
     alignSelf: "center",
   },

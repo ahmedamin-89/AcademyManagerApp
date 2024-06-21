@@ -1,11 +1,5 @@
 import { FlatList, Pressable, StyleSheet, View, Text } from "react-native";
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import SearchBar from "../../components/UI/SearchBar";
 import { Ionicons } from "@expo/vector-icons";
@@ -17,6 +11,7 @@ import BottomSheet, {
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import PlayerSearchBottomTab from "../../components/Club/PlayerSearchBottomTab";
+import SelectItemList from "../../components/UI/SelectItemList";
 
 const PlayersScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -57,10 +52,14 @@ const PlayersScreen = ({ navigation }) => {
       ),
     });
   }, [navigation]);
+
   return (
     <BottomSheetModalProvider>
       <View style={styles.searchContainer}>
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      </View>
+      <View style={styles.filterContainer}>
+        <SelectItemList placeholder="Team" />
       </View>
       <View style={styles.container}>
         <FlatList
@@ -68,16 +67,14 @@ const PlayersScreen = ({ navigation }) => {
           contentContainerStyle={styles.flatlist}
           data={playersData}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => {
-            return (
-              <PlayerSearchCard
-                onPress={() => {
-                  navigation.navigate("PlayerDetails", { player: item });
-                }}
-                {...item}
-              />
-            );
-          }}
+          renderItem={({ item }) => (
+            <PlayerSearchCard
+              onPress={() =>
+                navigation.navigate("PlayerDetails", { player: item })
+              }
+              {...item}
+            />
+          )}
         />
       </View>
       <BottomSheetModal
@@ -121,10 +118,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: "center",
     backgroundColor: colorScheme.black,
+    position: "relative",
   },
   flatlist: {
     marginTop: 15,
     gap: 1,
+    zIndex: 10,
     backgroundColor: colorScheme.white,
   },
   bottomSheetBackground: {
@@ -143,5 +142,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     alignItems: "center",
+  },
+  filterContainer: {
+    backgroundColor: colorScheme.black,
+    padding: 10,
+    zIndex: 10000, // Ensure this is higher than other components
   },
 });
