@@ -54,7 +54,7 @@ export default PlayerSearchCard;
 
 const styles = StyleSheet.create({
   container: {
-    height: 105,
+    height: 112,
     width: "100%",
     backgroundColor: colorScheme.black,
     justifyContent: "center",

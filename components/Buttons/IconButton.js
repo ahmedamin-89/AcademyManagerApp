@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colorScheme from "../../constants/colorScheme";
 
-const IconButton = ({ text, style, icon }) => {
+const IconButton = ({ text, style, icon, onPress }) => {
   return (
     <Pressable
       style={({ pressed }) => [
@@ -10,6 +10,7 @@ const IconButton = ({ text, style, icon }) => {
         pressed && { opacity: 0.85 },
         style,
       ]}
+      onPress={onPress}
     >
       {icon}
       <Text style={styles.text}>{text}</Text>

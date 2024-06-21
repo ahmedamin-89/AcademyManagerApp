@@ -21,6 +21,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import CoachesScreen from "./screens/Staff/CoachesScreen";
 import TeamsScreen from "./screens/Staff/TeamsScreen";
+import FinancialsScreen from "./screens/Staff/FinancialsScreen";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -176,6 +177,14 @@ const StackNavigator = () => {
           title: "Teams",
         }}
         component={TeamsScreen}
+      />
+      <Stack.Screen
+        name="Financials"
+        options={{
+          headerShown: true,
+          title: "Financials",
+        }}
+        component={FinancialsScreen}
       />
     </Stack.Navigator>
   );

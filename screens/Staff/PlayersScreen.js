@@ -12,15 +12,18 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import PlayerSearchBottomTab from "../../components/Club/PlayerSearchBottomTab";
 import SelectItemList from "../../components/UI/SelectItemList";
+import HorizontalSelector from "../../components/UI/HorizontalSelector";
 
 const PlayersScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const playersData = data.players;
   const bottomSheetModalRef = useRef(null);
   const snapPoints = ["50.5%"];
+  const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
 
   const openBottomSheet = () => {
     if (bottomSheetModalRef.current) {
+      setBottomSheetOpen(true);
       bottomSheetModalRef.current?.present();
     } else {
       console.error("BottomSheetModal ref is not defined");
@@ -58,9 +61,10 @@ const PlayersScreen = ({ navigation }) => {
       <View style={styles.searchContainer}>
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
       </View>
-      <View style={styles.filterContainer}>
+      {/* <View style={[styles.filterContainer, bottomSheetOpen && { zIndex: 0 }]}>
         <SelectItemList placeholder="Team" />
-      </View>
+      </View> */}
+      <HorizontalSelector />
       <View style={styles.container}>
         <FlatList
           style={{ flex: 1, width: "100%" }}
@@ -84,13 +88,17 @@ const PlayersScreen = ({ navigation }) => {
         enableContentPanningGesture={false}
         backgroundStyle={styles.bottomSheetBackground}
         enablePanDownToClose={true}
+        onDismiss={() => setBottomSheetOpen(false)}
         backdropComponent={() => (
           <Pressable
-            onPress={() => bottomSheetModalRef.current?.dismiss()}
+            onPress={() => {
+              bottomSheetModalRef.current?.dismiss();
+            }}
             style={{
               height: "100%",
               position: "absolute",
               width: "100%",
+              zIndex: 0,
               backgroundColor: "rgba(0, 0, 0, 0.65)",
             }}
           ></Pressable>
@@ -109,7 +117,7 @@ export default PlayersScreen;
 
 const styles = StyleSheet.create({
   searchContainer: {
-    paddingTop: 10,
+    paddingVertical: 10,
     alignItems: "center",
     backgroundColor: colorScheme.black,
   },
@@ -121,7 +129,6 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   flatlist: {
-    marginTop: 15,
     gap: 1,
     zIndex: 10,
     backgroundColor: colorScheme.white,
@@ -146,6 +153,6 @@ const styles = StyleSheet.create({
   filterContainer: {
     backgroundColor: colorScheme.black,
     padding: 10,
-    zIndex: 10000, // Ensure this is higher than other components
+    zIndex: 100, // Ensure this is higher than other components
   },
 });

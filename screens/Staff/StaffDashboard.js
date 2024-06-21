@@ -4,11 +4,12 @@ import HomeStats from "../../components/Home/HomeStats";
 import { Ionicons } from "@expo/vector-icons";
 import IconButton from "../../components/Buttons/IconButton";
 
-const StaffDashboard = () => {
+const StaffDashboard = ({ navigation }) => {
   return (
     <ScrollView style={styles.scrollView} contentStyle={styles.container}>
       <HomeStats />
       <IconButton
+        onPress={() => navigation.navigate("Financials")}
         icon={<Ionicons name="cash" size={28} color="white" />}
         text="Financials"
         style={styles.button}

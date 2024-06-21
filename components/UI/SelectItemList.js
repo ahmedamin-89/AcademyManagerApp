@@ -13,6 +13,7 @@ const SelectItemList = ({ placeholder }) => {
     { key: "6", value: "Diary Products" },
     { key: "7", value: "Drinks" },
   ];
+
   return (
     <View style={styles.container}>
       <SelectList
@@ -23,7 +24,7 @@ const SelectItemList = ({ placeholder }) => {
         inputStyles={styles.inputStyles}
         placeholder={placeholder}
         search={false}
-        fontFamily="Condensed-Black"
+        fontFamily="Condensed-Light"
         dropdownStyles={styles.dropdownStyles}
       />
     </View>
@@ -35,7 +36,8 @@ export default SelectItemList;
 const styles = StyleSheet.create({
   container: {
     width: 110,
-    zIndex: 91199,
+    zIndex: 500, // Ensure this is higher than other components
+    height: 40,
   },
   boxStyles: {
     backgroundColor: "white",
@@ -45,13 +47,24 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 2.84,
     elevation: 5,
-    justifyContent: "center",
-    alignItems: "center",
+    height: "100%",
+    minHeight: 40,
+    borderRadius: 6,
+    borderWidth: 0,
+    padding: 0,
+    margin: 0,
   },
   inputStyles: {
     color: "#1d1d1f",
-    padding: 0,
-    fontSize: 16,
+    fontSize: 17,
+    position: "relative",
+    minHeight: 40,
+    bottom: 3,
+    textAlign: "center",
+    alignSelf: "center",
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: "auto",
   },
   dropdownStyles: {
     backgroundColor: "white",
@@ -64,6 +77,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 40,
     width: "100%",
-    zIndex: 91199,
+    zIndex: 500, // Ensure this is higher than other components
   },
 });

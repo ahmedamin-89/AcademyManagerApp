@@ -7,7 +7,11 @@ const PlayerSearchBottomTab = () => {
   return (
     <View style={styles.bar}>
       <Pressable
-        style={({ pressed }) => [styles.container, pressed && { opacity: 0.5 }]}
+        style={({ pressed }) => [
+          styles.container,
+          pressed && { opacity: 0.5 },
+          { opacity: 0 },
+        ]}
       >
         <Ionicons name="chevron-back" size={25} color={colorScheme.white} />
         <Text style={styles.text}>Previous</Text>
