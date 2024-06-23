@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colorScheme from "../../constants/colorScheme";
 import Timeline from "react-native-timeline-flatlist";
+import HorizontalSelector from "../../components/UI/HorizontalSelector";
 
 const ScheduleScreen = () => {
   const data = [
@@ -34,6 +35,7 @@ const ScheduleScreen = () => {
   ];
   return (
     <View style={styles.container}>
+      <HorizontalSelector />
       <Timeline
         style={{ flex: 1, width: "100%" }}
         data={data}

@@ -3,21 +3,9 @@ import React, { useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import { FlatList } from "react-native-gesture-handler";
 
-const HorizontalSelector = () => {
-  const [selected, setSelected] = useState("2009");
-  const data = [
-    "2009",
-    "2010",
-    "2011",
-    "2012",
-    "2013",
-    "2014",
-    "2015",
-    "2016",
-    "2017",
-    "2018",
-    "2019",
-  ];
+const HorizontalSelector = ({ data }) => {
+  const [selected, setSelected] = useState("All");
+
   return (
     <View style={styles.container}>
       <FlatList
@@ -25,6 +13,17 @@ const HorizontalSelector = () => {
         horizontal
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item}
+        ListHeaderComponent={
+          <Pressable
+            style={[
+              styles.itemContainer,
+              selected === "All" && { backgroundColor: colorScheme.green },
+            ]}
+            onPress={() => setSelected("All")}
+          >
+            <Text style={styles.text}>All</Text>
+          </Pressable>
+        }
         renderItem={({ item }) => (
           <Pressable
             style={[
@@ -45,7 +44,6 @@ export default HorizontalSelector;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
     width: "100%",
     backgroundColor: colorScheme.black,
     overflow: "visible",

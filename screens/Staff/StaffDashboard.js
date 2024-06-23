@@ -3,22 +3,24 @@ import React from "react";
 import HomeStats from "../../components/Home/HomeStats";
 import { Ionicons } from "@expo/vector-icons";
 import IconButton from "../../components/Buttons/IconButton";
+import PaymentStatusHomeCard from "../../components/Home/PaymentStatusHomeCard";
 
 const StaffDashboard = ({ navigation }) => {
   return (
     <ScrollView style={styles.scrollView} contentStyle={styles.container}>
       <HomeStats />
+      <PaymentStatusHomeCard />
       <IconButton
         onPress={() => navigation.navigate("Financials")}
         icon={<Ionicons name="cash" size={28} color="white" />}
         text="Financials"
         style={styles.button}
       />
-      <IconButton
+      {/* <IconButton
         icon={<Ionicons name="notifications" size={28} color="white" />}
         text="Notify Members"
         style={styles.button}
-      />
+      /> */}
     </ScrollView>
   );
 };

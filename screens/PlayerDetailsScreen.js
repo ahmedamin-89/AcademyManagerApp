@@ -10,7 +10,15 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
       title: name,
     });
   }, [navigation]);
-  return <View style={styles.container}></View>;
+  return (
+    <View style={styles.container}>
+      <Text>{name}</Text>
+      <Text>{number}</Text>
+      <Text>{position}</Text>
+      <Text>{height}</Text>
+      <Text>{weight}</Text>
+    </View>
+  );
 };
 
 export default PlayerDetailsScreen;

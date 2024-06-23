@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    width: "45%",
+    width: "46.5%",
     padding: 5,
   },
   titleContainer: {
