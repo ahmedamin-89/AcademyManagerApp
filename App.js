@@ -22,6 +22,7 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import CoachesScreen from "./screens/Staff/CoachesScreen";
 import TeamsScreen from "./screens/Staff/TeamsScreen";
 import FinancialsScreen from "./screens/Staff/FinancialsScreen";
+import LoginScreen from "./screens/Auth/LoginScreen";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -146,6 +147,7 @@ const StackNavigator = () => {
         backgroundColor: colorScheme.black,
       }}
     >
+      <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Tab" component={TabNavigator} />
       <Stack.Screen
         name="Players"

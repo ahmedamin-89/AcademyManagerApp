@@ -14,6 +14,19 @@ import PlayerSearchBottomTab from "../../components/Club/PlayerSearchBottomTab";
 import SelectItemList from "../../components/UI/SelectItemList";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
 
+const TeamsData = [
+  "2009",
+  "2010",
+  "2011",
+  "2012",
+  "2013",
+  "2014",
+  "2015",
+  "2016",
+  "2017",
+  "2018",
+  "2019",
+];
 const PlayersScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const playersData = data.players;
@@ -64,7 +77,7 @@ const PlayersScreen = ({ navigation }) => {
       {/* <View style={[styles.filterContainer, bottomSheetOpen && { zIndex: 0 }]}>
         <SelectItemList placeholder="Team" />
       </View> */}
-      <HorizontalSelector />
+      <HorizontalSelector data={TeamsData} />
       <View style={styles.container}>
         <FlatList
           style={{ flex: 1, width: "100%" }}

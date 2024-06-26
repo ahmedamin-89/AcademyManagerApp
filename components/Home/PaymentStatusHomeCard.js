@@ -1,13 +1,28 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import Button from "../Buttons/Button";
 import colorScheme from "../../constants/colorScheme";
 import PieChart from "react-native-pie-chart";
+import MonthPicker from "react-native-month-year-picker";
 
 const PaymentStatusHomeCard = () => {
   const widthAndHeight = 120;
   const series = [321, 123];
   const sliceColor = ["#6fedb7", "#2dd881"];
+  const [show, setShow] = useState(false);
+
+  const showPicker = useCallback((value) => setShow(value), []);
+  const [date, setDate] = useState(new Date());
+
+  const onValueChange = useCallback(
+    (event, newDate) => {
+      const selectedDate = newDate || date;
+
+      showPicker(false);
+      setDate(selectedDate);
+    },
+    [date, showPicker]
+  );
 
   return (
     <View style={styles.container}>
@@ -23,6 +38,7 @@ const PaymentStatusHomeCard = () => {
         <View style={styles.bodyText}>
           <Text style={[styles.bodyText]}>Paid: 321</Text>
           <Text style={[styles.bodyText]}>Unpaid: 123</Text>
+          <Text style={[styles.bodyText]}>Total: 444</Text>
         </View>
         <PieChart
           widthAndHeight={widthAndHeight}
@@ -30,6 +46,15 @@ const PaymentStatusHomeCard = () => {
           sliceColor={sliceColor}
         />
       </View>
+      {show && (
+        <MonthPicker
+          onChange={onValueChange}
+          value={date}
+          minimumDate={new Date()}
+          maximumDate={new Date(2025, 5)}
+          locale="ko"
+        />
+      )}
     </View>
   );
 };

@@ -5,6 +5,19 @@ import Timeline from "react-native-timeline-flatlist";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
 
 const ScheduleScreen = () => {
+  const TeamsData = [
+    "2009",
+    "2010",
+    "2011",
+    "2012",
+    "2013",
+    "2014",
+    "2015",
+    "2016",
+    "2017",
+    "2018",
+    "2019",
+  ];
   const data = [
     {
       time: "Dec, 4th",
@@ -35,7 +48,7 @@ const ScheduleScreen = () => {
   ];
   return (
     <View style={styles.container}>
-      <HorizontalSelector />
+      <HorizontalSelector data={TeamsData} />
       <Timeline
         style={{ flex: 1, width: "100%" }}
         data={data}

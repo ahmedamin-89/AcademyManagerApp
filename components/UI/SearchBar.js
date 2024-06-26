@@ -46,8 +46,8 @@ export default SearchBar;
 const styles = StyleSheet.create({
   input: {
     backgroundColor: colorScheme.grey,
-    width: "78%",
-    height: 55,
+    width: "81%",
+    height: 53,
     alignSelf: "center",
     paddingStart: 24,
     textAlign: "left",
