@@ -23,6 +23,7 @@ import CoachesScreen from "./screens/Staff/CoachesScreen";
 import TeamsScreen from "./screens/Staff/TeamsScreen";
 import FinancialsScreen from "./screens/Staff/FinancialsScreen";
 import LoginScreen from "./screens/Auth/LoginScreen";
+import AttendanceDashboardScreen from "./screens/Staff/AttendanceDashboardScreen";
 
 // SplashScreen.preventAutoHideAsync();
 
@@ -187,6 +188,14 @@ const StackNavigator = () => {
           title: "Financials",
         }}
         component={FinancialsScreen}
+      />
+      <Stack.Screen
+        name="AttendanceDashboard"
+        options={{
+          headerShown: true,
+          title: "Attendance",
+        }}
+        component={AttendanceDashboardScreen}
       />
     </Stack.Navigator>
   );

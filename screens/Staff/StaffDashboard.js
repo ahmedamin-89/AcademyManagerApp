@@ -20,6 +20,7 @@ const StaffDashboard = ({ navigation }) => {
         icon={<Ionicons name="checkbox" size={24} color="white" />}
         text="Attendance"
         style={styles.button}
+        onPress={() => navigation.navigate("AttendanceDashboard")}
       />
     </ScrollView>
   );
