@@ -12,15 +12,15 @@ const StaffDashboard = ({ navigation }) => {
       <PaymentStatusHomeCard />
       <IconButton
         onPress={() => navigation.navigate("Financials")}
-        icon={<Ionicons name="cash" size={28} color="white" />}
+        icon={<Ionicons name="cash" size={26} color="white" />}
         text="Financials"
         style={styles.button}
       />
-      {/* <IconButton
-        icon={<Ionicons name="notifications" size={28} color="white" />}
-        text="Notify Members"
+      <IconButton
+        icon={<Ionicons name="checkbox" size={24} color="white" />}
+        text="Attendance"
         style={styles.button}
-      /> */}
+      />
     </ScrollView>
   );
 };
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    marginTop: 20,
+    marginTop: 16,
     width: "98%",
     alignSelf: "center",
   },

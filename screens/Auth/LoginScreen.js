@@ -13,7 +13,7 @@ import colorScheme from "../../constants/colorScheme";
 import InputField from "../../components/UI/InputField";
 import IconButton from "../../components/Buttons/IconButton";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [userDetails, setUserDetails] = useState({
     phoneNumber: "",
     password: "",
@@ -81,7 +81,11 @@ const LoginScreen = () => {
             setShowPassword={toggleShowPassword}
             login={true}
           />
-          <IconButton style={{ width: "100%", marginTop: 10 }} text="Login" />
+          <IconButton
+            onPress={() => navigation.replace("Tab")}
+            style={{ width: "100%", marginTop: 10 }}
+            text="Login"
+          />
         </View>
       </ImageBackground>
     </KeyboardAvoidingView>
