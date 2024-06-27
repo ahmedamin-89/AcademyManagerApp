@@ -12,7 +12,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.a100amin.AcademyManager"
     },
     "android": {
       "adaptiveIcon": {
@@ -39,6 +40,11 @@
           ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "fd981bfb-4dcb-4d98-a883-640f132f38ca"
+      }
+    }
   }
 }

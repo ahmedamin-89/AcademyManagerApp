@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, Text, View } from "react-native";
 import React, { useCallback, useState } from "react";
 import Button from "../Buttons/Button";
 import colorScheme from "../../constants/colorScheme";
@@ -25,37 +25,31 @@ const PaymentStatusHomeCard = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Aquired Payments</Text>
-        <Button
-          containerStyle={styles.button}
-          textStyle={styles.buttonText}
-          text="June, 24"
-        />
-      </View>
-      <View style={styles.body}>
-        <View style={styles.bodyText}>
-          <Text style={[styles.bodyText]}>Paid: 321</Text>
-          <Text style={[styles.bodyText]}>Unpaid: 123</Text>
-          <Text style={[styles.bodyText]}>Total: 444</Text>
+    <>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Aquired Payments</Text>
+          <Button
+            containerStyle={styles.button}
+            textStyle={styles.buttonText}
+            text="June, 24"
+            onPress={() => showPicker(true)}
+          />
         </View>
-        <PieChart
-          widthAndHeight={widthAndHeight}
-          series={series}
-          sliceColor={sliceColor}
-        />
+        <View style={styles.body}>
+          <View style={styles.bodyText}>
+            <Text style={[styles.bodyText]}>Paid: 321</Text>
+            <Text style={[styles.bodyText]}>Unpaid: 123</Text>
+            <Text style={[styles.bodyText]}>Total: 444</Text>
+          </View>
+          <PieChart
+            widthAndHeight={widthAndHeight}
+            series={series}
+            sliceColor={sliceColor}
+          />
+        </View>
       </View>
-      {show && (
-        <MonthPicker
-          onChange={onValueChange}
-          value={date}
-          minimumDate={new Date()}
-          maximumDate={new Date(2025, 5)}
-          locale="ko"
-        />
-      )}
-    </View>
+    </>
   );
 };
 

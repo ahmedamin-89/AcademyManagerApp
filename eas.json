@@ -1,0 +1,28 @@
+{
+  "cli": {
+    "version": ">= 3.15.1"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "ios": {}
+    },
+    "development-simulator": {
+      "extends": "development",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "ios": {
+        "simulator": true
+      }
+    },
+    "production": {}
+  },
+  "submit": {
+    "production": {}
+  }
+}
