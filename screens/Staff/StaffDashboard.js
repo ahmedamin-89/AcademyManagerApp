@@ -1,9 +1,10 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet } from "react-native";
 import React, { useCallback, useState } from "react";
 import HomeStats from "../../components/Home/HomeStats";
 import { Ionicons } from "@expo/vector-icons";
 import IconButton from "../../components/Buttons/IconButton";
 import PaymentStatusHomeCard from "../../components/Home/PaymentStatusHomeCard";
+import colorScheme from "../../constants/colorScheme";
 
 const StaffDashboard = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
@@ -15,7 +16,19 @@ const StaffDashboard = ({ navigation }) => {
     }, 2000);
   }, []);
   return (
-    <ScrollView style={styles.scrollView} contentStyle={styles.container}>
+    <ScrollView
+      style={styles.scrollView}
+      contentStyle={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          colors={[colorScheme.white]}
+          tintColor={colorScheme.white}
+          size={"large"}
+        />
+      }
+    >
       <HomeStats />
       <PaymentStatusHomeCard />
       <IconButton

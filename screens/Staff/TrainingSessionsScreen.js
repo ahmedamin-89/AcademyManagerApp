@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    padding: 10,
+    padding: 15,
     alignItems: "center",
     gap: 15,
   },

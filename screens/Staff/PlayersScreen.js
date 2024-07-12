@@ -5,14 +5,14 @@ import SearchBar from "../../components/UI/SearchBar";
 import { Ionicons } from "@expo/vector-icons";
 import data from "../../data/players";
 import PlayerSearchCard from "../../components/Club/PlayerSearchCard";
-import BottomSheet, {
+import {
   BottomSheetModal,
   BottomSheetModalProvider,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import PlayerSearchBottomTab from "../../components/Club/PlayerSearchBottomTab";
-import SelectItemList from "../../components/UI/SelectItemList";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
+import AddPlayerForm from "../../components/Forms/AddPlayerForm";
 
 const TeamsData = [
   "2009",
@@ -31,7 +31,7 @@ const PlayersScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const playersData = data.players;
   const bottomSheetModalRef = useRef(null);
-  const snapPoints = ["50.5%"];
+  const snapPoints = ["59.5%"];
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
 
   const openBottomSheet = () => {
@@ -117,9 +117,7 @@ const PlayersScreen = ({ navigation }) => {
           ></Pressable>
         )}
       >
-        <BottomSheetView style={styles.contentContainer}>
-          <Text style={styles.text}>Create A Player</Text>
-        </BottomSheetView>
+        <AddPlayerForm />
       </BottomSheetModal>
       <PlayerSearchBottomTab />
     </BottomSheetModalProvider>
@@ -154,15 +152,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     justifyContent: "center",
   },
-  text: {
-    fontSize: 24,
-    fontFamily: "Condensed-Black",
-  },
-  contentContainer: {
-    flex: 1,
-    padding: 10,
-    alignItems: "center",
-  },
+
   filterContainer: {
     backgroundColor: colorScheme.black,
     padding: 10,
