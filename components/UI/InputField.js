@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     paddingLeft: 12.5,
     borderRadius: 4,
-    fontSize: 15.5,
+    fontSize: 16,
     fontFamily: "Condensed-Light",
     color: colorScheme.white,
   },

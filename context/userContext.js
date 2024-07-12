@@ -1,0 +1,90 @@
+import { createContext, useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import backendURL from "../constants/backendURL";
+
+export const UserContext = createContext({
+  user: {
+    id: "",
+    name: "",
+    phoneNumber: "",
+    role: "",
+  },
+  token: "",
+  setUser: () => {},
+  setToken: () => {},
+  login: () => {},
+  logout: () => {},
+});
+
+export const UserContextProvider = ({ children }) => {
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    phoneNumber: "",
+    role: "",
+  });
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const loadStoredAuth = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem("authToken");
+        if (storedToken) {
+          setToken(storedToken);
+          await fetchUserData(storedToken);
+        }
+      } catch (error) {
+        console.error("Failed to load auth token:", error);
+      }
+    };
+
+    loadStoredAuth();
+  }, []);
+
+  const login = async (userDetails) => {
+    try {
+      const response = await axios.post(
+        `${backendURL}/users/login`,
+        userDetails
+      );
+      const receivedToken = response.data.token;
+      await AsyncStorage.setItem("authToken", receivedToken);
+      setToken(receivedToken);
+      await fetchUserData(receivedToken);
+    } catch (error) {
+      console.error(
+        "Login error:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  const logout = async () => {
+    await AsyncStorage.removeItem("authToken");
+    setToken("");
+    setUser({ id: "", name: "", phoneNumber: "", role: "" });
+  };
+
+  const fetchUserData = async (authToken) => {
+    try {
+      const response = await apiClient.get("/users/me", {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      setUser(response.data);
+    } catch (error) {
+      console.error("Failed to fetch user data:", error);
+      logout();
+    }
+  };
+
+  return (
+    <UserContext.Provider
+      value={{ user, token, setUser, setToken, login, logout }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
+};

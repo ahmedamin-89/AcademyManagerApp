@@ -1,8 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colorScheme from "../../constants/colorScheme";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
-const IconButton = ({ text, style, icon, onPress }) => {
+const IconButton = ({ text, style, icon, onPress, loading }) => {
   return (
     <Pressable
       style={({ pressed }) => [
@@ -12,8 +13,14 @@ const IconButton = ({ text, style, icon, onPress }) => {
       ]}
       onPress={onPress}
     >
-      {icon}
-      <Text style={styles.text}>{text}</Text>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {icon}
+          <Text style={styles.text}>{text}</Text>
+        </>
+      )}
     </Pressable>
   );
 };
@@ -26,7 +33,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
-    paddingVertical: 14,
+    height: 56,
     shadowColor: "white",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,

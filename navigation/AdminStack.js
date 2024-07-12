@@ -1,18 +1,17 @@
 // src/navigation/AdminStack.js
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import AdminDashboard from "../screens/Admin/AdminDashboard";
-import PlayersScreen from "../screens/Admin/PlayersScreen";
-import PlayerDetailsScreen from "../screens/Admin/PlayerDetailsScreen";
-import CoachesScreen from "../screens/Admin/CoachesScreen";
-import TeamsScreen from "../screens/Admin/TeamsScreen";
-import FinancialsScreen from "../screens/Admin/FinancialsScreen";
-import AttendanceDashboardScreen from "../screens/Admin/AttendanceDashboardScreen";
-import TrainingSessionsScreen from "../screens/Admin/TrainingSessionsScreen";
-import ClubScreen from "../screens/Admin/ClubScreen";
-import ScheduleScreen from "../screens/Admin/ScheduleScreen";
-import StaffSettings from "../screens/Admin/StaffSettings";
+import PlayersScreen from "../screens/Staff/PlayersScreen";
+import PlayerDetailsScreen from "../screens/PlayerDetailsScreen";
+import CoachesScreen from "../screens/Staff/CoachesScreen";
+import TeamsScreen from "../screens/Staff/TeamsScreen";
+import FinancialsScreen from "../screens/Staff/FinancialsScreen";
+import AttendanceDashboardScreen from "../screens/Staff/AttendanceDashboardScreen";
+import TrainingSessionsScreen from "../screens/Staff/TrainingSessionsScreen";
+
 import TabNavigator from "./TabNavigator";
+import BackButton from "../components/Buttons/BackButton";
+import colorScheme from "../constants/colorScheme";
 
 const Stack = createStackNavigator();
 
@@ -24,6 +23,21 @@ const AdminStack = () => {
         contentStyle: {
           backgroundColor: colorScheme.black,
         },
+        headerLeft: () => <BackButton />,
+        headerStyle: {
+          backgroundColor: colorScheme.black,
+          borderBottomColor: "transparent",
+          borderBottomWidth: 0,
+          elevation: 0,
+          shadowOpacity: 0,
+        },
+        headerTintColor: colorScheme.white,
+        headerTitleStyle: {
+          fontFamily: "Condensed-Black",
+        },
+      }}
+      sceneContainerStyle={{
+        backgroundColor: colorScheme.black,
       }}
     >
       <Stack.Screen name="Tab" component={TabNavigator} />

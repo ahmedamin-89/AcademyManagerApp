@@ -12,6 +12,8 @@ import { ImageBackground } from "expo-image";
 import colorScheme from "../../constants/colorScheme";
 import InputField from "../../components/UI/InputField";
 import IconButton from "../../components/Buttons/IconButton";
+import axios from "axios";
+import backendURL from "../../constants/backendURL";
 
 const LoginScreen = ({ navigation }) => {
   const [userDetails, setUserDetails] = useState({
@@ -20,6 +22,7 @@ const LoginScreen = ({ navigation }) => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [bottomPadding, setBottomPadding] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = useCallback((name, value) => {
     setUserDetails((prevState) => ({ ...prevState, [name]: value }));
@@ -28,6 +31,26 @@ const LoginScreen = ({ navigation }) => {
   const toggleShowPassword = useCallback(() => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   }, []);
+
+  const handleLogin = async () => {
+    try {
+      setLoading(true);
+      console.log(`${backendURL}/users/login`);
+      const response = await axios.post(
+        `${backendURL}/users/login`,
+        userDetails
+      );
+      console.log(response.data);
+      // Handle successful login (e.g., navigate to another screen)
+    } catch (error) {
+      console.log(
+        "Error during login:",
+        error.response ? error.response.data : error.message
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Listen for keyboard events
   useEffect(() => {
@@ -82,9 +105,10 @@ const LoginScreen = ({ navigation }) => {
             login={true}
           />
           <IconButton
-            onPress={() => navigation.replace("Tab")}
+            onPress={handleLogin}
             style={{ width: "100%", marginTop: 10 }}
             text="Login"
+            loading={loading}
           />
         </View>
       </ImageBackground>
