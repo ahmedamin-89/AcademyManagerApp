@@ -28,6 +28,8 @@ const AddPlayerForm = () => {
         placeholder="Enter the player's name"
         handleInputChange={handleInputChange}
       />
+      <Text style={styles.label}>Position</Text>
+      <Text style={styles.label}>Date of Birth</Text>
       <Button
         text="Add Player"
         textStyle={{ color: colorScheme.white, fontSize: 22 }}
@@ -54,5 +56,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 15,
     marginBottom: 60,
+  },
+  label: {
+    color: colorScheme.grey,
+    paddingBottom: 4,
+    fontSize: 16,
+    fontWeight: "500",
+    fontFamily: "Condensed-Light",
+    alignSelf: "flex-start",
   },
 });
