@@ -145,10 +145,19 @@ const FinancialsScreen = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      <Button text="June, 2024" />
-      <SearchBar />
-      <HorizontalSelector data={TeamsData} />
-      <HorizontalSelector data={statusData} />
+      <View style={styles.header}>
+        <SearchBar style={{ width: "82%" }} />
+
+        <Button
+          textStyle={{ fontSize: 16 }}
+          containerStyle={{ height: "100%", justifyContent: "center" }}
+          text="June 24"
+        />
+      </View>
+      <View style={{ flexDirection: "column", gap: 10 }}>
+        <HorizontalSelector data={TeamsData} />
+        <HorizontalSelector data={statusData} />
+      </View>
       <FlatList
         contentContainerStyle={styles.contentContainerStyle}
         data={players}
@@ -172,9 +181,17 @@ export default FinancialsScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    paddingVertical: 10,
     backgroundColor: colorScheme.black,
     gap: 12,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    height: 55,
   },
   contentContainerStyle: {
     gap: 1.5,

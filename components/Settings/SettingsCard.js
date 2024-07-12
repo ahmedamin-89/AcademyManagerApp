@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   innerCard: {
     backgroundColor: colorScheme.grey,
-    padding: 25,
+    padding: 23,
     flexDirection: "row",
     justifyContent: "space-between",
   },

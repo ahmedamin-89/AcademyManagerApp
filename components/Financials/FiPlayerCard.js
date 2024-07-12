@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colorScheme from "../../constants/colorScheme";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,7 +23,9 @@ const FiPlayerCard = ({ name, paid, dueDate, interval, amount }) => {
   }
 
   return (
-    <View style={styles.container}>
+    <Pressable
+      style={({ pressed }) => [styles.container, pressed && { opacity: 0.97 }]}
+    >
       <Text style={[styles.text, { width: "29%" }]}>{name}</Text>
       <Text style={[styles.text, { width: "20%" }]}>
         {paid ? "Paid" : "Not Paid"}
@@ -34,7 +36,7 @@ const FiPlayerCard = ({ name, paid, dueDate, interval, amount }) => {
       <Text style={[styles.text, { width: "22%" }]}>{intervalString}</Text>
       <Text style={[styles.text, { width: "13%" }]}>{amount}</Text>
       <Ionicons name={"chevron-forward"} size={20} color={colorScheme.green} />
-    </View>
+    </Pressable>
   );
 };
 
@@ -46,6 +48,7 @@ const styles = StyleSheet.create({
     backgroundColor: colorScheme.black,
     height: 58,
     alignItems: "center",
+    paddingHorizontal: 10,
   },
   text: {
     color: "#fff",

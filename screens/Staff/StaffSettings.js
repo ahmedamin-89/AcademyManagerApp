@@ -14,6 +14,9 @@ const StaffSettings = ({ navigation }) => {
         title="Training Sessions"
         onPress={() => navigation.navigate("TrainingSessions")}
       />
+      <SettingsCard title="Record Attendance" />
+      <SettingsCard title="Create an Account" />
+      <SettingsCard title="Kits" />
       <SettingsCard title="Logout" />
     </View>
   );
