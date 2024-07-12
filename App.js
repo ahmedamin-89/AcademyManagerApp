@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
@@ -9,9 +9,14 @@ import CoachStack from "./navigation/CoachStack";
 import PlayerStack from "./navigation/PlayerStack";
 import ParentStack from "./navigation/ParentStack";
 import { UserContextProvider, UserContext } from "./context/userContext";
+import * as SplashScreen from "expo-splash-screen";
+
+// Keep the splash screen visible while we fetch resources
+SplashScreen.preventAutoHideAsync();
 
 const App = () => {
-  const [fontsLoaded, fontError] = useFonts({
+  const [appIsReady, setAppIsReady] = useState(false);
+  const [fontsLoaded] = useFonts({
     "Condensed-Black": require("./assets/fonts/CondensedBlack.ttf"),
     "Condensed-Light": require("./assets/fonts/CondensedLight.ttf"),
     "Expanded-Black": require("./assets/fonts/ExpandedBlack.ttf"),
@@ -22,9 +27,28 @@ const App = () => {
     "Ultra-Condensed-Medium": require("./assets/fonts/UltraCondensedMedium.ttf"),
   });
 
-  if (!fontsLoaded && !fontError) {
-    return null;
-  }
+  useEffect(() => {
+    async function prepare() {
+      try {
+        if (fontsLoaded) {
+          // Artificially delay for two seconds to simulate a slow loading experience
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+        }
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, [fontsLoaded]);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
 
   const renderStack = (user) => {
     if (!user.role) {
@@ -48,14 +72,22 @@ const App = () => {
   return (
     <UserContextProvider>
       <UserContext.Consumer>
-        {({ user }) => (
-          <NavigationContainer>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <StatusBar style="light" />
-              {renderStack(user)}
-            </GestureHandlerRootView>
-          </NavigationContainer>
-        )}
+        {({ user, loading }) => {
+          if (loading || !appIsReady) {
+            return null;
+          }
+          return (
+            <NavigationContainer>
+              <GestureHandlerRootView
+                style={{ flex: 1 }}
+                onLayout={onLayoutRootView}
+              >
+                <StatusBar style="light" />
+                {renderStack(user)}
+              </GestureHandlerRootView>
+            </NavigationContainer>
+          );
+        }}
       </UserContext.Consumer>
     </UserContextProvider>
   );

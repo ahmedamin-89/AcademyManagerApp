@@ -15,13 +15,7 @@ const StaffDashboard = ({ navigation }) => {
     }, 2000);
   }, []);
   return (
-    <ScrollView
-      style={styles.scrollView}
-      contentStyle={styles.container}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
+    <ScrollView style={styles.scrollView} contentStyle={styles.container}>
       <HomeStats />
       <PaymentStatusHomeCard />
       <IconButton

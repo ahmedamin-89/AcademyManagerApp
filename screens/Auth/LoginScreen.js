@@ -6,7 +6,7 @@ import {
   Platform,
   Keyboard,
 } from "react-native";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import bgImage from "../../assets/images/aliRunning.jpeg";
 import { ImageBackground } from "expo-image";
 import colorScheme from "../../constants/colorScheme";
@@ -14,11 +14,14 @@ import InputField from "../../components/UI/InputField";
 import IconButton from "../../components/Buttons/IconButton";
 import axios from "axios";
 import backendURL from "../../constants/backendURL";
+import { UserContext } from "../../context/userContext";
 
 const LoginScreen = ({ navigation }) => {
+  const { login } = useContext(UserContext);
+
   const [userDetails, setUserDetails] = useState({
-    phoneNumber: "",
-    password: "",
+    phoneNumber: "01117775978",
+    password: "q2md8uzj",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [bottomPadding, setBottomPadding] = useState(0);
@@ -33,23 +36,9 @@ const LoginScreen = ({ navigation }) => {
   }, []);
 
   const handleLogin = async () => {
-    try {
-      setLoading(true);
-      console.log(`${backendURL}/users/login`);
-      const response = await axios.post(
-        `${backendURL}/users/login`,
-        userDetails
-      );
-      console.log(response.data);
-      // Handle successful login (e.g., navigate to another screen)
-    } catch (error) {
-      console.log(
-        "Error during login:",
-        error.response ? error.response.data : error.message
-      );
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    await login(userDetails);
+    setLoading(false);
   };
 
   // Listen for keyboard events

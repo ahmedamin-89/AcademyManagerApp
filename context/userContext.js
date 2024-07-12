@@ -11,9 +11,10 @@ export const UserContext = createContext({
     role: "",
   },
   token: "",
+  loading: true,
   setUser: () => {},
   setToken: () => {},
-  login: () => {},
+  login: async () => {},
   logout: () => {},
 });
 
@@ -25,6 +26,7 @@ export const UserContextProvider = ({ children }) => {
     role: "",
   });
   const [token, setToken] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadStoredAuth = async () => {
@@ -36,6 +38,8 @@ export const UserContextProvider = ({ children }) => {
         }
       } catch (error) {
         console.error("Failed to load auth token:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -50,6 +54,7 @@ export const UserContextProvider = ({ children }) => {
       );
       const receivedToken = response.data.token;
       await AsyncStorage.setItem("authToken", receivedToken);
+
       setToken(receivedToken);
       await fetchUserData(receivedToken);
     } catch (error) {
@@ -68,12 +73,12 @@ export const UserContextProvider = ({ children }) => {
 
   const fetchUserData = async (authToken) => {
     try {
-      const response = await apiClient.get("/users/me", {
+      const response = await axios.get(`${backendURL}/users/`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
         },
       });
-      setUser(response.data);
+      setUser(response.data.user);
     } catch (error) {
       console.error("Failed to fetch user data:", error);
       logout();
@@ -82,7 +87,7 @@ export const UserContextProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, token, setUser, setToken, login, logout }}
+      value={{ user, token, loading, setUser, setToken, login, logout }}
     >
       {children}
     </UserContext.Provider>

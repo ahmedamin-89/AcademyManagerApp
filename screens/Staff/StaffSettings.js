@@ -1,10 +1,20 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
+import React, { useContext } from "react";
 import colorScheme from "../../constants/colorScheme";
 import PlayerCard from "../../components/UI/PlayerCard/PlayerCard";
 import SettingsCard from "../../components/Settings/SettingsCard";
+import { UserContext } from "../../context/userContext";
 
 const StaffSettings = ({ navigation }) => {
+  const { logout } = useContext(UserContext);
+
+  const logoutHandler = () => {
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      { text: "No", style: "default" },
+      { text: "Yes", style: "destructive", onPress: logout },
+    ]);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={[styles.text, { alignSelf: "flex-start", fontSize: 27 }]}>
@@ -17,7 +27,7 @@ const StaffSettings = ({ navigation }) => {
       <SettingsCard title="Record Attendance" />
       <SettingsCard title="Create an Account" />
       <SettingsCard title="Kits" />
-      <SettingsCard title="Logout" />
+      <SettingsCard title="Logout" onPress={logoutHandler} />
     </View>
   );
 };
