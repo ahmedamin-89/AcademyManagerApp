@@ -31,7 +31,7 @@ const PlayersScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const playersData = data.players;
   const bottomSheetModalRef = useRef(null);
-  const snapPoints = ["59.5%"];
+  const snapPoints = ["79.5%"];
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
 
   const openBottomSheet = () => {
@@ -70,57 +70,62 @@ const PlayersScreen = ({ navigation }) => {
   }, [navigation]);
 
   return (
-    <BottomSheetModalProvider>
-      <View style={styles.searchContainer}>
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-      </View>
-      {/* <View style={[styles.filterContainer, bottomSheetOpen && { zIndex: 0 }]}>
+    <View style={{ flex: 1, backgroundColor: colorScheme.black }}>
+      <BottomSheetModalProvider>
+        <View style={styles.searchContainer}>
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        </View>
+        {/* <View style={[styles.filterContainer, bottomSheetOpen && { zIndex: 0 }]}>
         <SelectItemList placeholder="Team" />
       </View> */}
-      <HorizontalSelector data={TeamsData} />
-      <View style={styles.container}>
-        <FlatList
-          style={{ flex: 1, width: "100%" }}
-          contentContainerStyle={styles.flatlist}
-          data={playersData}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <PlayerSearchCard
-              onPress={() =>
-                navigation.navigate("PlayerDetails", { player: item })
-              }
-              {...item}
-            />
+        <HorizontalSelector data={TeamsData} />
+        <View style={styles.container}>
+          <FlatList
+            style={{ flex: 1, width: "100%" }}
+            contentContainerStyle={styles.flatlist}
+            data={playersData}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <PlayerSearchCard
+                onPress={() =>
+                  navigation.navigate("PlayerDetails", { player: item })
+                }
+                {...item}
+              />
+            )}
+          />
+        </View>
+        <BottomSheetModal
+          ref={bottomSheetModalRef}
+          index={0}
+          snapPoints={snapPoints}
+          enableContentPanningGesture={false}
+          backgroundStyle={styles.bottomSheetBackground}
+          enablePanDownToClose={true}
+          onDismiss={() => setBottomSheetOpen(false)}
+          backdropComponent={() => (
+            <Pressable
+              onPress={() => {
+                bottomSheetModalRef.current?.dismiss();
+              }}
+              style={{
+                height: "100%",
+                position: "absolute",
+                width: "100%",
+                zIndex: 0,
+                backgroundColor: "rgba(0, 0, 0, 0.65)",
+              }}
+            ></Pressable>
           )}
-        />
-      </View>
-      <BottomSheetModal
-        ref={bottomSheetModalRef}
-        index={0}
-        snapPoints={snapPoints}
-        enableContentPanningGesture={false}
-        backgroundStyle={styles.bottomSheetBackground}
-        enablePanDownToClose={true}
-        onDismiss={() => setBottomSheetOpen(false)}
-        backdropComponent={() => (
-          <Pressable
-            onPress={() => {
-              bottomSheetModalRef.current?.dismiss();
-            }}
-            style={{
-              height: "100%",
-              position: "absolute",
-              width: "100%",
-              zIndex: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.65)",
-            }}
-          ></Pressable>
-        )}
-      >
-        <AddPlayerForm />
-      </BottomSheetModal>
-      <PlayerSearchBottomTab />
-    </BottomSheetModalProvider>
+        >
+          <AddPlayerForm />
+        </BottomSheetModal>
+        <PlayerSearchBottomTab />
+      </BottomSheetModalProvider>
+    </View>
   );
 };
 

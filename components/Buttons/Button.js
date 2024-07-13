@@ -22,7 +22,7 @@ export default Button;
 const styles = StyleSheet.create({
   container: {
     padding: 8,
-    paddingVertical: 10,
+    paddingVertical: 12,
     backgroundColor: "white",
     borderRadius: 5,
     shadowColor: "white",
