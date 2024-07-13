@@ -146,6 +146,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 24,
     fontFamily: "Condensed-Black",
+    color: colorScheme.grey,
   },
   contentContainer: {
     padding: 15,

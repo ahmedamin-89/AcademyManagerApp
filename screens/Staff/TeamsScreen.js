@@ -8,10 +8,11 @@ import {
 } from "@gorhom/bottom-sheet";
 import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import CreateTeamForm from "../../components/Forms/CreateTeamForm";
 
 const TeamsScreen = ({ navigation }) => {
   const bottomSheetModalRef = useRef(null);
-  const snapPoints = ["89.5%"];
+  const snapPoints = ["50%"];
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const openBottomSheet = () => {
     if (bottomSheetModalRef.current) {
@@ -74,7 +75,9 @@ const TeamsScreen = ({ navigation }) => {
           ></Pressable>
         )}
       >
-        <BottomSheetView style={styles.contentContainer}></BottomSheetView>
+        <BottomSheetView style={styles.contentContainer}>
+          <CreateTeamForm />
+        </BottomSheetView>
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

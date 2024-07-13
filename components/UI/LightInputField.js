@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     fontSize: 15.5,
     fontFamily: "Condensed-Light",
-    color: colorScheme.white,
+    color: colorScheme.black,
   },
 
   label: {

@@ -1,18 +1,30 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colorScheme from "../../constants/colorScheme";
+import LoadingSpinner from "../UI/LoadingSpinner";
 
-const Button = ({ text, onPress, containerStyle, textStyle }) => {
+const Button = ({ text, onPress, containerStyle, textStyle, loading }) => {
   return (
     <Pressable
-      onPress={onPress}
+      onPress={
+        loading
+          ? () => {
+              return;
+            }
+          : onPress
+      }
       style={({ pressed }) => [
         styles.container,
         containerStyle,
-        pressed && { opacity: 0.85 },
+
+        !loading && pressed && { opacity: 0.75 },
       ]}
     >
-      <Text style={[styles.text, textStyle]}>{text}</Text>
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <Text style={[styles.text, textStyle]}>{text}</Text>
+      )}
     </Pressable>
   );
 };
@@ -22,7 +34,7 @@ export default Button;
 const styles = StyleSheet.create({
   container: {
     padding: 8,
-    paddingVertical: 12,
+    height: 48,
     backgroundColor: "white",
     borderRadius: 5,
     shadowColor: "white",
@@ -30,6 +42,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 2.84,
     elevation: 5,
+    justifyContent: "center",
+    alignItems: "center",
   },
   text: {
     color: colorScheme.grey,
