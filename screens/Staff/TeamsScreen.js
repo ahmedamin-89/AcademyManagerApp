@@ -1,13 +1,15 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import { useRef, useState, useLayoutEffect } from "react";
 import colorScheme from "../../constants/colorScheme";
 import {
   BottomSheetModalProvider,
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import { Pressable } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-const TeamsScreen = () => {
+const TeamsScreen = ({ navigation }) => {
   const bottomSheetModalRef = useRef(null);
   const snapPoints = ["89.5%"];
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
@@ -20,7 +22,62 @@ const TeamsScreen = () => {
     }
   };
 
-  return <View style={styles.container}></View>;
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <Pressable
+          onPress={openBottomSheet}
+          style={({ pressed }) => [
+            pressed && { opacity: 0.6 },
+            {
+              marginRight: 20,
+              marginTop: 3,
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            },
+          ]}
+        >
+          <Ionicons
+            name="add-circle-outline"
+            size={28}
+            color={colorScheme.green}
+          />
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
+
+  return (
+    <BottomSheetModalProvider>
+      <View style={styles.container}></View>
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={0}
+        snapPoints={snapPoints}
+        enableContentPanningGesture={false}
+        backgroundStyle={styles.bottomSheetBackground}
+        enablePanDownToClose={true}
+        onDismiss={() => setBottomSheetOpen(false)}
+        backdropComponent={() => (
+          <Pressable
+            onPress={() => {
+              bottomSheetModalRef.current?.dismiss();
+            }}
+            style={{
+              height: "100%",
+              position: "absolute",
+              width: "100%",
+              zIndex: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.65)",
+            }}
+          ></Pressable>
+        )}
+      >
+        <BottomSheetView style={styles.contentContainer}></BottomSheetView>
+      </BottomSheetModal>
+    </BottomSheetModalProvider>
+  );
 };
 
 export default TeamsScreen;
