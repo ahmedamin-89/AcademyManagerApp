@@ -9,10 +9,17 @@ import {
 import { Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CreateTeamForm from "../../components/Forms/CreateTeamForm";
+import backendURL from "../../constants/backendURL";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import DataStatus from "../../components/UI/DataStatus";
 
 const TeamsScreen = ({ navigation }) => {
   const bottomSheetModalRef = useRef(null);
   const snapPoints = ["50%"];
+  const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const openBottomSheet = () => {
     if (bottomSheetModalRef.current) {
@@ -20,6 +27,22 @@ const TeamsScreen = ({ navigation }) => {
       bottomSheetModalRef.current?.present();
     } else {
       console.error("BottomSheetModal ref is not defined");
+    }
+  };
+
+  const fetchTeams = async () => {
+    try {
+      const response = await axios.get(backendURL + "/teams", {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+        },
+      });
+      throw new Error("Error");
+      setTeams(response.data.teams);
+    } catch (error) {
+      setError(error?.response?.data?.error);
+
+      console.log(error);
     }
   };
 
@@ -47,11 +70,16 @@ const TeamsScreen = ({ navigation }) => {
         </Pressable>
       ),
     });
+    fetchTeams();
   }, [navigation]);
 
   return (
     <BottomSheetModalProvider>
-      <View style={styles.container}></View>
+      <View style={styles.container}>
+        {teams.length == 0 && (
+          <DataStatus error={error} loading={loading} setLoading={setLoading} />
+        )}
+      </View>
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
@@ -76,7 +104,11 @@ const TeamsScreen = ({ navigation }) => {
         )}
       >
         <BottomSheetView style={styles.contentContainer}>
-          <CreateTeamForm />
+          <CreateTeamForm
+            closeBottomSheet={() => {
+              bottomSheetModalRef.current?.dismiss();
+            }}
+          />
         </BottomSheetView>
       </BottomSheetModal>
     </BottomSheetModalProvider>

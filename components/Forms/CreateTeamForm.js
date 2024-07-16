@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import Button from "../Buttons/Button";
@@ -8,17 +8,20 @@ import DateSelector from "../UI/DateSelector";
 import HorizontalSelector from "../UI/HorizontalSelector";
 import { ScrollView } from "react-native-gesture-handler";
 import RatingAdjuster from "../UI/RatingAdjuster";
+import backendURL from "../../constants/backendURL";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 
 const yearsData = [
   2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
 ];
 
-const CreateTeamForm = () => {
+const CreateTeamForm = ({ closeBottomSheet }) => {
   const [loading, setLoading] = useState(false);
 
   const [teamDetails, setTeamDetails] = useState({
     teamName: "",
-    years: [],
+    yearsOfBirth: [],
   });
 
   const handleInputChange = (name, text) => {
@@ -28,9 +31,23 @@ const CreateTeamForm = () => {
     }));
   };
 
-  useEffect(() => {
-    console.log(teamDetails);
-  }, [teamDetails]);
+  const createTeam = async () => {
+    setLoading(true);
+    try {
+      await axios.post(backendURL + "/teams", teamDetails, {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+        },
+      });
+      closeBottomSheet();
+    } catch (error) {
+      console.log(error);
+
+      Alert.alert("Error", error.response.data.error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <BottomSheetView style={styles.contentContainer}>
@@ -50,13 +67,14 @@ const CreateTeamForm = () => {
           itemStyle={{ backgroundColor: colorScheme.lightGrey }}
           multipleSelect={true}
           onSelectionChange={(selectedYears) =>
-            handleInputChange("years", selectedYears)
+            handleInputChange("yearsOfBirth", selectedYears)
           }
         />
       </View>
 
       <Button
         text="Create Team"
+        onPress={createTeam}
         textStyle={{ color: colorScheme.white, fontSize: 22 }}
         containerStyle={{
           width: "70%",
