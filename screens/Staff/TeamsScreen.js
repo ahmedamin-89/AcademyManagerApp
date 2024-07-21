@@ -13,6 +13,8 @@ import backendURL from "../../constants/backendURL";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import DataStatus from "../../components/UI/DataStatus";
+import TeamCard from "../../components/Club/TeamCard";
+import { FlatList } from "react-native-gesture-handler";
 
 const TeamsScreen = ({ navigation }) => {
   const bottomSheetModalRef = useRef(null);
@@ -23,7 +25,6 @@ const TeamsScreen = ({ navigation }) => {
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const openBottomSheet = () => {
     if (bottomSheetModalRef.current) {
-      setBottomSheetOpen(true);
       bottomSheetModalRef.current?.present();
     } else {
       console.error("BottomSheetModal ref is not defined");
@@ -32,17 +33,20 @@ const TeamsScreen = ({ navigation }) => {
 
   const fetchTeams = async () => {
     try {
+      setError(null);
+
+      setLoading(true);
       const response = await axios.get(backendURL + "/teams", {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
         },
       });
-      throw new Error("Error");
       setTeams(response.data.teams);
     } catch (error) {
       setError(error?.response?.data?.error);
-
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,10 +80,26 @@ const TeamsScreen = ({ navigation }) => {
   return (
     <BottomSheetModalProvider>
       <View style={styles.container}>
-        {teams.length == 0 && (
-          <DataStatus error={error} loading={loading} setLoading={setLoading} />
+        {(loading || error) && (
+          <DataStatus
+            error={error}
+            loading={loading}
+            setLoading={setLoading}
+            fetchData={fetchTeams}
+          />
+        )}
+
+        {!loading && !error && (
+          <FlatList
+            style={{ width: "100%", paddingHorizontal: 20, paddingBottom: 60 }}
+            contentContainerStyle={{ gap: 20 }}
+            data={teams}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => <TeamCard {...item} team={item} />}
+          />
         )}
       </View>
+
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
@@ -87,7 +107,6 @@ const TeamsScreen = ({ navigation }) => {
         enableContentPanningGesture={false}
         backgroundStyle={styles.bottomSheetBackground}
         enablePanDownToClose={true}
-        onDismiss={() => setBottomSheetOpen(false)}
         backdropComponent={() => (
           <Pressable
             onPress={() => {

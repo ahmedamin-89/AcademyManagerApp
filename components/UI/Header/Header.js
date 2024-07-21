@@ -9,14 +9,14 @@ const Header = () => {
     <View style={styles.container}>
       <View style={styles.logoContainer}>
         <Image
-          source={require("../../../assets/images/starsAcademyLogo.png")}
+          source={require("../../../assets/images/X Play Crest.png")}
           style={styles.logo}
           contentFit="contain"
         />
       </View>
       <View style={styles.nameContainer}>
-        <Text style={styles.academyName}>Stars F.C.</Text>
-        <Text style={styles.estDate}>Est. 2010</Text>
+        <Text style={styles.academyName}>X PLAY F.A.</Text>
+        <Text style={styles.estDate}>Est. 2024</Text>
       </View>
       <View style={styles.notificationContainer}>
         <Ionicons name="notifications" size={30} color="white" />
