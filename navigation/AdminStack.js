@@ -8,7 +8,6 @@ import TeamsScreen from "../screens/Staff/TeamsScreen";
 import FinancialsScreen from "../screens/Staff/FinancialsScreen";
 import AttendanceDashboardScreen from "../screens/Staff/AttendanceDashboardScreen";
 import TrainingSessionsScreen from "../screens/Staff/TrainingSessionsScreen";
-
 import TabNavigator from "./TabNavigator";
 import BackButton from "../components/Buttons/BackButton";
 import colorScheme from "../constants/colorScheme";

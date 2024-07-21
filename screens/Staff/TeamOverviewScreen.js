@@ -10,6 +10,7 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import Picture from "../../components/UI/Picture";
 
 const TeamOverviewScreen = ({ navigation, route }) => {
   const { name, yearsOfBirth } = route.params;
@@ -26,8 +27,6 @@ const TeamOverviewScreen = ({ navigation, route }) => {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
@@ -76,7 +75,7 @@ const TeamOverviewScreen = ({ navigation, route }) => {
       >
         <BottomSheetView style={styles.contentContainer}>
           <Button title="Pick an image from camera roll" onPress={pickImage} />
-          {image && <Image source={{ uri: image }} style={styles.image} />}
+          <Picture uri={image} />
         </BottomSheetView>
       </BottomSheetModal>
     </BottomSheetModalProvider>
