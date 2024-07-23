@@ -23,7 +23,6 @@ const TeamsScreen = ({ navigation }) => {
   const [teams, setTeams] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
   const openBottomSheet = () => {
     if (bottomSheetModalRef.current) {
       bottomSheetModalRef.current?.present();
@@ -131,6 +130,7 @@ const TeamsScreen = ({ navigation }) => {
           <CreateTeamForm
             closeBottomSheet={() => {
               bottomSheetModalRef.current?.dismiss();
+              fetchTeams();
             }}
           />
         </BottomSheetView>

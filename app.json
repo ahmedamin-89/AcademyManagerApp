@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Academy Manager",
-    "slug": "AcademyManager",
+    "name": "AcademyManager",
+    "slug": "Academy Manager",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

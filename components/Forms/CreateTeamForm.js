@@ -75,11 +75,16 @@ const CreateTeamForm = ({ closeBottomSheet }) => {
       <Button
         text="Create Team"
         onPress={createTeam}
+        loading={loading}
+        disabled={
+          teamDetails.teamName === "" || teamDetails.yearsOfBirth.length === 0
+        }
         textStyle={{ color: colorScheme.white, fontSize: 22 }}
         containerStyle={{
           width: "70%",
           backgroundColor: colorScheme.green,
           marginTop: "auto",
+          marginTop: 20,
         }}
       />
     </BottomSheetView>

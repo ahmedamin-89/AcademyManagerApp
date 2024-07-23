@@ -42,6 +42,7 @@ const TeamOverviewScreen = ({ navigation, route }) => {
   const snapPoints = ["78%"];
   const bottomSheetModalRef = useRef(null);
   const [updatingInfo, setUpdatingInfo] = useState(false);
+  const [deletingTeam, setDeletingTeam] = useState(false);
 
   const [teamDetails, setTeamDetails] = useState({
     name,
@@ -149,12 +150,10 @@ const TeamOverviewScreen = ({ navigation, route }) => {
 
   const deleteTeamHandler = async () => {
     try {
-      const response = await axios.delete(`${backendURL}/teams`, {
+      setDeletingTeam(true);
+      const response = await axios.delete(`${backendURL}/teams/${_id}`, {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
-        },
-        data: {
-          teamId: _id,
         },
       });
 
@@ -162,6 +161,8 @@ const TeamOverviewScreen = ({ navigation, route }) => {
       Alert.alert("Success", response.data.message);
     } catch (error) {
       Alert.alert("Error", error.response?.data?.error || error.message);
+    } finally {
+      setDeletingTeam(false);
     }
   };
 
@@ -174,7 +175,7 @@ const TeamOverviewScreen = ({ navigation, route }) => {
       {
         text: "Delete",
         style: "destructive",
-        onPress: () => {},
+        onPress: deleteTeamHandler,
       },
     ]);
   };
@@ -255,6 +256,7 @@ const TeamOverviewScreen = ({ navigation, route }) => {
           <Button
             text="Delete Team"
             onPress={deleteTeam}
+            loading={deletingTeam}
             textStyle={{ color: colorScheme.white, fontSize: 22 }}
             containerStyle={{
               width: "70%",
