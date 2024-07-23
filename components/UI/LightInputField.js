@@ -29,7 +29,7 @@ const ForgotPasswordButton = () => {
   );
 };
 
-const InputField = ({
+const LightInputField = ({
   name,
   label,
   value,
@@ -107,7 +107,7 @@ const InputField = ({
   );
 };
 
-export default InputField;
+export default LightInputField;
 
 const styles = StyleSheet.create({
   input: {

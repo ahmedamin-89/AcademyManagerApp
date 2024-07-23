@@ -4,4 +4,5 @@ export default colorScheme = {
   lightGrey: "#e9ecef",
   green: "#2DD881",
   white: "#FFFFFF",
+  red: "#f02d3a",
 };

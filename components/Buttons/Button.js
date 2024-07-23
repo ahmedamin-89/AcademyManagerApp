@@ -3,11 +3,18 @@ import React from "react";
 import colorScheme from "../../constants/colorScheme";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
-const Button = ({ text, onPress, containerStyle, textStyle, loading }) => {
+const Button = ({
+  text,
+  onPress,
+  containerStyle,
+  textStyle,
+  loading,
+  disabled,
+}) => {
   return (
     <Pressable
       onPress={
-        loading
+        loading || disabled
           ? () => {
               return;
             }
@@ -16,14 +23,17 @@ const Button = ({ text, onPress, containerStyle, textStyle, loading }) => {
       style={({ pressed }) => [
         styles.container,
         containerStyle,
-
-        !loading && pressed && { opacity: 0.75 },
+        disabled && styles.disabledContainer,
+        !loading && !disabled && pressed && { opacity: 0.75 },
       ]}
+      disabled={loading || disabled}
     >
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <Text style={[styles.text, textStyle]}>{text}</Text>
+        <Text style={[styles.text, textStyle, disabled && styles.disabledText]}>
+          {text}
+        </Text>
       )}
     </Pressable>
   );
@@ -50,5 +60,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     fontFamily: "Condensed-Black",
+  },
+  disabledContainer: {
+    backgroundColor: "#d3d3d3",
+    shadowColor: "#d3d3d3",
+  },
+  disabledText: {
+    color: "#a9a9a9",
   },
 });

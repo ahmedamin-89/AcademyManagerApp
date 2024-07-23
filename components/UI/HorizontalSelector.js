@@ -9,8 +9,11 @@ const HorizontalSelector = ({
   showAllOption = true,
   multipleSelect = false,
   onSelectionChange,
+  initialSelection = [],
 }) => {
-  const [selected, setSelected] = useState(showAllOption ? ["All"] : []);
+  const [selected, setSelected] = useState(
+    showAllOption ? ["All"] : initialSelection
+  );
 
   const handleSelect = (item) => {
     if (multipleSelect) {

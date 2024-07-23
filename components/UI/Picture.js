@@ -7,7 +7,7 @@ import colorScheme from "../../constants/colorScheme";
 const Picture = ({ uri, pickImage }) => {
   return (
     <View style={{ alignSelf: "center" }}>
-      <Image source={placeholder} style={styles.image} />
+      <Image source={{ uri }} style={styles.image} />
       <Pressable
         style={({ pressed }) => [
           styles.cameraIcon,
@@ -30,9 +30,10 @@ export default Picture;
 
 const styles = StyleSheet.create({
   image: {
-    width: 200,
-    height: 200,
-    borderRadius: 100,
+    width: 210,
+    height: 210,
+    borderRadius: 105,
+    backgroundColor: colorScheme.lightGrey,
   },
   cameraIcon: {
     position: "absolute",

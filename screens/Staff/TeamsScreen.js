@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { useRef, useState, useLayoutEffect } from "react";
+import { useRef, useState, useLayoutEffect, useCallback } from "react";
 import colorScheme from "../../constants/colorScheme";
 import {
   BottomSheetModalProvider,
@@ -15,6 +15,7 @@ import axios from "axios";
 import DataStatus from "../../components/UI/DataStatus";
 import TeamCard from "../../components/Club/TeamCard";
 import { FlatList } from "react-native-gesture-handler";
+import { useFocusEffect } from "@react-navigation/native";
 
 const TeamsScreen = ({ navigation }) => {
   const bottomSheetModalRef = useRef(null);
@@ -74,9 +75,13 @@ const TeamsScreen = ({ navigation }) => {
         </Pressable>
       ),
     });
-    fetchTeams();
   }, [navigation]);
 
+  useFocusEffect(
+    useCallback(() => {
+      fetchTeams();
+    }, [])
+  );
   return (
     <BottomSheetModalProvider>
       <View style={styles.container}>

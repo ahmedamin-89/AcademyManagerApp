@@ -21,7 +21,7 @@ const TeamCard = ({ name, _id, team }) => {
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.8 }]}
     >
       <ImageBackground
-        source={kids}
+        source={{ uri: team.imageUrl }}
         style={styles.imageBackground}
         resizeMode="cover"
         imageStyle={{ alignSelf: "flex-end" }}
