@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
-    fontSize: 44,
+    fontSize: 48,
     fontWeight: "bold",
     fontFamily: "Ultra-Condensed-Black",
   },
