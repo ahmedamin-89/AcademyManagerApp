@@ -1,13 +1,8 @@
-import {
-  ImageBackground,
-  Pressable,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import kids from "../../assets/images/hussein.png";
 import { useNavigation } from "@react-navigation/native";
+import { ImageBackground } from "expo-image";
 
 const TeamCard = ({ name, _id, team }) => {
   const navigation = useNavigation();
@@ -23,8 +18,9 @@ const TeamCard = ({ name, _id, team }) => {
       <ImageBackground
         source={{ uri: team.imageUrl }}
         style={styles.imageBackground}
-        resizeMode="cover"
+        contentFit="cover"
         imageStyle={{ alignSelf: "flex-end" }}
+        cachePolicy="memory-disk"
       >
         <View style={styles.overlay} />
         <Text style={styles.text}>{name}</Text>

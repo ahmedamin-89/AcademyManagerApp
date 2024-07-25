@@ -1,4 +1,11 @@
-import { Pressable, StyleSheet, Text, View, Alert } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  FlatList,
+} from "react-native";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import MenuButton from "../../components/Buttons/MenuButton";
@@ -18,6 +25,7 @@ import * as ImageManipulator from "expo-image-manipulator";
 import LightInputField from "../../components/UI/LightInputField";
 import axios from "axios";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
+import CoachTeamCard from "../../components/Club/CoachTeamCard";
 
 const yearsData = [
   2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
@@ -30,6 +38,18 @@ const arraysEqual = (a, b) => {
   }
   return true;
 };
+
+const coaches = [
+  {
+    name: "Reda Seeka",
+  },
+  {
+    name: "Mohamed Salah",
+  },
+  {
+    name: "Loay Elsobky",
+  },
+];
 
 const TeamOverviewScreen = ({ navigation, route }) => {
   const { name, yearsOfBirth, _id, imageUrl } = route.params;
@@ -137,14 +157,13 @@ const TeamOverviewScreen = ({ navigation, route }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: name,
       headerRight: () => <MenuButton onPress={openBottomSheet} />,
     });
   }, [navigation]);
 
   useEffect(() => {
     navigation.setOptions({
-      title: storedTeamDetails.name,
+      title: `${storedTeamDetails.name} Team`,
     });
   }, [navigation, storedTeamDetails.name]);
 
@@ -182,7 +201,32 @@ const TeamOverviewScreen = ({ navigation, route }) => {
 
   return (
     <BottomSheetModalProvider>
-      <View style={styles.container}></View>
+      <View style={styles.container}>
+        <View style={styles.section}>
+          <Text style={styles.title}>Training Details</Text>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.title}>Assigned Coaches</Text>
+          <FlatList
+            data={coaches}
+            keyExtractor={(item) => item.name}
+            renderItem={({ item }) => (
+              <CoachTeamCard name={item.name} team={item} />
+            )}
+            contentContainerStyle={{
+              gap: 10,
+              paddingVertical: 10,
+              overflow: "visible",
+            }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
+        </View>
+        <Text style={[styles.title, { color: "white", paddingTop: 10 }]}>
+          Players
+        </Text>
+      </View>
+      <View style={styles.playersContainer}></View>
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
@@ -273,7 +317,6 @@ export default TeamOverviewScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 12,
     gap: 20,
     backgroundColor: colorScheme.black,
@@ -288,6 +331,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 12,
   },
+  greenLine: {
+    height: 8,
+    borderRadius: 4,
+  },
   label: {
     color: colorScheme.grey,
     fontSize: 16,
@@ -298,5 +345,25 @@ const styles = StyleSheet.create({
   bottomSheetBackground: {
     backgroundColor: "white",
     borderRadius: 10,
+  },
+  section: {
+    backgroundColor: colorScheme.lightGrey,
+    padding: 10,
+    borderRadius: 6,
+  },
+  text: {
+    color: colorScheme.black,
+    fontSize: 22,
+    fontFamily: "Condensed-Black",
+  },
+  title: {
+    color: colorScheme.black,
+    fontSize: 24,
+    fontFamily: "Condensed-Black",
+  },
+  playersContainer: {
+    backgroundColor: colorScheme.grey,
+    padding: 10,
+    flex: 1,
   },
 });
