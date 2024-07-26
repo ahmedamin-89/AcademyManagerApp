@@ -3,12 +3,10 @@ import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import SearchBar from "../../components/UI/SearchBar";
 import { Ionicons } from "@expo/vector-icons";
-import data from "../../data/players";
 import PlayerSearchCard from "../../components/Club/PlayerSearchCard";
 import {
   BottomSheetModal,
   BottomSheetModalProvider,
-  BottomSheetView,
 } from "@gorhom/bottom-sheet";
 import PlayerSearchBottomTab from "../../components/Club/PlayerSearchBottomTab";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";

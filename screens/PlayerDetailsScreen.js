@@ -14,9 +14,9 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
   const [PlayerDetails, setPlayerDetails] = useState({
     name: "Hussein Mohamed",
     parentName: "Sara Khaled",
-    parentPhone: "01117775978",
+    parentPhoneNumber: "01117775978",
     knownAs: "- - -",
-    playerPhone: "01117775978",
+    phoneNumber: "01117775978",
     DOB: new Date("2007-01-22T00:00:00.000Z"),
     position: "",
     team: "",
@@ -70,9 +70,9 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
   };
 
   useLayoutEffect(() => {
-    navigation.setOptions({
-      title: name,
-    });
+    // navigation.setOptions({
+    //   title: name,
+    // });
     setPlayerDetails({
       ...route.params.player,
       knownAs: route.params.player.knownAs || "- - -",
@@ -102,11 +102,11 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.item1}>
         <Text style={styles.title}>Player's Phone</Text>
-        <Text style={styles.text}>{PlayerDetails.playerPhone}</Text>
+        <Text style={styles.text}>{PlayerDetails.phoneNumber}</Text>
       </View>
       <View style={styles.item2}>
         <Text style={styles.title}>Parent's Phone</Text>
-        <Text style={styles.text}>{PlayerDetails.parentPhone}</Text>
+        <Text style={styles.text}>{PlayerDetails.parentPhoneNumber}</Text>
       </View>
     </View>
   );
