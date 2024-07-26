@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import Button from "../Buttons/Button";
 import colorScheme from "../../constants/colorScheme";
@@ -8,6 +8,7 @@ import DateSelector from "../UI/DateSelector";
 import HorizontalSelector from "../UI/HorizontalSelector";
 import { ScrollView } from "react-native-gesture-handler";
 import RatingAdjuster from "../UI/RatingAdjuster";
+import { UserContext } from "../../context/userContext";
 
 const positions = [
   "ST",
@@ -26,6 +27,8 @@ const AddPlayerForm = () => {
     startDate: new Date().toISOString(),
     endDate: new Date().toISOString(),
   });
+  const { academy } = useContext(UserContext);
+  const teams = academy.teams;
 
   const [PlayerDetails, setPlayerDetails] = useState({
     playerName: "",
@@ -47,6 +50,11 @@ const AddPlayerForm = () => {
 
   const handlePositionChange = (selectedPositions) => {
     handleInputChange("position", selectedPositions);
+  };
+
+  const handleTeamChange = (selectedTeam) => {
+    const teamId = teams.find((team) => team.name === selectedTeam)._id;
+    handleInputChange("team", teamId);
   };
 
   return (
@@ -85,6 +93,17 @@ const AddPlayerForm = () => {
             itemStyle={{ backgroundColor: colorScheme.lightGrey }}
             multipleSelect={true}
             onSelectionChange={handlePositionChange}
+          />
+        </View>
+        <View style={{ gap: 4, width: "100%" }}>
+          <Text style={styles.label}>Team</Text>
+          <HorizontalSelector
+            showAllOption={false}
+            data={teams.map((team) => team.name)}
+            itemStyle={{ backgroundColor: colorScheme.lightGrey }}
+            onSelectionChange={(selectedTeam) =>
+              handleTeamChange(selectedTeam[0])
+            }
           />
         </View>
         <View

@@ -15,7 +15,7 @@ const PlayerSearchCard = ({
       onPress={onPress}
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.97 }]}
     >
-      <View style={{ width: "48%" }}>
+      <View style={{ width: "48%", justifyContent: "center" }}>
         <Text style={[styles.text]}>{name}</Text>
       </View>
       <View style={styles.statsContainer}>
@@ -54,7 +54,7 @@ export default PlayerSearchCard;
 
 const styles = StyleSheet.create({
   container: {
-    height: 112,
+    height: 100,
     width: "100%",
     backgroundColor: colorScheme.black,
     justifyContent: "center",

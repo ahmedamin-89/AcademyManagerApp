@@ -11,6 +11,14 @@ export const UserContext = createContext({
     role: "",
   },
   token: "",
+  academy: {
+    id: "",
+    name: "Academy Name",
+    playersCount: 0,
+    logoURL: "",
+    staffCount: 0,
+    teams: [],
+  },
   loading: true,
   setUser: () => {},
   setToken: () => {},
@@ -25,6 +33,16 @@ export const UserContextProvider = ({ children }) => {
     phoneNumber: "",
     role: "",
   });
+
+  const [academy, setAcademy] = useState({
+    id: "",
+    name: "Academy Name",
+    playersCount: 0,
+    logoURL: "",
+    staffCount: 0,
+    teams: [],
+  });
+
   const [token, setToken] = useState("");
   const [loading, setLoading] = useState(true);
 
@@ -69,6 +87,14 @@ export const UserContextProvider = ({ children }) => {
     await AsyncStorage.removeItem("authToken");
     setToken("");
     setUser({ id: "", name: "", phoneNumber: "", role: "" });
+    setAcademy({
+      id: "",
+      name: "Academy Name",
+      playersCount: 0,
+      logoURL: "",
+      staffCount: 0,
+      teams: [],
+    });
   };
 
   const fetchUserData = async (authToken) => {
@@ -79,6 +105,7 @@ export const UserContextProvider = ({ children }) => {
         },
       });
       setUser(response.data.user);
+      setAcademy(response.data.academy);
     } catch (error) {
       console.error("Failed to fetch user data:", error);
       logout();
@@ -87,7 +114,14 @@ export const UserContextProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, token, loading, setUser, setToken, login, logout }}
+      value={{
+        user,
+        token,
+        loading,
+        academy,
+        login,
+        logout,
+      }}
     >
       {children}
     </UserContext.Provider>

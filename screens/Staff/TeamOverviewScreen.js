@@ -5,6 +5,7 @@ import {
   View,
   Alert,
   FlatList,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
@@ -26,6 +27,10 @@ import LightInputField from "../../components/UI/LightInputField";
 import axios from "axios";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
 import CoachTeamCard from "../../components/Club/CoachTeamCard";
+import TrainingDetailCard from "../../components/Club/TrainingDetailCard";
+import PlayerSearchCard from "../../components/Club/PlayerSearchCard";
+import playersData from "../../data/players";
+import TeamPlayersOverviewHeader from "../../components/TeamOverview/TeamPlayersOverviewHeader";
 
 const yearsData = [
   2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
@@ -204,6 +209,18 @@ const TeamOverviewScreen = ({ navigation, route }) => {
       <View style={styles.container}>
         <View style={styles.section}>
           <Text style={styles.title}>Training Details</Text>
+          <FlatList
+            data={coaches}
+            keyExtractor={(item) => item.name}
+            renderItem={({ item }) => <TrainingDetailCard />}
+            contentContainerStyle={{
+              gap: 10,
+              paddingVertical: 10,
+              overflow: "visible",
+            }}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+          />
         </View>
         <View style={styles.section}>
           <Text style={styles.title}>Assigned Coaches</Text>
@@ -222,11 +239,25 @@ const TeamOverviewScreen = ({ navigation, route }) => {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-        <Text style={[styles.title, { color: "white", paddingTop: 10 }]}>
-          Players
-        </Text>
+        <TeamPlayersOverviewHeader players={playersData.players} />
       </View>
-      <View style={styles.playersContainer}></View>
+      <View style={styles.greenLine} />
+      <View style={styles.playersContainer}>
+        <FlatList
+          style={{ flex: 1, width: "100%" }}
+          contentContainerStyle={{ backgroundColor: colorScheme.white, gap: 1 }}
+          data={playersData.players}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <PlayerSearchCard
+              onPress={() =>
+                navigation.navigate("PlayerDetails", { player: item })
+              }
+              {...item}
+            />
+          )}
+        />
+      </View>
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
@@ -318,7 +349,7 @@ export default TeamOverviewScreen;
 const styles = StyleSheet.create({
   container: {
     padding: 12,
-    gap: 20,
+    gap: 14,
     backgroundColor: colorScheme.black,
   },
   headerRight: {
@@ -332,8 +363,8 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   greenLine: {
-    height: 8,
-    borderRadius: 4,
+    height: 1,
+    backgroundColor: colorScheme.green,
   },
   label: {
     color: colorScheme.grey,
@@ -362,8 +393,7 @@ const styles = StyleSheet.create({
     fontFamily: "Condensed-Black",
   },
   playersContainer: {
-    backgroundColor: colorScheme.grey,
-    padding: 10,
     flex: 1,
+    backgroundColor: colorScheme.black,
   },
 });

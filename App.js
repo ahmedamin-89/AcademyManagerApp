@@ -10,6 +10,10 @@ import PlayerStack from "./navigation/PlayerStack";
 import ParentStack from "./navigation/ParentStack";
 import { UserContextProvider, UserContext } from "./context/userContext";
 import * as SplashScreen from "expo-splash-screen";
+import { LogBox } from "react-native";
+LogBox.ignoreLogs([
+  "Sending `onAnimatedValueUpdate` with no listeners registered.",
+]);
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
