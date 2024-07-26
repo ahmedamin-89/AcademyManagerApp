@@ -7,7 +7,19 @@ import colorScheme from "../../constants/colorScheme";
 const Picture = ({ uri, pickImage }) => {
   return (
     <View style={{ alignSelf: "center" }}>
-      <Image source={{ uri }} style={styles.image} />
+      {uri && <Image source={{ uri }} style={styles.image} />}
+      {!uri && (
+        <Pressable style={styles.image} onPress={pickImage}>
+          <View style={{ marginBottom: 10 }}>
+            <Ionicons
+              name="person"
+              style={{ alignSelf: "center" }}
+              size={130}
+              color={colorScheme.grey}
+            />
+          </View>
+        </Pressable>
+      )}
       <Pressable
         style={({ pressed }) => [
           styles.cameraIcon,
@@ -34,6 +46,8 @@ const styles = StyleSheet.create({
     height: 210,
     borderRadius: 105,
     backgroundColor: colorScheme.lightGrey,
+    justifyContent: "center",
+    alignItems: "center",
   },
   cameraIcon: {
     position: "absolute",

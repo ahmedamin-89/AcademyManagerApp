@@ -211,6 +211,17 @@ const AddPlayerForm = ({ closeSheet }) => {
       <Button
         loading={loading}
         onPress={AddPlayer}
+        disabled={
+          !PlayerDetails.playerName ||
+          !PlayerDetails.parentName ||
+          !PlayerDetails.parentPhone ||
+          !PlayerDetails.playerPhone ||
+          !PlayerDetails.DOB ||
+          !PlayerDetails.position ||
+          !PlayerDetails.team ||
+          !PlayerDetails.rating ||
+          loading
+        }
         text="Add Player"
         textStyle={{ color: colorScheme.white, fontSize: 22 }}
         containerStyle={{
