@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 const PlayerSearchCard = ({
   name,
-  DOB = 2002,
+  yearOfBirth = 2002,
   rating = 91,
   position,
   onPress,
@@ -21,7 +21,7 @@ const PlayerSearchCard = ({
       <View style={styles.statsContainer}>
         <View style={styles.stat}>
           <Text style={[styles.text, styles.statText]}>DOB</Text>
-          <Text style={[styles.text, styles.statText]}>{DOB}</Text>
+          <Text style={[styles.text, styles.statText]}>{yearOfBirth}</Text>
         </View>
         <View style={styles.stat}>
           <Text style={[styles.text, styles.statText]}>Rate</Text>

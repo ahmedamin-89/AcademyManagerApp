@@ -3,11 +3,10 @@ import { useState } from "react";
 import ColorScheme from "../../constants/colorScheme";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-const DateSelector = ({ setSelectedDates, selectedDates }) => {
+const DateSelector = ({ setSelectedDate, selectedDate }) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-  const [isStartDatePicker, setIsStartDatePicker] = useState(true); // New state to track if we're picking a start date
-  const showDatePicker = (isStartDate) => {
-    setIsStartDatePicker(isStartDate); // Set whether it's start or end date being picked
+
+  const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
 
@@ -16,21 +15,21 @@ const DateSelector = ({ setSelectedDates, selectedDates }) => {
   };
 
   const handleConfirm = (date) => {
-    // Update the selectedDates based on whether it's start or end date
-    if (isStartDatePicker) {
-      setSelectedDates({ ...selectedDates, startDate: toLocalISOString(date) });
-    } else {
-      setSelectedDates({ ...selectedDates, endDate: toLocalISOString(date) });
-    }
-
+    setSelectedDate(
+      new Date(
+        new Date(date).toISOString().slice(0, 10) + "T00:00:00.000+00:00"
+      )
+    );
     hideDatePicker();
   };
 
   return (
     <>
-      <Pressable style={styles.container} onPress={() => showDatePicker(false)}>
+      <Pressable style={styles.container} onPress={showDatePicker}>
         <Text style={styles.dateText}>
-          {new Date(selectedDates.endDate).toLocaleDateString()}
+          {selectedDate
+            ? new Date(selectedDate).toLocaleDateString()
+            : "Select Date"}
         </Text>
       </Pressable>
 
@@ -41,6 +40,25 @@ const DateSelector = ({ setSelectedDates, selectedDates }) => {
         onCancel={hideDatePicker}
       />
     </>
+  );
+};
+
+const toLocalISOString = (date) => {
+  const tzOffset = -date.getTimezoneOffset();
+  const pad = (n) => (n < 10 ? "0" + n : n);
+  const offset =
+    pad(Math.floor(Math.abs(tzOffset) / 60)) +
+    ":" +
+    pad(Math.abs(tzOffset) % 60);
+
+  return (
+    date.getFullYear() +
+    "-" +
+    pad(date.getMonth() + 1) +
+    "-" +
+    pad(date.getDate()) +
+    "T00:00:00" +
+    offset
   );
 };
 
@@ -61,22 +79,3 @@ const styles = StyleSheet.create({
     fontFamily: "Condensed-Light",
   },
 });
-
-const toLocalISOString = (date) => {
-  const tzOffset = -date.getTimezoneOffset();
-  const diff = tzOffset >= 0 ? "+" : "-";
-  const pad = (n) => (n < 10 ? "0" + n : n);
-  const offset =
-    pad(Math.floor(Math.abs(tzOffset) / 60)) +
-    ":" +
-    pad(Math.abs(tzOffset) % 60);
-
-  return new Date(
-    date.getFullYear() +
-      "-" +
-      pad(date.getMonth() + 1) +
-      "-" +
-      pad(date.getDate()) +
-      "T00:00:00Z"
-  );
-};

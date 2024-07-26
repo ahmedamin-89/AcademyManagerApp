@@ -1,5 +1,5 @@
 import { FlatList, Pressable, StyleSheet, View, Text } from "react-native";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import SearchBar from "../../components/UI/SearchBar";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,6 +13,11 @@ import {
 import PlayerSearchBottomTab from "../../components/Club/PlayerSearchBottomTab";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
 import AddPlayerForm from "../../components/Forms/AddPlayerForm";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import backendURL from "../../constants/backendURL";
+import axios from "axios";
+import DataStatus from "../../components/UI/DataStatus";
+import { RefreshControl } from "react-native-gesture-handler";
 
 const TeamsData = [
   "2009",
@@ -29,17 +34,39 @@ const TeamsData = [
 ];
 const PlayersScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const playersData = data.players;
   const bottomSheetModalRef = useRef(null);
   const snapPoints = ["79.5%"];
-  const [bottomSheetOpen, setBottomSheetOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [players, setPlayers] = useState([]);
+  const [error, setError] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchPlayers();
+    setRefreshing(false);
+  }, []);
 
   const openBottomSheet = () => {
     if (bottomSheetModalRef.current) {
-      setBottomSheetOpen(true);
       bottomSheetModalRef.current?.present();
     } else {
       console.error("BottomSheetModal ref is not defined");
+    }
+  };
+
+  const fetchPlayers = async () => {
+    try {
+      const response = await axios.get(`${backendURL}/players/`, {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+        },
+      });
+
+      setPlayers(response.data.players);
+    } catch (error) {
+      setError(error?.response?.data?.error);
+      console.error("Failed to fetch players:", error);
     }
   };
 
@@ -67,6 +94,8 @@ const PlayersScreen = ({ navigation }) => {
         </Pressable>
       ),
     });
+
+    fetchPlayers();
   }, [navigation]);
 
   return (
@@ -83,20 +112,40 @@ const PlayersScreen = ({ navigation }) => {
       </View> */}
         <HorizontalSelector data={TeamsData} />
         <View style={styles.container}>
-          <FlatList
-            style={{ flex: 1, width: "100%" }}
-            contentContainerStyle={styles.flatlist}
-            data={playersData}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <PlayerSearchCard
-                onPress={() =>
-                  navigation.navigate("PlayerDetails", { player: item })
-                }
-                {...item}
+          {players.length === 0 ? (
+            <View style={{ flex: 1, justifyContent: "center" }}>
+              <DataStatus
+                error={error}
+                loading={loading}
+                setLoading={setLoading}
+                fetchData={fetchPlayers}
               />
-            )}
-          />
+            </View>
+          ) : (
+            <FlatList
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  colors={[colorScheme.white]}
+                  tintColor={colorScheme.white}
+                  size={"large"}
+                />
+              }
+              style={{ flex: 1, width: "100%" }}
+              contentContainerStyle={styles.flatlist}
+              data={players}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <PlayerSearchCard
+                  onPress={() =>
+                    navigation.navigate("PlayerDetails", { player: item })
+                  }
+                  {...item}
+                />
+              )}
+            />
+          )}
         </View>
         <BottomSheetModal
           ref={bottomSheetModalRef}
@@ -105,7 +154,6 @@ const PlayersScreen = ({ navigation }) => {
           enableContentPanningGesture={false}
           backgroundStyle={styles.bottomSheetBackground}
           enablePanDownToClose={true}
-          onDismiss={() => setBottomSheetOpen(false)}
           backdropComponent={() => (
             <Pressable
               onPress={() => {
@@ -121,7 +169,13 @@ const PlayersScreen = ({ navigation }) => {
             ></Pressable>
           )}
         >
-          <AddPlayerForm />
+          <AddPlayerForm
+            closeSheet={() => {
+              bottomSheetModalRef.current?.dismiss();
+              setPlayers([]);
+              fetchPlayers();
+            }}
+          />
         </BottomSheetModal>
         <PlayerSearchBottomTab />
       </BottomSheetModalProvider>

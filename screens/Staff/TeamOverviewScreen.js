@@ -68,6 +68,7 @@ const TeamOverviewScreen = ({ navigation, route }) => {
   const bottomSheetModalRef = useRef(null);
   const [updatingInfo, setUpdatingInfo] = useState(false);
   const [deletingTeam, setDeletingTeam] = useState(false);
+  const [players, setPlayers] = useState([]);
 
   const [teamDetails, setTeamDetails] = useState({
     name,
@@ -159,11 +160,24 @@ const TeamOverviewScreen = ({ navigation, route }) => {
   const openBottomSheet = () => {
     bottomSheetModalRef.current?.present();
   };
+  const fetchPlayers = async () => {
+    try {
+      const response = await axios.get(`${backendURL}/players/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+        },
+      });
+      setPlayers(response.data.players);
+    } catch (error) {
+      console.error("Failed to fetch players:", error);
+    }
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => <MenuButton onPress={openBottomSheet} />,
     });
+    fetchPlayers();
   }, [navigation]);
 
   useEffect(() => {
@@ -239,15 +253,15 @@ const TeamOverviewScreen = ({ navigation, route }) => {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-        <TeamPlayersOverviewHeader players={playersData.players} />
+        <TeamPlayersOverviewHeader players={players} />
       </View>
       <View style={styles.greenLine} />
       <View style={styles.playersContainer}>
         <FlatList
           style={{ flex: 1, width: "100%" }}
           contentContainerStyle={{ backgroundColor: colorScheme.white, gap: 1 }}
-          data={playersData.players}
-          keyExtractor={(item) => item.id}
+          data={players}
+          keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
             <PlayerSearchCard
               onPress={() =>

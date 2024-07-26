@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Alert, StyleSheet, Text, View } from "react-native";
 import React, { useContext, useState } from "react";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import Button from "../Buttons/Button";
@@ -9,6 +9,9 @@ import HorizontalSelector from "../UI/HorizontalSelector";
 import { ScrollView } from "react-native-gesture-handler";
 import RatingAdjuster from "../UI/RatingAdjuster";
 import { UserContext } from "../../context/userContext";
+import axios from "axios";
+import backendURL from "../../constants/backendURL";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const positions = [
   "ST",
@@ -22,23 +25,20 @@ const positions = [
   "CAM",
 ];
 
-const AddPlayerForm = () => {
-  const [selectedDates, setSelectedDates] = useState({
-    startDate: new Date().toISOString(),
-    endDate: new Date().toISOString(),
-  });
+const AddPlayerForm = ({ closeSheet }) => {
   const { academy } = useContext(UserContext);
   const teams = academy.teams;
+  const [loading, setLoading] = useState(false);
 
   const [PlayerDetails, setPlayerDetails] = useState({
-    playerName: "",
-    parentName: "",
-    parentPhone: "",
-    playerPhone: "",
-    DOB: "",
+    playerName: "Hussein Mohamed",
+    parentName: "Sara Khaled",
+    parentPhone: "01117775978",
+    playerPhone: "01117775978",
+    DOB: new Date("2007-01-22T00:00:00.000Z"),
     position: "",
     team: "",
-    rating: 70,
+    rating: 72,
   });
 
   const handleInputChange = (name, value) => {
@@ -53,8 +53,66 @@ const AddPlayerForm = () => {
   };
 
   const handleTeamChange = (selectedTeam) => {
-    const teamId = teams.find((team) => team.name === selectedTeam)._id;
+    const teamId = teams.find((team) => team.name === selectedTeam)?._id;
     handleInputChange("team", teamId);
+  };
+
+  const AddPlayer = async () => {
+    if (!PlayerDetails.playerName) {
+      Alert.alert("Player's name is required");
+      return;
+    }
+    if (!PlayerDetails.parentName) {
+      Alert.alert("Parent's name is required");
+      return;
+    }
+    if (!PlayerDetails.parentPhone) {
+      Alert.alert("Parent's phone is required");
+      return;
+    }
+    if (!PlayerDetails.playerPhone) {
+      Alert.alert("Player's phone is required");
+      return;
+    }
+    if (!PlayerDetails.DOB) {
+      Alert.alert("Date of birth is required");
+      return;
+    }
+    if (!PlayerDetails.position) {
+      Alert.alert("Position is required");
+      return;
+    }
+    if (!PlayerDetails.team) {
+      Alert.alert("Team is required");
+      return;
+    }
+    if (!PlayerDetails.rating) {
+      Alert.alert("Rating is required");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        `${backendURL}/players`,
+        {
+          academy: academy.id,
+          ...PlayerDetails,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      Alert.alert("Player Added", response.data.message);
+      closeSheet();
+    } catch (error) {
+      console.error("Failed to add player:", error.message);
+      Alert.alert("Failed to add player", error.response.data.error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -68,21 +126,25 @@ const AddPlayerForm = () => {
           label="Player's Name"
           placeholder="Enter the player's name"
           handleInputChange={(name, text) => handleInputChange(name, text)}
+          value={PlayerDetails.playerName}
         />
         <LightInputField
           label="Parent's Name"
           placeholder="Enter the parent's name"
           handleInputChange={(name, text) => handleInputChange(name, text)}
+          value={PlayerDetails.parentName}
         />
         <LightInputField
           label="Parent's Phone"
           placeholder="Enter the parent's phone number"
           handleInputChange={(name, text) => handleInputChange(name, text)}
+          value={PlayerDetails.parentPhone}
         />
         <LightInputField
           label="Player's Phone"
           placeholder="Enter the player's phone number"
           handleInputChange={(name, text) => handleInputChange(name, text)}
+          value={PlayerDetails.playerPhone}
         />
 
         <View style={{ gap: 4, width: "100%" }}>
@@ -140,13 +202,15 @@ const AddPlayerForm = () => {
             Date of Birth:
           </Text>
           <DateSelector
-            selectedDates={selectedDates}
-            setSelectedDates={setSelectedDates}
+            selectedDate={PlayerDetails.DOB}
+            setSelectedDate={(date) => handleInputChange("DOB", date)}
           />
         </View>
       </ScrollView>
 
       <Button
+        loading={loading}
+        onPress={AddPlayer}
         text="Add Player"
         textStyle={{ color: colorScheme.white, fontSize: 22 }}
         containerStyle={{

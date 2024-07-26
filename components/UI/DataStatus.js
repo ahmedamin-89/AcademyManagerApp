@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: colorScheme.black,
   },
   text: {
     color: colorScheme.lightGrey,
