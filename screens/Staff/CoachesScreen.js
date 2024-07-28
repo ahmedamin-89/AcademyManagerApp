@@ -1,5 +1,5 @@
-import { StyleSheet, View } from "react-native";
-import React, { useRef } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import React, { useRef, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import { Ionicons } from "@expo/vector-icons";
 import { useLayoutEffect } from "react";
@@ -9,15 +9,42 @@ import {
   BottomSheetModalProvider,
 } from "@gorhom/bottom-sheet";
 import CreateCoachForm from "../../components/Forms/CreateCoachForm";
+import CoachCard from "../../components/Club/CoachCard";
+import backendURL from "../../constants/backendURL";
+import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import DataStatus from "../../components/UI/DataStatus";
 const CoachesScreen = ({ navigation }) => {
   const bottomSheetModalRef = useRef(null);
   const snapPoints = ["65%"];
+  const [coaches, setCoaches] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const openBottomSheet = () => {
     if (bottomSheetModalRef.current) {
       bottomSheetModalRef.current?.present();
     } else {
       console.error("BottomSheetModal ref is not defined");
+    }
+  };
+
+  const fetchCoaches = async () => {
+    try {
+      setError(null);
+
+      setLoading(true);
+      const response = await axios.get(backendURL + "/coaches", {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+        },
+      });
+      setCoaches(response.data.coaches);
+    } catch (error) {
+      setError(error?.response?.data?.error);
+      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -45,11 +72,32 @@ const CoachesScreen = ({ navigation }) => {
         </Pressable>
       ),
     });
+    fetchCoaches();
   }, [navigation]);
 
   return (
     <BottomSheetModalProvider>
-      <View style={styles.container}></View>
+      <View style={styles.container}>
+        {(loading || error) && (
+          <View style={{ paddingTop: 270 }}>
+            <DataStatus
+              error={error}
+              loading={loading}
+              setLoading={setLoading}
+              fetchData={fetchCoaches}
+            />
+          </View>
+        )}
+        {!loading && !error && (
+          <FlatList
+            style={{ width: "100%" }}
+            contentContainerStyle={{ gap: 6 }}
+            data={coaches}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => <CoachCard {...item} />}
+          />
+        )}
+      </View>
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
@@ -72,7 +120,12 @@ const CoachesScreen = ({ navigation }) => {
           ></Pressable>
         )}
       >
-        <CreateCoachForm />
+        <CreateCoachForm
+          closeBottomSheet={() => {
+            bottomSheetModalRef.current?.dismiss();
+            fetchCoaches();
+          }}
+        />
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );
@@ -83,7 +136,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colorScheme.black,
     alignItems: "center",
-    justifyContent: "center",
+    padding: 10,
+    paddingHorizontal: 14,
   },
 });
 

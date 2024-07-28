@@ -1,5 +1,12 @@
 import { FlatList, Pressable, StyleSheet, View, Text } from "react-native";
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import colorScheme from "../../constants/colorScheme";
 import SearchBar from "../../components/UI/SearchBar";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,20 +23,8 @@ import backendURL from "../../constants/backendURL";
 import axios from "axios";
 import DataStatus from "../../components/UI/DataStatus";
 import { RefreshControl } from "react-native-gesture-handler";
+import { UserContext } from "../../context/userContext";
 
-const TeamsData = [
-  "2009",
-  "2010",
-  "2011",
-  "2012",
-  "2013",
-  "2014",
-  "2015",
-  "2016",
-  "2017",
-  "2018",
-  "2019",
-];
 const PlayersScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const bottomSheetModalRef = useRef(null);
@@ -38,6 +33,8 @@ const PlayersScreen = ({ navigation }) => {
   const [players, setPlayers] = useState([]);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
+  const { academy } = useContext(UserContext);
+  const [selectedYear, setSelectedYear] = useState("All");
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -55,11 +52,16 @@ const PlayersScreen = ({ navigation }) => {
 
   const fetchPlayers = async () => {
     try {
-      const response = await axios.get(`${backendURL}/players/`, {
-        headers: {
-          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
-        },
-      });
+      const response = await axios.get(
+        `${backendURL}/players/${
+          Number.isInteger(selectedYear) ? selectedYear : ""
+        }`,
+        {
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+          },
+        }
+      );
 
       setPlayers(response.data.players);
     } catch (error) {
@@ -92,9 +94,11 @@ const PlayersScreen = ({ navigation }) => {
         </Pressable>
       ),
     });
-
-    fetchPlayers();
   }, [navigation]);
+
+  useEffect(() => {
+    fetchPlayers();
+  }, [selectedYear]);
 
   return (
     <View style={{ flex: 1, backgroundColor: colorScheme.black }}>
@@ -105,10 +109,11 @@ const PlayersScreen = ({ navigation }) => {
             setSearchQuery={setSearchQuery}
           />
         </View>
-        {/* <View style={[styles.filterContainer, bottomSheetOpen && { zIndex: 0 }]}>
-        <SelectItemList placeholder="Team" />
-      </View> */}
-        <HorizontalSelector data={TeamsData} />
+
+        <HorizontalSelector
+          data={academy.yearsOfBirth}
+          onSelectionChange={(year) => setSelectedYear(year[0])}
+        />
         <View style={styles.container}>
           {players.length === 0 ? (
             <View style={{ flex: 1, justifyContent: "center" }}>
@@ -185,7 +190,8 @@ export default PlayersScreen;
 
 const styles = StyleSheet.create({
   searchContainer: {
-    paddingVertical: 10,
+    paddingTop: 10,
+    paddingBottom: 14,
     alignItems: "center",
     backgroundColor: colorScheme.black,
   },

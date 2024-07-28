@@ -29,8 +29,8 @@ import HorizontalSelector from "../../components/UI/HorizontalSelector";
 import CoachTeamCard from "../../components/Club/CoachTeamCard";
 import TrainingDetailCard from "../../components/Club/TrainingDetailCard";
 import PlayerSearchCard from "../../components/Club/PlayerSearchCard";
-import playersData from "../../data/players";
 import TeamPlayersOverviewHeader from "../../components/TeamOverview/TeamPlayersOverviewHeader";
+import NoTrainingsView from "../../components/TeamOverview/NoTrainingsView";
 
 const yearsData = [
   2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
@@ -57,7 +57,7 @@ const coaches = [
 ];
 
 const TeamOverviewScreen = ({ navigation, route }) => {
-  const { name, yearsOfBirth, _id, imageUrl } = route.params;
+  const { name, yearsOfBirth, _id, imageUrl, trainings } = route.params;
 
   const [storedTeamDetails, setStoredTeamDetails] = useState({
     name,
@@ -224,7 +224,9 @@ const TeamOverviewScreen = ({ navigation, route }) => {
         <View style={styles.section}>
           <Text style={styles.title}>Training Details</Text>
           <FlatList
-            data={coaches}
+            data={trainings}
+            style={{ width: "100%" }}
+            ListEmptyComponent={<NoTrainingsView />}
             keyExtractor={(item) => item.name}
             renderItem={({ item }) => <TrainingDetailCard />}
             contentContainerStyle={{
@@ -248,6 +250,7 @@ const TeamOverviewScreen = ({ navigation, route }) => {
               gap: 10,
               paddingVertical: 10,
               overflow: "visible",
+              width: "100%",
             }}
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -259,7 +262,11 @@ const TeamOverviewScreen = ({ navigation, route }) => {
       <View style={styles.playersContainer}>
         <FlatList
           style={{ flex: 1, width: "100%" }}
-          contentContainerStyle={{ backgroundColor: colorScheme.white, gap: 1 }}
+          contentContainerStyle={{
+            backgroundColor: colorScheme.white,
+            gap: 1,
+            width: "100%",
+          }}
           data={players}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
@@ -395,6 +402,7 @@ const styles = StyleSheet.create({
     backgroundColor: colorScheme.lightGrey,
     padding: 10,
     borderRadius: 6,
+    width: "100%",
   },
   text: {
     color: colorScheme.black,

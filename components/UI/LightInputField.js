@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   phoneContainer: {
     flexDirection: "row",
     height: 50,
-    backgroundColor: colorScheme.grey,
+    backgroundColor: "#e9ecef",
     borderWidth: 0,
     paddingLeft: 8,
     borderRadius: 4,

@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import Timeline from "react-native-timeline-flatlist";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
+import { UserContext } from "../../context/userContext";
 
 const ScheduleScreen = () => {
   const TeamsData = [
@@ -18,6 +19,16 @@ const ScheduleScreen = () => {
     "2018",
     "2019",
   ];
+  const { academy } = useContext(UserContext);
+  const teams = academy.teams;
+  const [selectedTeam, setSelectedTeam] = useState(null);
+
+  const handleTeamChange = (selectedTeam) => {
+    const teamId = teams.find((team) => team.name === selectedTeam)?._id;
+
+    setSelectedTeam(teamId);
+  };
+
   const data = [
     {
       time: "Dec, 4th",
@@ -48,7 +59,11 @@ const ScheduleScreen = () => {
   ];
   return (
     <View style={styles.container}>
-      <HorizontalSelector data={TeamsData} />
+      <HorizontalSelector
+        data={teams.map((team) => team.name)}
+        itemStyle={{ backgroundColor: colorScheme.lightGrey }}
+        onSelectionChange={(selectedTeam) => handleTeamChange(selectedTeam[0])}
+      />
       <Timeline
         style={{ flex: 1, width: "100%" }}
         data={data}

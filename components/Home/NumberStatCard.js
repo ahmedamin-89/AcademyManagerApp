@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-const NumberStatCard = ({ icon, number, title }) => {
+const NumberStatCard = ({ icon, number, title, onPress }) => {
   return (
-    <View style={[styles.container, styles.shadow]}>
+    <Pressable onPress={onPress} style={[styles.container, styles.shadow]}>
       <View style={styles.titleContainer}>
         {icon}
         <Text style={styles.title}>{title}</Text>
       </View>
       <Text style={styles.number}>{number}</Text>
-    </View>
+    </Pressable>
   );
 };
 

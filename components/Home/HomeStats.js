@@ -7,10 +7,13 @@ import coachIcon from "../../assets/icons/coach.png";
 import groupIcon from "../../assets/icons/group.png";
 import parentsIcon from "../../assets/icons/parents.png";
 import playersIcon from "../../assets/icons/soccer-player.png";
+import { useNavigation } from "@react-navigation/native";
 const HomeStats = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <NumberStatCard
+        onPress={() => navigation.navigate("PlayersStatistics")}
         title="Players"
         number="425"
         icon={<Image source={playersIcon} style={{ width: 40, height: 40 }} />}

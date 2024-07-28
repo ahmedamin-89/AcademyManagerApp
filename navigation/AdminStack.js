@@ -12,6 +12,8 @@ import TabNavigator from "./TabNavigator";
 import BackButton from "../components/Buttons/BackButton";
 import colorScheme from "../constants/colorScheme";
 import TeamOverviewScreen from "../screens/Staff/TeamOverviewScreen";
+import PlayersStatistics from "../screens/Staff/PlayersStatistics";
+import AddTrainingScreen from "../screens/Staff/AddTrainingScreen";
 
 const Stack = createStackNavigator();
 
@@ -80,6 +82,16 @@ const AdminStack = () => {
         name="TeamOverview"
         component={TeamOverviewScreen}
         options={{ headerShown: true, title: "Team Overview" }}
+      />
+      <Stack.Screen
+        name="PlayersStatistics"
+        component={PlayersStatistics}
+        options={{ headerShown: true, title: "Players Statistics" }}
+      />
+      <Stack.Screen
+        name="AddTraining"
+        component={AddTrainingScreen}
+        options={{ headerShown: true, title: "Add Training" }}
       />
     </Stack.Navigator>
   );

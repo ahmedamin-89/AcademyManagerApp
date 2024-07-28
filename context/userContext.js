@@ -18,6 +18,7 @@ export const UserContext = createContext({
     logoURL: "",
     staffCount: 0,
     teams: [],
+    yearsOfBirth: [],
   },
   loading: true,
   setUser: () => {},
@@ -41,6 +42,7 @@ export const UserContextProvider = ({ children }) => {
     logoURL: "",
     staffCount: 0,
     teams: [],
+    yearsOfBirth: [],
   });
 
   const [token, setToken] = useState("");
@@ -94,6 +96,7 @@ export const UserContextProvider = ({ children }) => {
       logoURL: "",
       staffCount: 0,
       teams: [],
+      yearsOfBirth: [],
     });
   };
 

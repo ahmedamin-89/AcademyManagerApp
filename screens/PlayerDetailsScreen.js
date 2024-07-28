@@ -7,6 +7,7 @@ import * as ImageManipulator from "expo-image-manipulator";
 import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import backendURL from "../constants/backendURL";
+import PressablePhoneNumber from "../components/UI/PressablePhoneNumber";
 
 const PlayerDetailsScreen = ({ navigation, route }) => {
   const { name, number, position, _id } = route.params.player;
@@ -102,11 +103,17 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
       </View>
       <View style={styles.item1}>
         <Text style={styles.title}>Player's Phone</Text>
-        <Text style={styles.text}>{PlayerDetails.phoneNumber}</Text>
+        <PressablePhoneNumber
+          style={styles.text}
+          phoneNumber={PlayerDetails.phoneNumber}
+        />
       </View>
       <View style={styles.item2}>
         <Text style={styles.title}>Parent's Phone</Text>
-        <Text style={styles.text}>{PlayerDetails.parentPhoneNumber}</Text>
+        <PressablePhoneNumber
+          style={styles.text}
+          phoneNumber={PlayerDetails.parentPhoneNumber}
+        />
       </View>
     </View>
   );

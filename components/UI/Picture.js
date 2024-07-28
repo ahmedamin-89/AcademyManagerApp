@@ -4,36 +4,74 @@ import React from "react";
 import placeholder from "../../assets/images/hussein.png";
 import { Ionicons } from "@expo/vector-icons";
 import colorScheme from "../../constants/colorScheme";
-const Picture = ({ uri, pickImage }) => {
+const Picture = ({
+  uri,
+  pickImage = () => {},
+  scale = 1,
+  allowEditing = true,
+}) => {
   return (
     <View style={{ alignSelf: "center" }}>
-      {uri && <Image source={{ uri }} style={styles.image} />}
+      {uri && (
+        <Image
+          source={{ uri }}
+          style={[
+            styles.image,
+            scale && {
+              width: 210 * scale,
+              height: 210 * scale,
+              borderRadius: 105 * scale,
+            },
+          ]}
+        />
+      )}
       {!uri && (
-        <Pressable style={styles.image} onPress={pickImage}>
+        <Pressable
+          style={[
+            styles.image,
+            scale && {
+              width: 210 * scale,
+              height: 210 * scale,
+              borderRadius: 105 * scale,
+            },
+          ]}
+          onPress={() => {
+            if (allowEditing) {
+              pickImage();
+            }
+          }}
+        >
           <View style={{ marginBottom: 10 }}>
             <Ionicons
               name="person"
               style={{ alignSelf: "center" }}
-              size={130}
+              size={scale ? 130 * scale : 130}
               color={colorScheme.grey}
             />
           </View>
         </Pressable>
       )}
-      <Pressable
-        style={({ pressed }) => [
-          styles.cameraIcon,
-          pressed && { opacity: 0.9 },
-        ]}
-        onPress={pickImage}
-      >
-        <Ionicons
-          name="camera"
-          style={{}}
-          size={38}
-          color={colorScheme.black}
-        />
-      </Pressable>
+      {allowEditing && (
+        <Pressable
+          style={({ pressed }) => [
+            styles.cameraIcon,
+            scale && {
+              width: 55 * scale,
+              height: 55 * scale,
+              borderRadius: 27.5 * scale,
+            },
+            pressed && { opacity: 0.9 },
+          ]}
+          onPress={pickImage}
+        >
+          <Ionicons
+            name="camera"
+            style={{}}
+            size={scale * 38}
+            color={colorScheme.black}
+          />
+        </Pressable>
+      )}
     </View>
   );
 };

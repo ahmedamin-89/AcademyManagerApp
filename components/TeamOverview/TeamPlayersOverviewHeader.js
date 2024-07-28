@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     backgroundColor: colorScheme.green,
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 8,
     height: 40,
   },
   buttonText: {

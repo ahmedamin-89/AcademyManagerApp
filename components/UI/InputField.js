@@ -42,11 +42,12 @@ const InputField = ({
   textInputStyle,
   login,
   editable,
+  labelStyle,
 }) => {
   if (name === "phoneNumber") {
     return (
       <View style={{ alignSelf: "stretch" }}>
-        <Text style={styles.label}>{label}</Text>
+        <Text style={[styles.label, labelStyle]}>{label}</Text>
         <View style={styles.phoneContainer}>
           <View style={styles.iconContainer}>
             <Image
@@ -74,11 +75,13 @@ const InputField = ({
     <View style={{ alignSelf: "stretch" }}>
       {(login && name) === "password" ? (
         <View style={styles.passwordLabelContainer}>
-          <Text style={[styles.label, { paddingBottom: 0 }]}>Password</Text>
+          <Text style={[styles.label, { paddingBottom: 0 }, labelStyle]}>
+            Password
+          </Text>
           <ForgotPasswordButton />
         </View>
       ) : (
-        <Text style={styles.label}>{label}</Text>
+        <Text style={[styles.label, labelStyle]}>{label}</Text>
       )}
       <TextInput
         style={[styles.input, textInputStyle]}
