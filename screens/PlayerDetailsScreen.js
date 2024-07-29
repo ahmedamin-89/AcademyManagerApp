@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import colorScheme from "../constants/colorScheme";
 import Picture from "../components/UI/Picture";
@@ -8,6 +8,7 @@ import * as FileSystem from "expo-file-system";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import backendURL from "../constants/backendURL";
 import PressablePhoneNumber from "../components/UI/PressablePhoneNumber";
+import Button from "../components/Buttons/Button";
 
 const PlayerDetailsScreen = ({ navigation, route }) => {
   const { name, number, position, _id } = route.params.player;
@@ -81,7 +82,10 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
     });
   }, [navigation]);
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      style={{ backgroundColor: colorScheme.black }}
+    >
       <Picture uri={image || imageUrl} pickImage={pickImage} />
       <View style={styles.item1}>
         <Text style={styles.title}>Full Name</Text>
@@ -115,7 +119,19 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
           phoneNumber={PlayerDetails.parentPhoneNumber}
         />
       </View>
-    </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          onPress={() => navigation.navigate("AddPayment")}
+          text="Add Payment"
+          textStyle={{ color: colorScheme.white, fontSize: 22 }}
+          containerStyle={{
+            backgroundColor: colorScheme.green,
+            marginTop: "auto",
+            marginHorizontal: 5,
+          }}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
@@ -147,5 +163,9 @@ const styles = StyleSheet.create({
     color: colorScheme.white,
     fontSize: 17.5,
     fontFamily: "Condensed-Light",
+  },
+  buttonContainer: {
+    paddingTop: 10,
+    width: "100%",
   },
 });

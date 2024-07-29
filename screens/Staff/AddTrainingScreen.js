@@ -1,11 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
 import StartAndEndDateSelector from "../../components/TeamOverview/StartAndEndDateSelector";
 import LightInputField from "../../components/UI/LightInputField";
 import InputField from "../../components/UI/InputField";
 import Button from "../../components/Buttons/Button";
+import axios from "axios";
+import backendURL from "../../constants/backendURL";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const DAY_NAMES = [
   "Sunday",
   "Monday",
@@ -31,6 +34,18 @@ const TIME = [
   "10:00 PM",
   "10:30 PM",
   "11:00 PM",
+];
+const AvailableLocations = [
+  "New Cairo",
+  "Heliopolis",
+  "Nasr City",
+  "Sheikh Zayed",
+  "Al Shorouk",
+  "Al Rehab",
+  "Maadi",
+  "Mokattam",
+  "Downtown",
+  "6th of October",
 ];
 
 function getMonthDateRange() {
@@ -58,17 +73,32 @@ function getMonthDateRange() {
   };
 }
 
-const AddTrainingScreen = () => {
+const AddTrainingScreen = ({ navigation, route }) => {
   const [trainingDetails, setTrainingDetails] = useState({
-    team: "",
+    team: route.params.teamId,
     startTime: "",
     endTime: "",
     location: "",
     dayNames: [],
+    area: [],
     location: "",
     startDate: null,
     endDate: null,
   });
+
+  useEffect(() => {
+    console.log("Training Details", trainingDetails);
+  }, [trainingDetails]);
+
+  const [availableEndTimes, setAvailableEndTimes] = useState(TIME);
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (trainingDetails.startTime) {
+      const startTimeIndex = TIME.indexOf(trainingDetails.startTime);
+      setAvailableEndTimes(TIME.slice(startTimeIndex + 1));
+    }
+  }, [trainingDetails.startTime]);
+
   const [selectedDates, setSelectedDates] = useState(getMonthDateRange());
 
   const handleInputChange = (name, value) => {
@@ -77,6 +107,32 @@ const AddTrainingScreen = () => {
       [name]: value,
     }));
   };
+
+  const AddTraining = async () => {
+    try {
+      setLoading(true);
+      await axios.post(
+        backendURL + "/trainings",
+        {
+          ...trainingDetails,
+          startDate: selectedDates.startDate,
+          endDate: selectedDates.endDate,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      navigation.goBack();
+      Alert.alert("Success", "Training added successfully");
+    } catch (error) {
+      console.log("Error", error.response?.data?.error || error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <StartAndEndDateSelector
@@ -84,6 +140,7 @@ const AddTrainingScreen = () => {
         setSelectedDates={setSelectedDates}
       />
       <InputField
+        value={trainingDetails.location}
         labelStyle={styles.label}
         label={"Location Name:"}
         placeholder="X FIELD New Cairo"
@@ -101,6 +158,16 @@ const AddTrainingScreen = () => {
         />
       </View>
       <View style={{ gap: 4, width: "100%" }}>
+        <Text style={styles.label}>Area:</Text>
+        <HorizontalSelector
+          showAllOption={false}
+          data={AvailableLocations}
+          multipleSelect={false}
+          itemStyle={{ backgroundColor: colorScheme.lightGrey }}
+          onSelectionChange={(area) => handleInputChange("area", area[0])}
+        />
+      </View>
+      <View style={{ gap: 4, width: "100%" }}>
         <Text style={styles.label}>Starting Time:</Text>
         <HorizontalSelector
           showAllOption={false}
@@ -113,13 +180,15 @@ const AddTrainingScreen = () => {
         <Text style={styles.label}>Ending Time:</Text>
         <HorizontalSelector
           showAllOption={false}
-          data={TIME}
+          data={availableEndTimes}
           itemStyle={{ backgroundColor: colorScheme.lightGrey }}
           onSelectionChange={(time) => handleInputChange("endTime", time[0])}
         />
       </View>
       <View style={styles.buttonContainer}>
         <Button
+          loading={loading}
+          onPress={AddTraining}
           text="Add Training"
           textStyle={{ color: colorScheme.white, fontSize: 22 }}
           containerStyle={{
@@ -127,6 +196,16 @@ const AddTrainingScreen = () => {
             marginTop: "auto",
             marginHorizontal: 5,
           }}
+          disabled={
+            !(
+              trainingDetails.location &&
+              trainingDetails.startTime &&
+              trainingDetails.endTime &&
+              trainingDetails.dayNames.length > 0 &&
+              selectedDates.startDate &&
+              selectedDates.endDate
+            )
+          }
         />
       </View>
     </View>

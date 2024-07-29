@@ -14,6 +14,7 @@ import colorScheme from "../constants/colorScheme";
 import TeamOverviewScreen from "../screens/Staff/TeamOverviewScreen";
 import PlayersStatistics from "../screens/Staff/PlayersStatistics";
 import AddTrainingScreen from "../screens/Staff/AddTrainingScreen";
+import AddPaymentScreen from "../screens/Staff/AddPaymentScreen";
 
 const Stack = createStackNavigator();
 
@@ -92,6 +93,11 @@ const AdminStack = () => {
         name="AddTraining"
         component={AddTrainingScreen}
         options={{ headerShown: true, title: "Add Training" }}
+      />
+      <Stack.Screen
+        name="AddPayment"
+        component={AddPaymentScreen}
+        options={{ headerShown: true, title: "Add Payment" }}
       />
     </Stack.Navigator>
   );

@@ -4,22 +4,23 @@ import { Ionicons } from "@expo/vector-icons";
 import colorScheme from "../../constants/colorScheme";
 
 const TrainingDetailCard = ({
-  days = ["Sun", "Tue", "Thu"],
+  dayNames = ["Sun", "Tue", "Thu"],
   startTime = "6:00 PM",
   endTime = "7:30 PM",
   location = "X Field - New Cairo",
 }) => {
   return (
     <View style={styles.container}>
-      <View style={styles.dayContainer}>
-        {days.map((day) => (
-          <Text style={styles.dayText}>{day}</Text>
-        ))}
-      </View>
       <View style={styles.locationContainer}>
         <Ionicons name="location" size={20} color="black" />
         <Text style={styles.locationText}>{location}</Text>
       </View>
+      <View style={styles.dayContainer}>
+        {dayNames.map((day) => (
+          <Text style={styles.dayText}>{day}</Text>
+        ))}
+      </View>
+
       <View style={styles.timeContainer}>
         <Text style={styles.timeText}>{startTime}</Text>
         <Ionicons name="chevron-forward" size={20} color={colorScheme.black} />
@@ -35,7 +36,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#ced4da",
     height: 100,
-    width: 138,
     borderRadius: 8,
     shadowColor: "#ced4da",
     shadowOffset: { width: 0, height: 2 },
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     width: "100%",
     padding: 5,
+    gap: 10,
   },
   dayText: {
     color: "black",

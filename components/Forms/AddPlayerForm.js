@@ -31,7 +31,7 @@ const AddPlayerForm = ({ closeSheet }) => {
   const [loading, setLoading] = useState(false);
 
   const [PlayerDetails, setPlayerDetails] = useState({
-    playerName: "Hussein Mohamed",
+    playerName: "Ahmed Khalil",
     parentName: "Sara Khaled",
     parentPhone: "01117775978",
     playerPhone: "01117775978",

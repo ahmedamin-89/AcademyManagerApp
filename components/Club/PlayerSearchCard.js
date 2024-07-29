@@ -19,15 +19,15 @@ const PlayerSearchCard = ({
         <Text style={[styles.text]}>{name}</Text>
       </View>
       <View style={styles.statsContainer}>
-        <View style={styles.stat}>
+        <View style={[styles.stat, { width: 40 }]}>
           <Text style={[styles.text, styles.statText]}>DOB</Text>
           <Text style={[styles.text, styles.statText]}>{yearOfBirth}</Text>
         </View>
-        <View style={styles.stat}>
+        <View style={[styles.stat, { width: 38 }]}>
           <Text style={[styles.text, styles.statText]}>Rate</Text>
           <Text style={[styles.text, styles.statText]}>{rating}</Text>
         </View>
-        <View style={styles.stat}>
+        <View style={[styles.stat, { width: 50 }]}>
           <Text style={[styles.text, styles.statText]}>Pos.</Text>
           <Text style={[styles.text, styles.statText]}>{position}</Text>
         </View>

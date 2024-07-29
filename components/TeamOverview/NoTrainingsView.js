@@ -18,7 +18,11 @@ const NoTrainingsView = ({ teamId }) => {
         containerStyle={styles.buttonContainer}
         textStyle={styles.buttonText}
         text="Add Training"
-        onPress={() => navigation.navigate("AddTraining")}
+        onPress={() =>
+          navigation.navigate("AddTraining", {
+            teamId,
+          })
+        }
       />
     </View>
   );

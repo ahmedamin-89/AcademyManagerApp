@@ -57,12 +57,14 @@ const coaches = [
 ];
 
 const TeamOverviewScreen = ({ navigation, route }) => {
-  const { name, yearsOfBirth, _id, imageUrl, trainings } = route.params;
+  const { name, yearsOfBirth, _id, imageUrl } = route.params;
 
   const [storedTeamDetails, setStoredTeamDetails] = useState({
     name,
     yearsOfBirth,
   });
+
+  const [trainingDetails, setTrainingDetails] = useState([]);
 
   const snapPoints = ["78%"];
   const bottomSheetModalRef = useRef(null);
@@ -173,11 +175,25 @@ const TeamOverviewScreen = ({ navigation, route }) => {
     }
   };
 
+  const fetchTrainingDetails = async () => {
+    try {
+      const response = await axios.get(`${backendURL}/trainings/${_id}`, {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+        },
+      });
+      setTrainingDetails(response.data.trainings);
+    } catch (error) {
+      console.error("Failed to fetch training:", error);
+    }
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => <MenuButton onPress={openBottomSheet} />,
     });
     fetchPlayers();
+    fetchTrainingDetails();
   }, [navigation]);
 
   useEffect(() => {
@@ -224,11 +240,11 @@ const TeamOverviewScreen = ({ navigation, route }) => {
         <View style={styles.section}>
           <Text style={styles.title}>Training Details</Text>
           <FlatList
-            data={trainings}
+            data={trainingDetails}
             style={{ width: "100%" }}
-            ListEmptyComponent={<NoTrainingsView />}
-            keyExtractor={(item) => item.name}
-            renderItem={({ item }) => <TrainingDetailCard />}
+            ListEmptyComponent={<NoTrainingsView teamId={_id} />}
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => <TrainingDetailCard {...item} />}
             contentContainerStyle={{
               gap: 10,
               paddingVertical: 10,
