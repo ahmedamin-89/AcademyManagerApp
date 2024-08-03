@@ -1,17 +1,19 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import React, { useLayoutEffect, useState } from "react";
 import colorScheme from "../constants/colorScheme";
 import Picture from "../components/UI/Picture";
-import { ImagePicker } from "expo-image-picker";
-import * as ImageManipulator from "expo-image-manipulator";
-import * as FileSystem from "expo-file-system";
+
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import backendURL from "../constants/backendURL";
 import PressablePhoneNumber from "../components/UI/PressablePhoneNumber";
 import Button from "../components/Buttons/Button";
+import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
+import * as FileSystem from "expo-file-system";
+import { FileSystemUploadType } from "expo-file-system";
 
 const PlayerDetailsScreen = ({ navigation, route }) => {
-  const { name, number, position, _id } = route.params.player;
+  const { name, number, position, _id, imageUrl } = route.params.player;
 
   const [PlayerDetails, setPlayerDetails] = useState({
     name: "Hussein Mohamed",
@@ -27,8 +29,7 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
     yearOfBirth: 2007,
   });
 
-  const imageUrl = null;
-  const image = null;
+  const [image, setImage] = useState(null);
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -38,37 +39,34 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
       base64: false,
     });
 
-    // if (!result.canceled) {
-    //   const manipulatedImage = await ImageManipulator.manipulateAsync(
-    //     result.assets[0].uri,
-    //     [],
-    //     { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
-    //   );
+    if (!result.canceled) {
+      const manipulatedImage = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      );
 
-    //   setImage(manipulatedImage.uri);
-    //   try {
-    //     await FileSystem.uploadAsync(
-    //       `${backendURL}/teams/photo`,
-    //       manipulatedImage.uri,
-    //       {
-    //         httpMethod: "POST",
-    //         uploadType: FileSystemUploadType.MULTIPART,
-    //         fieldName: "image",
-    //         headers: {
-    //           "Content-Type": "multipart/form-data",
-    //           Authorization: `Bearer ${await AsyncStorage.getItem(
-    //             "authToken"
-    //           )}`,
-    //         },
-    //         parameters: {
-    //           teamId: _id,
-    //         },
-    //       }
-    //     );
-    //   } catch (error) {
-    //     Alert.alert("Error", error.response?.data?.error || error.message);
-    //   }
-    // }
+      setImage(manipulatedImage.uri);
+      try {
+        await FileSystem.uploadAsync(
+          `${backendURL}/players/${_id}/image`,
+          manipulatedImage.uri,
+          {
+            httpMethod: "POST",
+            uploadType: FileSystemUploadType.MULTIPART,
+            fieldName: "image",
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${await AsyncStorage.getItem(
+                "authToken"
+              )}`,
+            },
+          }
+        );
+      } catch (error) {
+        Alert.alert("Error", error.response?.data?.error || error.message);
+      }
+    }
   };
 
   useLayoutEffect(() => {

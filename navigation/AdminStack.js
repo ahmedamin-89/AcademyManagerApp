@@ -15,6 +15,7 @@ import TeamOverviewScreen from "../screens/Staff/TeamOverviewScreen";
 import PlayersStatistics from "../screens/Staff/PlayersStatistics";
 import AddTrainingScreen from "../screens/Staff/AddTrainingScreen";
 import AddPaymentScreen from "../screens/Staff/AddPaymentScreen";
+import TakeAttendanceScreen from "../screens/Staff/TakeAttendanceScreen";
 
 const Stack = createStackNavigator();
 
@@ -98,6 +99,11 @@ const AdminStack = () => {
         name="AddPayment"
         component={AddPaymentScreen}
         options={{ headerShown: true, title: "Add Payment" }}
+      />
+      <Stack.Screen
+        name="TakeAttendance"
+        component={TakeAttendanceScreen}
+        options={{ headerShown: true, title: "Take Attendance" }}
       />
     </Stack.Navigator>
   );

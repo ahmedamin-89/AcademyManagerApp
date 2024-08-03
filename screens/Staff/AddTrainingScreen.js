@@ -86,10 +86,6 @@ const AddTrainingScreen = ({ navigation, route }) => {
     endDate: null,
   });
 
-  useEffect(() => {
-    console.log("Training Details", trainingDetails);
-  }, [trainingDetails]);
-
   const [availableEndTimes, setAvailableEndTimes] = useState(TIME);
   const [loading, setLoading] = useState(false);
   useEffect(() => {

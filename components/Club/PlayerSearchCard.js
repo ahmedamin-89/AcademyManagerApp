@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colorScheme from "../../constants/colorScheme";
 import { Ionicons } from "@expo/vector-icons";
+import Picture from "../UI/Picture";
 
 const PlayerSearchCard = ({
   name,
@@ -9,32 +10,41 @@ const PlayerSearchCard = ({
   rating = 91,
   position,
   onPress,
+  imageUrl,
 }) => {
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.97 }]}
     >
-      <View style={{ width: "48%", justifyContent: "center" }}>
+      <View
+        style={{
+          width: "57%",
+          flexDirection: "row",
+          alignItems: "center",
+          paddingLeft: 0,
+          gap: 6,
+        }}
+      >
+        <Picture uri={imageUrl} scale={0.3} allowEditing={false} />
         <Text style={[styles.text]}>{name}</Text>
       </View>
       <View style={styles.statsContainer}>
-        <View style={[styles.stat, { width: 40 }]}>
+        <View style={[styles.stat, { width: 35 }]}>
           <Text style={[styles.text, styles.statText]}>DOB</Text>
           <Text style={[styles.text, styles.statText]}>{yearOfBirth}</Text>
         </View>
-        <View style={[styles.stat, { width: 38 }]}>
+        <View style={[styles.stat, { width: 30 }]}>
           <Text style={[styles.text, styles.statText]}>Rate</Text>
           <Text style={[styles.text, styles.statText]}>{rating}</Text>
         </View>
-        <View style={[styles.stat, { width: 50 }]}>
+        <View style={[styles.stat, { width: 40 }]}>
           <Text style={[styles.text, styles.statText]}>Pos.</Text>
           <Text style={[styles.text, styles.statText]}>{position}</Text>
         </View>
       </View>
       <View
         style={{
-          width: "6%",
           height: "100%",
           justifyContent: "center",
           alignItems: "center",
@@ -63,11 +73,10 @@ const styles = StyleSheet.create({
   },
   text: {
     color: colorScheme.white,
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: "Condensed-Light",
   },
   statsContainer: {
-    width: "46%",
     height: "100%",
     justifyContent: "center",
     alignItems: "center",

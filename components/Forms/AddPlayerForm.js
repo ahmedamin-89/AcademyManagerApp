@@ -12,6 +12,11 @@ import { UserContext } from "../../context/userContext";
 import axios from "axios";
 import backendURL from "../../constants/backendURL";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Picture from "../UI/Picture";
+import * as ImagePicker from "expo-image-picker";
+import * as ImageManipulator from "expo-image-manipulator";
+import * as FileSystem from "expo-file-system";
+import { FileSystemUploadType } from "expo-file-system";
 
 const positions = [
   "ST",
@@ -31,7 +36,7 @@ const AddPlayerForm = ({ closeSheet }) => {
   const [loading, setLoading] = useState(false);
 
   const [PlayerDetails, setPlayerDetails] = useState({
-    playerName: "Ahmed Khalil",
+    playerName: "Loleleo 4",
     parentName: "Sara Khaled",
     parentPhone: "01117775978",
     playerPhone: "01117775978",
@@ -40,6 +45,27 @@ const AddPlayerForm = ({ closeSheet }) => {
     team: "",
     rating: 72,
   });
+  const [image, setImage] = useState(null);
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [16, 9],
+      quality: 1,
+      base64: false,
+    });
+
+    if (!result.canceled) {
+      const manipulatedImage = await ImageManipulator.manipulateAsync(
+        result.assets[0].uri,
+        [],
+        { compress: 0.5, format: ImageManipulator.SaveFormat.JPEG }
+      );
+
+      setImage(manipulatedImage.uri);
+    }
+  };
 
   const handleInputChange = (name, value) => {
     setPlayerDetails((prevState) => ({
@@ -105,10 +131,29 @@ const AddPlayerForm = ({ closeSheet }) => {
           },
         }
       );
+
+      if (image) {
+        await FileSystem.uploadAsync(
+          `${backendURL}/players/${response.data.playerId}/image`,
+          image,
+          {
+            httpMethod: "POST",
+            uploadType: FileSystemUploadType.MULTIPART,
+            fieldName: "image",
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${await AsyncStorage.getItem(
+                "authToken"
+              )}`,
+            },
+          }
+        );
+      }
+
       Alert.alert("Player Added", response.data.message);
       closeSheet();
     } catch (error) {
-      console.error("Failed to add player:", error.message);
+      console.error("Failed to add player:", error);
       Alert.alert("Failed to add player", error.response.data.error);
     } finally {
       setLoading(false);
@@ -121,7 +166,9 @@ const AddPlayerForm = ({ closeSheet }) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.contentContainer}
       >
-        <Text style={styles.text}>Create A Player</Text>
+        <Text style={styles.text}>Add A Player</Text>
+        <Picture uri={image} pickImage={pickImage} scale={0.85} />
+
         <LightInputField
           label="Player's Name"
           placeholder="Enter the player's name"

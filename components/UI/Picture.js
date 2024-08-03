@@ -41,7 +41,7 @@ const Picture = ({
             }
           }}
         >
-          <View style={{ marginBottom: 10 }}>
+          <View style={allowEditing && { marginBottom: 10 }}>
             <Ionicons
               name="person"
               style={{ alignSelf: "center" }}

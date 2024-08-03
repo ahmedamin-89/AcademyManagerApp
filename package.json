@@ -40,7 +40,8 @@
     "react-native-svg": "15.2.0",
     "react-native-timeline-flatlist": "^0.8.0",
     "expo-image-manipulator": "~12.0.5",
-    "expo-linking": "~6.3.1"
+    "expo-linking": "~6.3.1",
+    "expo-checkbox": "~3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
