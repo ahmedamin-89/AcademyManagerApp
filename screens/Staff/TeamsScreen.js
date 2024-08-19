@@ -16,6 +16,7 @@ import DataStatus from "../../components/UI/DataStatus";
 import TeamCard from "../../components/Club/TeamCard";
 import { FlatList } from "react-native-gesture-handler";
 import { useFocusEffect } from "@react-navigation/native";
+import SheetBackdrop from "../../components/BottomSheets/SheetBackdrop";
 
 const TeamsScreen = ({ navigation }) => {
   const bottomSheetModalRef = useRef(null);
@@ -112,18 +113,11 @@ const TeamsScreen = ({ navigation }) => {
         backgroundStyle={styles.bottomSheetBackground}
         enablePanDownToClose={true}
         backdropComponent={() => (
-          <Pressable
+          <SheetBackdrop
             onPress={() => {
               bottomSheetModalRef.current?.dismiss();
             }}
-            style={{
-              height: "100%",
-              position: "absolute",
-              width: "100%",
-              zIndex: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.65)",
-            }}
-          ></Pressable>
+          />
         )}
       >
         <BottomSheetView style={styles.contentContainer}>

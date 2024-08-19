@@ -3,13 +3,15 @@ import React from "react";
 import colorScheme from "../../constants/colorScheme";
 import Checkbox from "expo-checkbox";
 import Picture from "../UI/Picture";
+import PressablePhoneNumber from "../UI/PressablePhoneNumber";
 
 const PlayerAttendanceCard = ({
   name,
   phoneNumber,
   eventId,
-  attended = false,
+  attended,
   imageUrl,
+  onValueChange,
 }) => {
   return (
     <View style={styles.container}>
@@ -20,11 +22,12 @@ const PlayerAttendanceCard = ({
         <Text style={styles.text}>{name}</Text>
       </View>
       <View style={styles.nameContainer}>
-        <Text style={styles.text}>{phoneNumber}</Text>
+        <PressablePhoneNumber style={styles.text} phoneNumber={phoneNumber} />
       </View>
+
       <Checkbox
         value={attended}
-        onValueChange={() => {}}
+        onValueChange={onValueChange}
         color={colorScheme.green}
         style={styles.checkbox}
       />
@@ -55,6 +58,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginLeft: "auto",
     marginRight: 10,
+    width: 23,
+    height: 23,
   },
   imageContainer: {
     marginRight: 10,

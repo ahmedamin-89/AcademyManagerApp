@@ -14,12 +14,15 @@ import backendURL from "../../constants/backendURL";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DataStatus from "../../components/UI/DataStatus";
+import SheetBackdrop from "../../components/BottomSheets/SheetBackdrop";
 const CoachesScreen = ({ navigation }) => {
   const bottomSheetModalRef = useRef(null);
   const snapPoints = ["65%"];
   const [coaches, setCoaches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [creatingCoach, setCreatingCoach] = useState(false);
+  const [coachToEdit, setCoachToEdit] = useState(null);
 
   const openBottomSheet = () => {
     if (bottomSheetModalRef.current) {
@@ -106,26 +109,21 @@ const CoachesScreen = ({ navigation }) => {
         backgroundStyle={styles.bottomSheetBackground}
         enablePanDownToClose={true}
         backdropComponent={() => (
-          <Pressable
+          <SheetBackdrop
             onPress={() => {
               bottomSheetModalRef.current?.dismiss();
             }}
-            style={{
-              height: "100%",
-              position: "absolute",
-              width: "100%",
-              zIndex: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.65)",
-            }}
-          ></Pressable>
+          />
         )}
       >
-        <CreateCoachForm
-          closeBottomSheet={() => {
-            bottomSheetModalRef.current?.dismiss();
-            fetchCoaches();
-          }}
-        />
+        {creatingCoach && (
+          <CreateCoachForm
+            closeBottomSheet={() => {
+              bottomSheetModalRef.current?.dismiss();
+              fetchCoaches();
+            }}
+          />
+        )}
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

@@ -5,7 +5,6 @@ import {
   View,
   Alert,
   FlatList,
-  ScrollView,
 } from "react-native";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
@@ -31,6 +30,10 @@ import TrainingDetailCard from "../../components/Club/TrainingDetailCard";
 import PlayerSearchCard from "../../components/Club/PlayerSearchCard";
 import TeamPlayersOverviewHeader from "../../components/TeamOverview/TeamPlayersOverviewHeader";
 import NoTrainingsView from "../../components/TeamOverview/NoTrainingsView";
+import AddTrainingButton from "../../components/TeamOverview/AddTrainingButton";
+import TeamEditForm from "../../components/Forms/TeamEditForm";
+import SheetBackdrop from "../../components/BottomSheets/SheetBackdrop";
+import TeamTrainingsList from "../../components/TeamOverview/TeamTrainingsList";
 
 const yearsData = [
   2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
@@ -239,20 +242,7 @@ const TeamOverviewScreen = ({ navigation, route }) => {
       <View style={styles.container}>
         <View style={styles.section}>
           <Text style={styles.title}>Training Details</Text>
-          <FlatList
-            data={trainingDetails}
-            style={{ width: "100%" }}
-            ListEmptyComponent={<NoTrainingsView teamId={_id} />}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => <TrainingDetailCard {...item} />}
-            contentContainerStyle={{
-              gap: 10,
-              paddingVertical: 10,
-              overflow: "visible",
-            }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-          />
+          <TeamTrainingsList trainingDetails={trainingDetails} teamId={_id} />
         </View>
         <View style={styles.section}>
           <Text style={styles.title}>Assigned Coaches</Text>
@@ -309,73 +299,27 @@ const TeamOverviewScreen = ({ navigation, route }) => {
         backgroundStyle={styles.bottomSheetBackground}
         enablePanDownToClose={true}
         backdropComponent={() => (
-          <Pressable
+          <SheetBackdrop
             onPress={() => {
               bottomSheetModalRef.current?.dismiss();
             }}
-            style={{
-              height: "100%",
-              position: "absolute",
-              width: "100%",
-              zIndex: 0,
-              backgroundColor: "rgba(0, 0, 0, 0.65)",
-            }}
-          ></Pressable>
+          />
         )}
       >
-        <BottomSheetView style={styles.contentContainer}>
-          <Picture uri={image || imageUrl} pickImage={pickImage} />
-          <LightInputField
-            label="Team Name"
-            value={teamDetails.name}
-            placeholder="Enter the team's name"
-            name="name"
-            handleInputChange={handleInputChange}
-          />
-          <View style={{ gap: 4, width: "100%" }}>
-            <Text style={styles.label}>Years of Birth</Text>
-            <HorizontalSelector
-              initialSelection={teamDetails.yearsOfBirth}
-              showAllOption={false}
-              data={yearsData}
-              itemStyle={{ backgroundColor: colorScheme.lightGrey }}
-              multipleSelect={true}
-              onSelectionChange={(selectedYearsOfBirth) =>
-                handleInputChange("yearsOfBirth", selectedYearsOfBirth)
-              }
-            />
-          </View>
-          <Button
-            text="Update Info"
-            loading={updatingInfo}
-            disabled={
-              (teamDetails.name === storedTeamDetails.name &&
-                arraysEqual(
-                  teamDetails.yearsOfBirth,
-                  storedTeamDetails.yearsOfBirth
-                )) ||
-              teamDetails.name === "" ||
-              teamDetails.yearsOfBirth.length === 0
-            }
-            textStyle={{ color: colorScheme.white, fontSize: 22 }}
-            containerStyle={{
-              width: "70%",
-              backgroundColor: colorScheme.green,
-              marginTop: "auto",
-            }}
-            onPress={updateTeamName}
-          />
-          <Button
-            text="Delete Team"
-            onPress={deleteTeam}
-            loading={deletingTeam}
-            textStyle={{ color: colorScheme.white, fontSize: 22 }}
-            containerStyle={{
-              width: "70%",
-              backgroundColor: colorScheme.red,
-            }}
-          />
-        </BottomSheetView>
+        <TeamEditForm
+          image={image}
+          imageUrl={imageUrl}
+          pickImage={pickImage}
+          teamDetails={teamDetails}
+          handleInputChange={handleInputChange}
+          updatingInfo={updatingInfo}
+          storedTeamDetails={storedTeamDetails}
+          yearsData={yearsData}
+          updateTeamName={updateTeamName}
+          deletingTeam={deletingTeam}
+          deleteTeam={deleteTeam}
+          arraysEqual={arraysEqual}
+        />
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );
@@ -392,13 +336,7 @@ const styles = StyleSheet.create({
   headerRight: {
     marginRight: 20,
   },
-  contentContainer: {
-    flex: 1,
-    padding: 10,
-    paddingBottom: 50,
-    alignItems: "center",
-    gap: 12,
-  },
+
   greenLine: {
     height: 1,
     backgroundColor: colorScheme.green,

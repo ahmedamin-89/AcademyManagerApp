@@ -24,6 +24,8 @@ import axios from "axios";
 import DataStatus from "../../components/UI/DataStatus";
 import { RefreshControl } from "react-native-gesture-handler";
 import { UserContext } from "../../context/userContext";
+import { useFocusEffect } from "@react-navigation/native";
+import SheetBackdrop from "../../components/BottomSheets/SheetBackdrop";
 
 const PlayersScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -100,6 +102,18 @@ const PlayersScreen = ({ navigation }) => {
     fetchPlayers();
   }, [selectedYear]);
 
+  useEffect(() => {
+    navigation.setOptions({
+      title: `${players.length} Players`,
+    });
+  }, [players]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchPlayers();
+    }, [])
+  );
+
   return (
     <View style={{ flex: 1, backgroundColor: colorScheme.black }}>
       <BottomSheetModalProvider>
@@ -158,18 +172,11 @@ const PlayersScreen = ({ navigation }) => {
           backgroundStyle={styles.bottomSheetBackground}
           enablePanDownToClose={true}
           backdropComponent={() => (
-            <Pressable
+            <SheetBackdrop
               onPress={() => {
                 bottomSheetModalRef.current?.dismiss();
               }}
-              style={{
-                height: "100%",
-                position: "absolute",
-                width: "100%",
-                zIndex: 0,
-                backgroundColor: "rgba(0, 0, 0, 0.65)",
-              }}
-            ></Pressable>
+            />
           )}
         >
           <AddPlayerForm

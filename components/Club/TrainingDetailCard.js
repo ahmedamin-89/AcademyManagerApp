@@ -17,7 +17,9 @@ const TrainingDetailCard = ({
       </View>
       <View style={styles.dayContainer}>
         {dayNames.map((day) => (
-          <Text style={styles.dayText}>{day}</Text>
+          <Text key={day} style={styles.dayText}>
+            {day}
+          </Text>
         ))}
       </View>
 
@@ -49,7 +51,6 @@ const styles = StyleSheet.create({
   dayContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    width: "100%",
     padding: 5,
     gap: 10,
   },
