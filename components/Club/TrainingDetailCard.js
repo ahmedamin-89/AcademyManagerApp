@@ -38,20 +38,20 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#ced4da",
     height: 100,
+    width: 250,
     borderRadius: 8,
-    shadowColor: "#ced4da",
+    shadowColor: colorScheme.grey,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.15,
     shadowRadius: 3.84,
     elevation: 5,
     justifyContent: "center",
-    alignItems: "center",
     padding: 10,
   },
   dayContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
     padding: 5,
+    justifyContent: "center",
     gap: 10,
   },
   dayText: {

@@ -1,29 +1,42 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React from "react";
-import { FlatList } from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import NoTrainingsView from "./NoTrainingsView";
 import AddTrainingButton from "./AddTrainingButton";
 import TrainingDetailCard from "../Club/TrainingDetailCard";
 
 const TeamTrainingsList = ({ trainingDetails, teamId }) => {
   return (
-    <FlatList
-      data={trainingDetails}
-      ListEmptyComponent={<NoTrainingsView teamId={teamId} />}
-      ListFooterComponent={<AddTrainingButton teamId={teamId} />}
-      keyExtractor={(item) => item._id}
-      renderItem={({ item }) => <TrainingDetailCard {...item} />}
-      contentContainerStyle={{
-        paddingVertical: 10,
-        paddingHorizontal: 10, // Use paddingHorizontal instead of paddingRight to balance padding on both sides
-      }}
-      showsHorizontalScrollIndicator={false}
+    <ScrollView
       horizontal
-      style={{ flexGrow: 0 }}
-    />
+      contentContainerStyle={styles.scrollContainer}
+      showsHorizontalScrollIndicator={false} // Optionally hide the horizontal scroll indicator
+    >
+      <View style={styles.container}>
+        {trainingDetails.length > 0 ? (
+          trainingDetails.map((training) => (
+            <TrainingDetailCard {...training} key={training._id} />
+          ))
+        ) : (
+          <NoTrainingsView teamId={teamId} />
+        )}
+        <AddTrainingButton teamId={teamId} />
+      </View>
+    </ScrollView>
   );
 };
 
 export default TeamTrainingsList;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  scrollContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 10, // Ensure padding on both sides for better visibility
+    alignItems: "center", // Center items vertically
+  },
+  container: {
+    flexDirection: "row",
+    alignItems: "center", // Ensure items are centered vertically
+    gap: 10, // Add space between items
+  },
+});
