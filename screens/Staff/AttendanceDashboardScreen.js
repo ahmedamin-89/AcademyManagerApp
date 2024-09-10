@@ -49,6 +49,16 @@ const AttendanceDashboardScreen = () => {
       <AttendanceDateSelector
         setSelectedDate={setSelectedDate}
         selectedDate={selectedDate}
+        incrementDate={() => {
+          setSelectedDate(
+            new Date(selectedDate.getTime() + 24 * 60 * 60 * 1000)
+          );
+        }}
+        decrementDate={() => {
+          setSelectedDate(
+            new Date(selectedDate.getTime() - 24 * 60 * 60 * 1000)
+          );
+        }}
       />
       {(loading || error) && (
         <View style={{ paddingTop: 270 }}>
