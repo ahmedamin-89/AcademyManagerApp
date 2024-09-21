@@ -16,17 +16,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import DataStatus from "../../components/UI/DataStatus";
 import SheetBackdrop from "../../components/BottomSheets/SheetBackdrop";
 const CoachesScreen = ({ navigation }) => {
-  const bottomSheetModalRef = useRef(null);
+  const createCoachBottomSheetRef = useRef(null);
   const snapPoints = ["65%"];
   const [coaches, setCoaches] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [creatingCoach, setCreatingCoach] = useState(false);
-  const [coachToEdit, setCoachToEdit] = useState(null);
 
   const openBottomSheet = () => {
-    if (bottomSheetModalRef.current) {
-      bottomSheetModalRef.current?.present();
+    if (createCoachBottomSheetRef.current) {
+      createCoachBottomSheetRef.current?.present();
     } else {
       console.error("BottomSheetModal ref is not defined");
     }
@@ -102,7 +100,7 @@ const CoachesScreen = ({ navigation }) => {
         )}
       </View>
       <BottomSheetModal
-        ref={bottomSheetModalRef}
+        ref={createCoachBottomSheetRef}
         index={0}
         snapPoints={snapPoints}
         enableContentPanningGesture={false}
@@ -111,19 +109,17 @@ const CoachesScreen = ({ navigation }) => {
         backdropComponent={() => (
           <SheetBackdrop
             onPress={() => {
-              bottomSheetModalRef.current?.dismiss();
+              createCoachBottomSheetRef.current?.dismiss();
             }}
           />
         )}
       >
-        {creatingCoach && (
-          <CreateCoachForm
-            closeBottomSheet={() => {
-              bottomSheetModalRef.current?.dismiss();
-              fetchCoaches();
-            }}
-          />
-        )}
+        <CreateCoachForm
+          closeBottomSheet={() => {
+            createCoachBottomSheetRef.current?.dismiss();
+            fetchCoaches();
+          }}
+        />
       </BottomSheetModal>
     </BottomSheetModalProvider>
   );

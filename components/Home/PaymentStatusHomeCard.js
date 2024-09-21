@@ -4,15 +4,16 @@ import Button from "../Buttons/Button";
 import colorScheme from "../../constants/colorScheme";
 import PieChart from "react-native-pie-chart";
 import MonthPicker from "react-native-month-year-picker";
+import { format } from "date-fns"; // Import date-fns
 
 const PaymentStatusHomeCard = () => {
   const widthAndHeight = 120;
   const series = [321, 123];
   const sliceColor = ["#6fedb7", "#2dd881"];
   const [show, setShow] = useState(false);
+  const [date, setDate] = useState(new Date());
 
   const showPicker = useCallback((value) => setShow(value), []);
-  const [date, setDate] = useState(new Date());
 
   const onValueChange = useCallback(
     (event, newDate) => {
@@ -20,19 +21,23 @@ const PaymentStatusHomeCard = () => {
 
       showPicker(false);
       setDate(selectedDate);
+      console.log("Selected Date:", selectedDate);
     },
     [date, showPicker]
   );
+
+  // Format the date for display
+  const formattedDate = format(date, "MMMM, yy");
 
   return (
     <>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Aquired Payments</Text>
+          <Text style={styles.headerText}>Acquired Payments</Text>
           <Button
             containerStyle={styles.button}
             textStyle={styles.buttonText}
-            text="June, 24"
+            text={formattedDate} // Use the formatted date here
             onPress={() => showPicker(true)}
           />
         </View>
@@ -49,6 +54,11 @@ const PaymentStatusHomeCard = () => {
           />
         </View>
       </View>
+      {show && (
+        <View style={styles.pickerContainer}>
+          <MonthPicker onChange={onValueChange} value={date} locale="en" />
+        </View>
+      )}
     </>
   );
 };
@@ -102,5 +112,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#495057",
     gap: 2,
+  },
+  pickerContainer: {
+    position: "absolute",
+    zIndex: 10000,
+    bottom: 0,
+    right: 0,
+    left: 0,
   },
 });
