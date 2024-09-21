@@ -36,10 +36,10 @@ const AddPlayerForm = ({ closeSheet }) => {
   const [loading, setLoading] = useState(false);
 
   const [PlayerDetails, setPlayerDetails] = useState({
-    playerName: "Loleleo 4",
-    parentName: "Sara Khaled",
-    parentPhone: "01117775978",
-    playerPhone: "01117775978",
+    playerName: "",
+    parentName: "",
+    parentPhone: "",
+    playerPhone: "",
     DOB: new Date("2007-01-22T00:00:00.000Z"),
     position: "",
     team: "",
@@ -171,27 +171,32 @@ const AddPlayerForm = ({ closeSheet }) => {
 
         <LightInputField
           label="Player's Name"
+          name="playerName"
           placeholder="Enter the player's name"
-          handleInputChange={(name, text) => handleInputChange(name, text)}
+          handleInputChange={handleInputChange}
           value={PlayerDetails.playerName}
-        />
-        <LightInputField
-          label="Parent's Name"
-          placeholder="Enter the parent's name"
-          handleInputChange={(name, text) => handleInputChange(name, text)}
-          value={PlayerDetails.parentName}
-        />
-        <LightInputField
-          label="Parent's Phone"
-          placeholder="Enter the parent's phone number"
-          handleInputChange={(name, text) => handleInputChange(name, text)}
-          value={PlayerDetails.parentPhone}
         />
         <LightInputField
           label="Player's Phone"
           placeholder="Enter the player's phone number"
-          handleInputChange={(name, text) => handleInputChange(name, text)}
+          name="playerPhone"
+          handleInputChange={handleInputChange}
           value={PlayerDetails.playerPhone}
+        />
+        <LightInputField
+          label="Parent's Name"
+          placeholder="Enter the parent's name"
+          name={"parentName"}
+          handleInputChange={handleInputChange}
+          value={PlayerDetails.parentName}
+        />
+
+        <LightInputField
+          label="Parent's Phone"
+          name="parentPhone"
+          placeholder="Enter the parent's phone number"
+          handleInputChange={handleInputChange}
+          value={PlayerDetails.parentPhone}
         />
 
         <View style={{ gap: 4, width: "100%" }}>

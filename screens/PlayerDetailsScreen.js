@@ -27,7 +27,8 @@ import LightInputField from "../components/UI/LightInputField";
 import axios from "axios";
 
 const PlayerDetailsScreen = ({ navigation, route }) => {
-  const { name, number, position, _id, imageUrl } = route.params.player;
+  const { name, number, position, _id, imageUrl, attendanceCount } =
+    route.params.player;
   const snapPoints = ["18%"];
   const bottomSheetModalRef = useRef(null);
   const [PlayerDetails, setPlayerDetails] = useState({
@@ -42,6 +43,7 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
     rating: 0,
     _id: "",
     yearOfBirth: 2002,
+    attendanceCount: 0,
   });
 
   const [deletingPlayer, setDeletingPlayer] = useState(false);
@@ -137,8 +139,8 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
           <Text style={styles.text}>{PlayerDetails.name}</Text>
         </View>
         <View style={styles.item2}>
-          <Text style={styles.title}>Known As</Text>
-          <Text style={styles.text}>{PlayerDetails.knownAs}</Text>
+          <Text style={styles.title}>Total Attended Sessions</Text>
+          <Text style={styles.text}>{attendanceCount}</Text>
         </View>
         <View style={styles.item1}>
           <Text style={styles.title}>Date of Birth</Text>

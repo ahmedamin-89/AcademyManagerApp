@@ -48,6 +48,21 @@ const TakeAttendanceScreen = ({ navigation, route }) => {
     }
   };
 
+  const modifyAttendance = async (playerId, increment) => {
+    const req = await axios.post(
+      `${backendURL}/players/${playerId}/attendance`,
+      {
+        increment,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+        },
+      }
+    );
+    console.log(req.data);
+  };
+
   useEffect(() => {
     addPlayerAttendance();
 
@@ -92,10 +107,14 @@ const TakeAttendanceScreen = ({ navigation, route }) => {
             onValueChange={async (value) => {
               if (value) {
                 setAttendedPlayers((prevState) => [...prevState, item._id]);
+
+                await modifyAttendance(item._id, true);
               } else {
                 setAttendedPlayers((prevState) =>
                   prevState.filter((id) => id !== item._id)
                 );
+
+                await modifyAttendance(item._id, false);
               }
             }}
           />
