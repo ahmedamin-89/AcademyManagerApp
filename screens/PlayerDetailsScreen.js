@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useLayoutEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import colorScheme from "../constants/colorScheme";
 import Picture from "../components/UI/Picture";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -44,6 +44,9 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
     _id: "",
     yearOfBirth: 2002,
     attendanceCount: 0,
+    attendanceRate: 0,
+    attendedSessionsCount: 0,
+    unAttendedSessionsCount: 0,
   });
 
   const [deletingPlayer, setDeletingPlayer] = useState(false);
@@ -115,6 +118,27 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
     }
   };
 
+  const fetchAttendanceRate = async () => {
+    try {
+      const response = await axios.get(
+        `${backendURL}/players/${_id}/attendanceRate`,
+        {
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      setPlayerDetails((prevState) => ({
+        ...prevState,
+        attendanceRate: response.data.attendanceRate,
+        attendedSessionsCount: response.data.attendedSessionsCount,
+        unAttendedSessionsCount: response.data.unAttendedSessionsCount,
+      }));
+    } catch (error) {
+      console.error("Failed to fetch attendance rate:", error);
+    }
+  };
+
   useLayoutEffect(() => {
     setPlayerDetails({
       ...route.params.player,
@@ -126,6 +150,10 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
       headerRight: () => <MenuButton onPress={openBottomSheet} />,
     });
   }, [navigation]);
+
+  useEffect(() => {
+    fetchAttendanceRate();
+  }, []);
 
   return (
     <BottomSheetModalProvider>
@@ -166,6 +194,19 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
             phoneNumber={PlayerDetails.parentPhoneNumber}
           />
         </View>
+        <View style={styles.item1}>
+          <Text style={styles.title}>Attendance Rate</Text>
+          <Text style={styles.text}>
+            {(PlayerDetails.attendanceRate * 100).toFixed(2) || 0}%
+          </Text>
+        </View>
+        <View style={styles.item2}>
+          <Text style={styles.title}>Unattended Sessions</Text>
+          <Text style={styles.text}>
+            {PlayerDetails.unAttendedSessionsCount}
+          </Text>
+        </View>
+
         <View style={styles.buttonContainer}>
           <Button
             onPress={() => navigation.navigate("AddPayment")}
