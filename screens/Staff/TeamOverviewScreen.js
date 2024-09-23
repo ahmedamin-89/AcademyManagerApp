@@ -34,6 +34,10 @@ import AddTrainingButton from "../../components/TeamOverview/AddTrainingButton";
 import TeamEditForm from "../../components/Forms/TeamEditForm";
 import SheetBackdrop from "../../components/BottomSheets/SheetBackdrop";
 import TeamTrainingsList from "../../components/TeamOverview/TeamTrainingsList";
+import { ScrollView } from "react-native-gesture-handler";
+import IconButton from "../../components/Buttons/IconButton";
+import { Ionicons } from "@expo/vector-icons";
+import TeamAttendanceStats from "../../components/TeamOverview/TeamAttendanceStats";
 
 const yearsData = [
   2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019,
@@ -73,7 +77,6 @@ const TeamOverviewScreen = ({ navigation, route }) => {
   const bottomSheetModalRef = useRef(null);
   const [updatingInfo, setUpdatingInfo] = useState(false);
   const [deletingTeam, setDeletingTeam] = useState(false);
-  const [players, setPlayers] = useState([]);
 
   const [teamDetails, setTeamDetails] = useState({
     name,
@@ -165,18 +168,6 @@ const TeamOverviewScreen = ({ navigation, route }) => {
   const openBottomSheet = () => {
     bottomSheetModalRef.current?.present();
   };
-  const fetchPlayers = async () => {
-    try {
-      const response = await axios.get(`${backendURL}/players/${_id}`, {
-        headers: {
-          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
-        },
-      });
-      setPlayers(response.data.players);
-    } catch (error) {
-      console.error("Failed to fetch players:", error);
-    }
-  };
 
   const fetchTrainingDetails = async () => {
     try {
@@ -195,7 +186,6 @@ const TeamOverviewScreen = ({ navigation, route }) => {
     navigation.setOptions({
       headerRight: () => <MenuButton onPress={openBottomSheet} />,
     });
-    fetchPlayers();
     fetchTrainingDetails();
   }, [navigation]);
 
@@ -239,7 +229,11 @@ const TeamOverviewScreen = ({ navigation, route }) => {
 
   return (
     <BottomSheetModalProvider>
-      <View style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ gap: 14, paddingBottom: 60 }}
+        horizontal={false}
+      >
         <View style={styles.section}>
           <Text style={styles.title}>Training Details</Text>
           <TeamTrainingsList trainingDetails={trainingDetails} teamId={_id} />
@@ -252,39 +246,20 @@ const TeamOverviewScreen = ({ navigation, route }) => {
             renderItem={({ item }) => (
               <CoachTeamCard name={item.name} team={item} />
             )}
-            contentContainerStyle={{
-              gap: 10,
-              paddingVertical: 10,
-              overflow: "visible",
-              width: "100%",
-            }}
+            contentContainerStyle={styles.coachesListContainer}
             horizontal
             showsHorizontalScrollIndicator={false}
           />
         </View>
-        <TeamPlayersOverviewHeader players={players} />
-      </View>
-      <View style={styles.greenLine} />
-      <View style={styles.playersContainer}>
-        <FlatList
-          style={{ flex: 1, width: "100%" }}
-          contentContainerStyle={{
-            backgroundColor: colorScheme.white,
-            gap: 1,
-            width: "100%",
-          }}
-          data={players}
-          keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <PlayerSearchCard
-              onPress={() =>
-                navigation.navigate("PlayerDetails", { player: item })
-              }
-              {...item}
-            />
-          )}
+        <IconButton
+          icon={<Ionicons name="people" size={28} color="white" />}
+          text="Players Overview"
+          style={styles.button}
+          onPress={() => {}}
         />
-      </View>
+        <TeamAttendanceStats teamId={_id} />
+      </ScrollView>
+      {/* Edit Form */}
       <BottomSheetModal
         ref={bottomSheetModalRef}
         index={0}
@@ -330,11 +305,14 @@ export default TeamOverviewScreen;
 const styles = StyleSheet.create({
   container: {
     padding: 12,
-    gap: 14,
+
     backgroundColor: colorScheme.black,
   },
   headerRight: {
     marginRight: 20,
+  },
+  ScreenContainer: {
+    backgroundColor: colorScheme.black,
   },
 
   greenLine: {
@@ -371,5 +349,15 @@ const styles = StyleSheet.create({
   playersContainer: {
     flex: 1,
     backgroundColor: colorScheme.black,
+  },
+  coachesListContainer: {
+    gap: 10,
+    paddingVertical: 10,
+    overflow: "visible",
+    width: "100%",
+  },
+  button: {
+    width: "98%",
+    alignSelf: "center",
   },
 });
