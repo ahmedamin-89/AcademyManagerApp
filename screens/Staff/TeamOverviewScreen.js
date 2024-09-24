@@ -257,7 +257,7 @@ const TeamOverviewScreen = ({ navigation, route }) => {
           icon={<Ionicons name="people" size={28} color="white" />}
           text="Players Overview"
           style={styles.button}
-          onPress={() => {}}
+          onPress={() => navigation.navigate("TeamPlayers", { teamId: _id })}
         />
       </ScrollView>
       {/* Edit Form */}

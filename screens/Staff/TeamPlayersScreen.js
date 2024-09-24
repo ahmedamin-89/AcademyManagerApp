@@ -1,7 +1,6 @@
 import { FlatList, Pressable, StyleSheet, View } from "react-native";
 import React, {
   useCallback,
-  useContext,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -21,12 +20,10 @@ import backendURL from "../../constants/backendURL";
 import axios from "axios";
 import DataStatus from "../../components/UI/DataStatus";
 import { RefreshControl } from "react-native";
-import { UserContext } from "../../context/userContext";
 import { useFocusEffect } from "@react-navigation/native";
 import SheetBackdrop from "../../components/BottomSheets/SheetBackdrop";
-import HorizontalSelector from "../../components/UI/HorizontalSelector";
 
-const PlayersScreen = ({ navigation }) => {
+const TeamPlayersScreen = ({ navigation, route }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const bottomSheetModalRef = useRef(null);
   const snapPoints = ["79.5%"];
@@ -34,20 +31,15 @@ const PlayersScreen = ({ navigation }) => {
   const [players, setPlayers] = useState([]);
   const [error, setError] = useState(null);
   const [refreshing, setRefreshing] = useState(false);
-  const { academy } = useContext(UserContext);
-  const teams = academy.teams;
-  const [selectedTeam, setSelectedTeam] = useState(null);
 
-  const handleTeamChange = (selectedTeamName) => {
-    const team = teams.find((team) => team.name === selectedTeamName);
-    setSelectedTeam(team ? team._id : null);
-  };
+  // Extract teamId from route.params
+  const { teamId } = route.params;
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     fetchPlayers();
     setRefreshing(false);
-  }, [selectedTeam]);
+  }, [teamId]);
 
   const openBottomSheet = () => {
     if (bottomSheetModalRef.current) {
@@ -61,14 +53,11 @@ const PlayersScreen = ({ navigation }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await axios.get(
-        `${backendURL}/players${selectedTeam ? `/team/${selectedTeam}` : ""}`,
-        {
-          headers: {
-            Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
-          },
-        }
-      );
+      const response = await axios.get(`${backendURL}/players/team/${teamId}`, {
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+        },
+      });
 
       setPlayers(response.data.players);
     } catch (error) {
@@ -81,6 +70,7 @@ const PlayersScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      title: `${players.length} Players`,
       headerRight: () => (
         <Pressable
           onPress={openBottomSheet}
@@ -103,22 +93,16 @@ const PlayersScreen = ({ navigation }) => {
         </Pressable>
       ),
     });
-  }, [navigation]);
+  }, [navigation, players.length]);
 
   useEffect(() => {
     fetchPlayers();
-  }, [selectedTeam]);
-
-  useEffect(() => {
-    navigation.setOptions({
-      title: `${players.length} Players`,
-    });
-  }, [players]);
+  }, [teamId]);
 
   useFocusEffect(
     useCallback(() => {
       fetchPlayers();
-    }, [selectedTeam])
+    }, [teamId])
   );
 
   const filteredPlayers = players.filter((player) =>
@@ -134,14 +118,6 @@ const PlayersScreen = ({ navigation }) => {
             setSearchQuery={setSearchQuery}
           />
         </View>
-
-        <HorizontalSelector
-          data={teams.map((team) => team.name)}
-          itemStyle={{ backgroundColor: colorScheme.lightGrey }}
-          onSelectionChange={(selectedTeamName) =>
-            handleTeamChange(selectedTeamName[0])
-          }
-        />
 
         <View style={styles.container}>
           {loading || error || filteredPlayers.length === 0 ? (
@@ -207,6 +183,7 @@ const PlayersScreen = ({ navigation }) => {
           )}
         >
           <AddPlayerForm
+            selectedTeamId={teamId}
             closeSheet={() => {
               bottomSheetModalRef.current?.dismiss();
               setPlayers([]);
@@ -219,7 +196,7 @@ const PlayersScreen = ({ navigation }) => {
   );
 };
 
-export default PlayersScreen;
+export default TeamPlayersScreen;
 
 const styles = StyleSheet.create({
   searchContainer: {

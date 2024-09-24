@@ -3,18 +3,25 @@ import React from "react";
 import LoadingSpinner from "./LoadingSpinner";
 import colorScheme from "../../constants/colorScheme";
 
-const DataStatus = ({ text, error = true, fetchData, loading, setLoading }) => {
+const DataStatus = ({ text, error, loading, fetchData, noData }) => {
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <LoadingSpinner size="large" color={colorScheme.green} />
+        <Text style={styles.text}>{text || "Loading..."}</Text>
+      </View>
+    );
+  }
+
   if (error) {
     return (
       <View style={styles.container}>
         <Text style={[styles.text, { paddingBottom: 3 }]}>
-          Error Fetching Data
+          {error || "Error Fetching Data"}
         </Text>
-
         <Pressable
           onPress={() => {
             fetchData();
-            setLoading(true);
           }}
         >
           <Text style={[styles.text, { color: colorScheme.green }]}>
@@ -25,12 +32,15 @@ const DataStatus = ({ text, error = true, fetchData, loading, setLoading }) => {
     );
   }
 
-  return (
-    <View style={styles.container}>
-      <LoadingSpinner size="large" color={colorScheme.green} />
-      <Text style={styles.text}>{text || "Loading..."}</Text>
-    </View>
-  );
+  if (noData) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.text}>{text || "No data found"}</Text>
+      </View>
+    );
+  }
+
+  return null;
 };
 
 export default DataStatus;
@@ -40,6 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colorScheme.black,
+    flex: 1,
   },
   text: {
     color: colorScheme.lightGrey,

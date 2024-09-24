@@ -11,6 +11,7 @@ import LightInputField from "../../components/UI/LightInputField";
 import Button from "../../components/Buttons/Button";
 
 const TIME = [
+  "3:30 PM",
   "4:00 PM",
   "4:30 PM",
   "5:00 PM",

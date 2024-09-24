@@ -6,19 +6,6 @@ import HorizontalSelector from "../../components/UI/HorizontalSelector";
 import { UserContext } from "../../context/userContext";
 
 const ScheduleScreen = () => {
-  const TeamsData = [
-    "2009",
-    "2010",
-    "2011",
-    "2012",
-    "2013",
-    "2014",
-    "2015",
-    "2016",
-    "2017",
-    "2018",
-    "2019",
-  ];
   const { academy } = useContext(UserContext);
   const teams = academy.teams;
   const [selectedTeam, setSelectedTeam] = useState(null);

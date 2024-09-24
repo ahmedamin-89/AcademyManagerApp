@@ -1,12 +1,12 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BottomSheetView } from "@gorhom/bottom-sheet";
 import Button from "../Buttons/Button";
 import colorScheme from "../../constants/colorScheme";
 import LightInputField from "../UI/LightInputField";
 import DateSelector from "../UI/DateSelector";
 import HorizontalSelector from "../UI/HorizontalSelector";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 import RatingAdjuster from "../UI/RatingAdjuster";
 import { UserContext } from "../../context/userContext";
 import axios from "axios";
@@ -30,10 +30,14 @@ const positions = [
   "CAM",
 ];
 
-const AddPlayerForm = ({ closeSheet }) => {
+const AddPlayerForm = ({ closeSheet, selectedTeamId }) => {
   const { academy } = useContext(UserContext);
   const teams = academy.teams;
   const [loading, setLoading] = useState(false);
+
+  // Find the team name corresponding to the selectedTeamId
+  const selectedTeam = teams.find((team) => team._id === selectedTeamId);
+  const selectedTeamName = selectedTeam ? selectedTeam.name : "";
 
   const [PlayerDetails, setPlayerDetails] = useState({
     playerName: "",
@@ -41,11 +45,15 @@ const AddPlayerForm = ({ closeSheet }) => {
     parentPhone: "",
     playerPhone: "",
     DOB: new Date("2007-01-22T00:00:00.000Z"),
-    position: "",
-    team: "",
+    position: [],
+    team: selectedTeamId || "",
     rating: 72,
   });
   const [image, setImage] = useState(null);
+  const [selectedPositions, setSelectedPositions] = useState([]);
+  const [selectedTeamNameState, setSelectedTeamNameState] = useState(
+    selectedTeamName ? [selectedTeamName] : []
+  );
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -75,12 +83,17 @@ const AddPlayerForm = ({ closeSheet }) => {
   };
 
   const handlePositionChange = (selectedPositions) => {
+    setSelectedPositions(selectedPositions);
     handleInputChange("position", selectedPositions);
   };
 
-  const handleTeamChange = (selectedTeam) => {
-    const teamId = teams.find((team) => team.name === selectedTeam)?._id;
-    handleInputChange("team", teamId);
+  const handleTeamChange = (selectedTeamNames) => {
+    const teamName = selectedTeamNames[0];
+    const team = teams.find((team) => team.name === teamName);
+    if (team) {
+      setSelectedTeamNameState([team.name]);
+      handleInputChange("team", team._id);
+    }
   };
 
   const AddPlayer = async () => {
@@ -104,7 +117,7 @@ const AddPlayerForm = ({ closeSheet }) => {
       Alert.alert("Date of birth is required");
       return;
     }
-    if (!PlayerDetails.position) {
+    if (!PlayerDetails.position || PlayerDetails.position.length === 0) {
       Alert.alert("Position is required");
       return;
     }
@@ -154,7 +167,10 @@ const AddPlayerForm = ({ closeSheet }) => {
       closeSheet();
     } catch (error) {
       console.error("Failed to add player:", error);
-      Alert.alert("Failed to add player", error.response.data.error);
+      Alert.alert(
+        "Failed to add player",
+        error.response?.data?.error || "An error occurred"
+      );
     } finally {
       setLoading(false);
     }
@@ -215,9 +231,8 @@ const AddPlayerForm = ({ closeSheet }) => {
             showAllOption={false}
             data={teams.map((team) => team.name)}
             itemStyle={{ backgroundColor: colorScheme.lightGrey }}
-            onSelectionChange={(selectedTeam) =>
-              handleTeamChange(selectedTeam[0])
-            }
+            onSelectionChange={handleTeamChange}
+            initialSelection={selectedTeamNameState} // Use initialSelection prop
           />
         </View>
         <View

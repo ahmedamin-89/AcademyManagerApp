@@ -19,6 +19,7 @@ const DAY_NAMES = [
   "Saturday",
 ];
 const TIME = [
+  "3:30 PM",
   "4:00 PM",
   "4:30 PM",
   "5:00 PM",
