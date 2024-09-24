@@ -7,36 +7,40 @@ import TrainingDetailCard from "../Club/TrainingDetailCard";
 
 const TeamTrainingsList = ({ trainingDetails, teamId }) => {
   return (
-    <ScrollView
-      horizontal
-      contentContainerStyle={styles.scrollContainer}
-      showsHorizontalScrollIndicator={false} // Optionally hide the horizontal scroll indicator
-    >
-      <View style={styles.container}>
-        {trainingDetails.length > 0 ? (
-          trainingDetails.map((training) => (
-            <TrainingDetailCard {...training} key={training._id} />
-          ))
-        ) : (
-          <NoTrainingsView teamId={teamId} />
-        )}
-        <AddTrainingButton teamId={teamId} />
-      </View>
-    </ScrollView>
+    <View style={styles.wrapper}>
+      {trainingDetails.length > 0 ? (
+        <ScrollView
+          horizontal
+          contentContainerStyle={styles.scrollContainer}
+          showsHorizontalScrollIndicator={false}
+        >
+          <View style={styles.container}>
+            {trainingDetails.map((training) => (
+              <TrainingDetailCard {...training} key={training._id} />
+            ))}
+            <AddTrainingButton teamId={teamId} />
+          </View>
+        </ScrollView>
+      ) : (
+        <NoTrainingsView teamId={teamId} />
+      )}
+    </View>
   );
 };
 
 export default TeamTrainingsList;
 
 const styles = StyleSheet.create({
-  scrollContainer: {
+  wrapper: {
     paddingVertical: 10,
-    paddingHorizontal: 10, // Ensure padding on both sides for better visibility
-    alignItems: "center", // Center items vertically
+  },
+  scrollContainer: {
+    paddingHorizontal: 10,
+    alignItems: "center",
   },
   container: {
     flexDirection: "row",
-    alignItems: "center", // Ensure items are centered vertically
-    gap: 10, // Add space between items
+    alignItems: "center",
+    gap: 10,
   },
 });

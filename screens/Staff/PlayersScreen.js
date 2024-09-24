@@ -207,6 +207,7 @@ const PlayersScreen = ({ navigation }) => {
           )}
         >
           <AddPlayerForm
+            selectedTeamId={selectedTeam} // Pass the selected team ID here
             closeSheet={() => {
               bottomSheetModalRef.current?.dismiss();
               setPlayers([]);
