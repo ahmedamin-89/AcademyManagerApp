@@ -34,7 +34,7 @@ import AddTrainingButton from "../../components/TeamOverview/AddTrainingButton";
 import TeamEditForm from "../../components/Forms/TeamEditForm";
 import SheetBackdrop from "../../components/BottomSheets/SheetBackdrop";
 import TeamTrainingsList from "../../components/TeamOverview/TeamTrainingsList";
-import { ScrollView } from "react-native-gesture-handler";
+import { ScrollView } from "react-native";
 import IconButton from "../../components/Buttons/IconButton";
 import { Ionicons } from "@expo/vector-icons";
 import TeamAttendanceStats from "../../components/TeamOverview/TeamAttendanceStats";
@@ -251,13 +251,14 @@ const TeamOverviewScreen = ({ navigation, route }) => {
             showsHorizontalScrollIndicator={false}
           />
         </View>
+        <TeamAttendanceStats teamId={_id} />
+
         <IconButton
           icon={<Ionicons name="people" size={28} color="white" />}
           text="Players Overview"
           style={styles.button}
           onPress={() => {}}
         />
-        <TeamAttendanceStats teamId={_id} />
       </ScrollView>
       {/* Edit Form */}
       <BottomSheetModal
