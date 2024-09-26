@@ -209,7 +209,7 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
 
         <View style={styles.buttonContainer}>
           <Button
-            onPress={() => navigation.navigate("AddPayment")}
+            onPress={() => navigation.navigate("AddPayment", { playerId: _id })}
             text="Add Payment"
             textStyle={{ color: colorScheme.white, fontSize: 22 }}
             containerStyle={{
@@ -278,7 +278,6 @@ export default PlayerDetailsScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 10,
     alignItems: "center",
     backgroundColor: colorScheme.black,

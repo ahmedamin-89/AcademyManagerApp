@@ -259,6 +259,12 @@ const TeamOverviewScreen = ({ navigation, route }) => {
           style={styles.button}
           onPress={() => navigation.navigate("TeamPlayers", { teamId: _id })}
         />
+        <IconButton
+          icon={<Ionicons name="contract-outline" size={28} color="white" />}
+          text="Client Leads"
+          style={styles.button}
+          onPress={() => navigation.navigate("TeamPlayers", { teamId: _id })}
+        />
       </ScrollView>
       {/* Edit Form */}
       <BottomSheetModal
@@ -306,7 +312,6 @@ export default TeamOverviewScreen;
 const styles = StyleSheet.create({
   container: {
     padding: 12,
-
     backgroundColor: colorScheme.black,
   },
   headerRight: {

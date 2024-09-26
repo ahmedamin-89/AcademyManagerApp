@@ -133,4 +133,8 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingVertical: 5,
   },
+  button: {
+    width: "98%",
+    alignSelf: "center",
+  },
 });

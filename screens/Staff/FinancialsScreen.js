@@ -1,128 +1,50 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useLayoutEffect } from "react";
+import React, { useContext, useLayoutEffect, useState } from "react";
 import colorScheme from "../../constants/colorScheme";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
 import Button from "../../components/Buttons/Button";
 import { FlatList } from "react-native-gesture-handler";
 import FiPlayerCard from "../../components/Financials/FiPlayerCard";
 import SearchBar from "../../components/UI/SearchBar";
-
-const players = [
-  {
-    name: "John Doe",
-    paid: true,
-    dueDate: "2024-06-01T00:00:00.000Z",
-    interval: 1,
-    amount: 1000,
-  },
-  {
-    name: "Jane Smith",
-    paid: false,
-    dueDate: "2024-06-05T00:00:00.000Z",
-    interval: 2,
-    amount: 1500,
-  },
-  {
-    name: "Alice Johnson",
-    paid: true,
-    dueDate: "2024-06-10T00:00:00.000Z",
-    interval: 1,
-    amount: 2000,
-  },
-  {
-    name: "Bob Brown",
-    paid: false,
-    dueDate: "2024-06-15T00:00:00.000Z",
-    interval: 3,
-    amount: 2500,
-  },
-  {
-    name: "Charlie Davis",
-    paid: true,
-    dueDate: "2024-06-20T00:00:00.000Z",
-    interval: 1,
-    amount: 1200,
-  },
-  {
-    name: "Diana Evans",
-    paid: false,
-    dueDate: "2024-06-25T00:00:00.000Z",
-    interval: 2,
-    amount: 1300,
-  },
-  {
-    name: "Frank Garcia",
-    paid: true,
-    dueDate: "2024-06-30T00:00:00.000Z",
-    interval: 1,
-    amount: 1700,
-  },
-  {
-    name: "Gina Harris",
-    paid: false,
-    dueDate: "2024-06-01T00:00:00.000Z",
-    interval: 3,
-    amount: 1800,
-  },
-  {
-    name: "Henry Jackson",
-    paid: true,
-    dueDate: "2024-06-05T00:00:00.000Z",
-    interval: 1,
-    amount: 1900,
-  },
-  {
-    name: "Charlie Davis",
-    paid: true,
-    dueDate: "2024-06-20T00:00:00.000Z",
-    interval: 1,
-    amount: 1200,
-  },
-  {
-    name: "Diana Evans",
-    paid: false,
-    dueDate: "2024-06-25T00:00:00.000Z",
-    interval: 2,
-    amount: 1300,
-  },
-  {
-    name: "Frank Garcia",
-    paid: true,
-    dueDate: "2024-06-30T00:00:00.000Z",
-    interval: 1,
-    amount: 1700,
-  },
-  {
-    name: "Gina Harris",
-    paid: false,
-    dueDate: "2024-06-01T00:00:00.000Z",
-    interval: 3,
-    amount: 1800,
-  },
-  {
-    name: "Henry Jackson",
-    paid: true,
-    dueDate: "2024-06-05T00:00:00.000Z",
-    interval: 1,
-    amount: 1900,
-  },
-];
+import { UserContext } from "../../context/userContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import backendURL from "../../constants/backendURL";
 
 const FinancialsScreen = ({ navigation }) => {
-  const TeamsData = [
-    "2009",
-    "2010",
-    "2011",
-    "2012",
-    "2013",
-    "2014",
-    "2015",
-    "2016",
-    "2017",
-    "2018",
-    "2019",
-  ];
+  const { academy } = useContext(UserContext);
+  const teams = academy.teams;
+  const [loading, setLoading] = useState(false);
+  const [financialData, setFinancialData] = useState([]);
+  const [date, setDate] = useState(new Date());
+  const [selectedTeam, setSelectedTeam] = useState(null);
+
+  const handleTeamChange = (selectedTeam) => {
+    const teamId = teams.find((team) => team.name === selectedTeam)?._id;
+
+    setSelectedTeam(teamId);
+  };
+
   const statusData = ["Paid", "Unpaid"];
+
+  const fetchFinancialData = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${backendURL}/payments/status/${academy._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      setFinancialData(response.data.paymentStatusList);
+    } catch (error) {
+      console.error("Error fetching financial data:", error.response.data);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -134,15 +56,9 @@ const FinancialsScreen = ({ navigation }) => {
         </Pressable>
       ),
     });
+    fetchFinancialData();
   }, []);
 
-  const playerObject = {
-    name: "John Doe",
-    paid: true,
-    dueDate: new Date(2024, 5, 1),
-    interval: 1,
-    amount: 1000,
-  };
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -151,25 +67,37 @@ const FinancialsScreen = ({ navigation }) => {
         <Button
           textStyle={{ fontSize: 16 }}
           containerStyle={{ height: "100%", justifyContent: "center" }}
-          text="June 24"
+          text={date.toLocaleDateString("en-US", {
+            month: "short",
+            year: "numeric",
+          })}
         />
       </View>
       <View style={{ flexDirection: "column", gap: 10 }}>
-        <HorizontalSelector data={TeamsData} />
+        <HorizontalSelector
+          data={teams.map((team) => team.name)}
+          itemStyle={{ backgroundColor: colorScheme.lightGrey }}
+          onSelectionChange={(selectedTeam) =>
+            handleTeamChange(selectedTeam[0])
+          }
+        />
         <HorizontalSelector data={statusData} />
       </View>
       <FlatList
         contentContainerStyle={styles.contentContainerStyle}
-        data={players}
-        renderItem={({ item }) => (
-          <FiPlayerCard
-            name={item.name}
-            paid={item.paid}
-            dueDate={item.dueDate}
-            interval={item.interval}
-            amount={item.amount}
-          />
-        )}
+        data={financialData}
+        renderItem={({ item }) => {
+          console.log(item);
+          return (
+            <FiPlayerCard
+              name={item.name}
+              paid={item.paid}
+              dueDate={item.dueDate}
+              amountPaid={item.amountPaid}
+              amountDue={item.amountDue}
+            />
+          );
+        }}
         keyExtractor={(item, index) => index}
       />
     </View>

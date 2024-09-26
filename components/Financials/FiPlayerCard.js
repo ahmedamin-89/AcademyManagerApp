@@ -3,25 +3,7 @@ import React from "react";
 import colorScheme from "../../constants/colorScheme";
 import { Ionicons } from "@expo/vector-icons";
 
-const FiPlayerCard = ({ name, paid, dueDate, interval, amount }) => {
-  let intervalString = "";
-  switch (interval) {
-    case 1:
-      intervalString = "Monthly";
-      break;
-    case 2:
-      intervalString = "Quarterly";
-      break;
-    case 3:
-      intervalString = "Half-Yearly";
-      break;
-    case 4:
-      intervalString = "Yearly";
-      break;
-    default:
-      intervalString = "Unknown";
-  }
-
+const FiPlayerCard = ({ name, paid, amountPaid, amountDue }) => {
   return (
     <Pressable
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.97 }]}
@@ -30,11 +12,11 @@ const FiPlayerCard = ({ name, paid, dueDate, interval, amount }) => {
       <Text style={[styles.text, { width: "20%" }]}>
         {paid ? "Paid" : "Not Paid"}
       </Text>
-      <Text style={[styles.text, { width: "10%" }]}>
+      {/* <Text style={[styles.text, { width: "10%" }]}>
         {new Date(dueDate).getDate()}
-      </Text>
-      <Text style={[styles.text, { width: "22%" }]}>{intervalString}</Text>
-      <Text style={[styles.text, { width: "13%" }]}>{amount}</Text>
+      </Text> */}
+      <Text style={[styles.text, { width: "22%" }]}>{amountPaid}</Text>
+      <Text style={[styles.text, { width: "13%" }]}>{amountDue}</Text>
       <Ionicons name={"chevron-forward"} size={20} color={colorScheme.green} />
     </Pressable>
   );
