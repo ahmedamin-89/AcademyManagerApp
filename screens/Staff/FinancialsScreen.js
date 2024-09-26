@@ -1,50 +1,86 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
-import React, { useContext, useLayoutEffect, useState } from "react";
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Alert,
+  RefreshControl,
+} from "react-native";
+import React, {
+  useContext,
+  useLayoutEffect,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 import colorScheme from "../../constants/colorScheme";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
 import Button from "../../components/Buttons/Button";
-import { FlatList } from "react-native-gesture-handler";
 import FiPlayerCard from "../../components/Financials/FiPlayerCard";
 import SearchBar from "../../components/UI/SearchBar";
 import { UserContext } from "../../context/userContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import backendURL from "../../constants/backendURL";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DataStatus from "../../components/UI/DataStatus";
 
 const FinancialsScreen = ({ navigation }) => {
   const { academy } = useContext(UserContext);
   const teams = academy.teams;
   const [loading, setLoading] = useState(false);
   const [financialData, setFinancialData] = useState([]);
-  const [date, setDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTeam, setSelectedTeam] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [error, setError] = useState(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const handleTeamChange = (selectedTeam) => {
-    const teamId = teams.find((team) => team.name === selectedTeam)?._id;
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-    setSelectedTeam(teamId);
+  const handleTeamChange = (selectedTeamName) => {
+    const team = teams.find((team) => team.name === selectedTeamName);
+    setSelectedTeam(team ? team._id : null);
   };
 
   const statusData = ["Paid", "Unpaid"];
 
   const fetchFinancialData = async () => {
     setLoading(true);
+    setError(null);
     try {
       const response = await axios.get(
         `${backendURL}/payments/status/${academy._id}`,
         {
+          params: {
+            date: selectedDate.toISOString(),
+            teamId: selectedTeam,
+            search: searchQuery,
+            status: selectedStatus,
+          },
           headers: {
             Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
           },
         }
       );
+
       setFinancialData(response.data.paymentStatusList);
     } catch (error) {
-      console.error("Error fetching financial data:", error.response.data);
+      console.error("Error fetching financial data:", error);
+      setError(
+        error?.response?.data?.error || "Failed to fetch financial data"
+      );
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
+
+  useEffect(() => {
+    fetchFinancialData();
+  }, [selectedDate, selectedTeam, searchQuery, selectedStatus]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -56,49 +92,109 @@ const FinancialsScreen = ({ navigation }) => {
         </Pressable>
       ),
     });
+  }, [navigation]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
     fetchFinancialData();
-  }, []);
+  }, [selectedDate, selectedTeam, searchQuery, selectedStatus]);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <SearchBar style={{ width: "82%" }} />
+        <SearchBar
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          style={{ width: "82%" }}
+        />
 
         <Button
+          onPress={() => setDatePickerVisibility(true)}
           textStyle={{ fontSize: 16 }}
-          containerStyle={{ height: "100%", justifyContent: "center" }}
-          text={date.toLocaleDateString("en-US", {
+          containerStyle={{ justifyContent: "center" }}
+          text={selectedDate.toLocaleDateString("en-US", {
             month: "short",
             year: "numeric",
           })}
         />
       </View>
+
       <View style={{ flexDirection: "column", gap: 10 }}>
         <HorizontalSelector
           data={teams.map((team) => team.name)}
           itemStyle={{ backgroundColor: colorScheme.lightGrey }}
-          onSelectionChange={(selectedTeam) =>
-            handleTeamChange(selectedTeam[0])
+          onSelectionChange={(selectedTeamName) =>
+            handleTeamChange(selectedTeamName[0])
           }
         />
-        <HorizontalSelector data={statusData} />
+        <HorizontalSelector
+          data={statusData}
+          itemStyle={{ backgroundColor: colorScheme.lightGrey }}
+          onSelectionChange={(selectedStatus) =>
+            setSelectedStatus(selectedStatus[0])
+          }
+        />
       </View>
-      <FlatList
-        contentContainerStyle={styles.contentContainerStyle}
-        data={financialData}
-        renderItem={({ item }) => {
-          console.log(item);
-          return (
-            <FiPlayerCard
-              name={item.name}
-              paid={item.paid}
-              dueDate={item.dueDate}
-              amountPaid={item.amountPaid}
-              amountDue={item.amountDue}
+
+      <View style={styles.container}>
+        {loading || error || financialData.length === 0 ? (
+          <View style={{ flex: 1, justifyContent: "center" }}>
+            <DataStatus
+              error={error}
+              loading={loading}
+              fetchData={fetchFinancialData}
+              noData={
+                !loading &&
+                !error &&
+                financialData.length === 0 &&
+                searchQuery === ""
+              }
+              text={
+                loading
+                  ? "Loading financial data..."
+                  : searchQuery
+                  ? "No players match your search"
+                  : "No financial data found"
+              }
             />
-          );
+          </View>
+        ) : (
+          <FlatList
+            contentContainerStyle={styles.contentContainerStyle}
+            data={financialData}
+            renderItem={({ item }) => (
+              <FiPlayerCard
+                name={item.name}
+                paid={item.paid}
+                dueDate={item.nextDueDate}
+                amountPaid={item.amountPaid}
+                amountDue={item.amountDue}
+              />
+            )}
+            keyExtractor={(item, index) => index.toString()}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                colors={[colorScheme.white]}
+                tintColor={colorScheme.white}
+                size={"large"}
+              />
+            }
+          />
+        )}
+      </View>
+
+      {/* Date Picker Modal */}
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        date={selectedDate}
+        onConfirm={(newDate) => {
+          setSelectedDate(newDate);
+          setDatePickerVisibility(false);
         }}
-        keyExtractor={(item, index) => index}
+        onCancel={() => setDatePickerVisibility(false)}
       />
     </View>
   );
@@ -117,9 +213,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     alignItems: "center",
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    height: 55,
+    paddingHorizontal: 20,
   },
   contentContainerStyle: {
     gap: 1.5,

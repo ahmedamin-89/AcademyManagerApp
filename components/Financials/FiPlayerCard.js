@@ -8,15 +8,20 @@ const FiPlayerCard = ({ name, paid, amountPaid, amountDue }) => {
     <Pressable
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.97 }]}
     >
-      <Text style={[styles.text, { width: "29%" }]}>{name}</Text>
-      <Text style={[styles.text, { width: "20%" }]}>
-        {paid ? "Paid" : "Not Paid"}
+      <Text style={[styles.text, { width: "49%" }]}>{name}</Text>
+
+      <Text style={[styles.text, { width: "10%" }]}>
+        {/* {new Date(dueDate).getDate()} */}
       </Text>
-      {/* <Text style={[styles.text, { width: "10%" }]}>
-        {new Date(dueDate).getDate()}
-      </Text> */}
-      <Text style={[styles.text, { width: "22%" }]}>{amountPaid}</Text>
-      <Text style={[styles.text, { width: "13%" }]}>{amountDue}</Text>
+      <Text
+        style={[
+          styles.text,
+          { width: "22%", color: paid ? colorScheme.green : colorScheme.red },
+        ]}
+      >
+        £{paid ? amountPaid : amountDue}
+      </Text>
+      <Text style={[styles.text, { width: "13%" }]}></Text>
       <Ionicons name={"chevron-forward"} size={20} color={colorScheme.green} />
     </Pressable>
   );

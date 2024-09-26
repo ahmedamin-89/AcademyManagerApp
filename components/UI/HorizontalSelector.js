@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   text: {
     color: colorScheme.black,
     fontFamily: "Condensed-Light",
-    fontSize: 21,
+    fontSize: 19,
     marginHorizontal: 10,
   },
   itemContainer: {
