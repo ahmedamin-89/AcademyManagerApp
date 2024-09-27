@@ -125,6 +125,10 @@ const AddPaymentScreen = ({ navigation, route }) => {
           marginVertical: 20,
         }}
       />
+      <View style={styles.prvPaymentsContainer}>
+        <Text style={styles.title}>Previous Payments</Text>
+        <ScrollView>{/* Render previous payments here */}</ScrollView>
+      </View>
     </View>
   );
 };
@@ -164,5 +168,12 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colorScheme.white,
     fontSize: 18,
+  },
+  prvPaymentsContainer: {},
+  title: {
+    color: colorScheme.white,
+    fontSize: 20,
+    fontFamily: "Condensed-Black",
+    marginBottom: 10,
   },
 });
