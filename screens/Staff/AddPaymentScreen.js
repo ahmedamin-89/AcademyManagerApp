@@ -1,6 +1,6 @@
 // AddPaymentScreen.js
 import { StyleSheet, Text, View, Alert } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ScrollView } from "react-native";
 import Button from "../../components/Buttons/Button";
 import LightInputField from "../../components/UI/LightInputField";
@@ -32,8 +32,31 @@ const AddPaymentScreen = ({ navigation, route }) => {
     }));
   };
 
+  const fetchPlayerPayments = async () => {
+    try {
+      const token = await AsyncStorage.getItem("authToken");
+      const response = await axios.get(
+        `${backendURL}/payments/player/${playerId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+    } catch (error) {
+      console.error(
+        "Error fetching player payments:",
+        error.response?.data || error.message
+      );
+      Alert.alert(
+        "Error",
+        "Failed to fetch player payments. Please try again."
+      );
+    }
+  };
+
   const recordPayment = async () => {
-    // Input validation
     if (!paymentDetails.amount) {
       Alert.alert("Validation Error", "Please enter the payment amount.");
       return;
@@ -65,6 +88,10 @@ const AddPaymentScreen = ({ navigation, route }) => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchPlayerPayments();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -127,7 +154,6 @@ const AddPaymentScreen = ({ navigation, route }) => {
       />
       <View style={styles.prvPaymentsContainer}>
         <Text style={styles.title}>Previous Payments</Text>
-        <ScrollView>{/* Render previous payments here */}</ScrollView>
       </View>
     </View>
   );
