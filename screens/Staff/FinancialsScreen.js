@@ -169,6 +169,7 @@ const FinancialsScreen = ({ navigation }) => {
                 dueDate={item.nextDueDate}
                 amountPaid={item.amountPaid}
                 amountDue={item.amountDue}
+                playerId={item.playerId}
               />
             )}
             keyExtractor={(item, index) => index.toString()}

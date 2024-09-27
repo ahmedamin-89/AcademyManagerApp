@@ -1,3 +1,6 @@
+// PlayerDetailsScreen.js
+
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   Alert,
   Pressable,
@@ -6,7 +9,6 @@ import {
   Text,
   View,
 } from "react-native";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import colorScheme from "../constants/colorScheme";
 import Picture from "../components/UI/Picture";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -23,33 +25,22 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from "@gorhom/bottom-sheet";
-import LightInputField from "../components/UI/LightInputField";
 import axios from "axios";
+import { MotiView } from "moti";
+import { Skeleton } from "moti/skeleton";
+const Spacer = ({ height = 16 }) => <MotiView style={{ height }} />;
 
 const PlayerDetailsScreen = ({ navigation, route }) => {
-  const { name, number, position, _id, imageUrl, attendanceCount } =
-    route.params.player;
+  const { _id } = route.params.player; // Extract playerId from route params
   const snapPoints = ["18%"];
   const bottomSheetModalRef = useRef(null);
-  const [PlayerDetails, setPlayerDetails] = useState({
-    name: "",
-    parentName: "",
-    parentPhoneNumber: "",
-    knownAs: "- - -",
-    phoneNumber: "",
-    DOB: new Date(),
-    position: "",
-    team: "",
-    rating: 0,
-    _id: "",
-    yearOfBirth: 2002,
-    attendanceCount: 0,
-    attendanceRate: 0,
-    attendedSessionsCount: 0,
-    unAttendedSessionsCount: 0,
-  });
+  const playerId = _id;
 
+  // State variables
+  const [PlayerDetails, setPlayerDetails] = useState(null);
+  const [image, setImage] = useState(null);
   const [deletingPlayer, setDeletingPlayer] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleInputChange = (fieldName, value) => {
     setPlayerDetails((prevState) => ({
@@ -58,7 +49,6 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
     }));
   };
 
-  const [image, setImage] = useState(null);
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -78,7 +68,7 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
       setImage(manipulatedImage.uri);
       try {
         await FileSystem.uploadAsync(
-          `${backendURL}/players/${_id}/image`,
+          `${backendURL}/players/player/${_id}/image`,
           manipulatedImage.uri,
           {
             httpMethod: "POST",
@@ -92,11 +82,13 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
             },
           }
         );
+        Alert.alert("Success", "Player photo updated successfully");
       } catch (error) {
         Alert.alert("Error", error.response?.data?.error || error.message);
       }
     }
   };
+
   const openBottomSheet = () => {
     bottomSheetModalRef.current?.present();
   };
@@ -104,7 +96,7 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
   const deletePlayer = async () => {
     try {
       setDeletingPlayer(true);
-      await axios.delete(`${backendURL}/players/${_id}`, {
+      await axios.delete(`${backendURL}/players/player/${playerId}`, {
         headers: {
           Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
         },
@@ -121,7 +113,7 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
   const fetchAttendanceRate = async () => {
     try {
       const response = await axios.get(
-        `${backendURL}/players/${_id}/attendanceRate`,
+        `${backendURL}/players/player/${playerId}/attendanceRate`,
         {
           headers: {
             Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
@@ -135,40 +127,81 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
         unAttendedSessionsCount: response.data.unAttendedSessionsCount,
       }));
     } catch (error) {
-      console.error("Failed to fetch attendance rate:", error);
+      console.log("", error.response?.data?.error || error.message);
     }
   };
 
-  useLayoutEffect(() => {
-    setPlayerDetails({
-      ...route.params.player,
-      knownAs: route.params.player.knownAs || "- - -",
-      DOB: new Date(route.params.player.dateOfBirth),
-    });
+  const fetchPlayerDetails = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${backendURL}/players/player/${playerId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("authToken")}`,
+          },
+        }
+      );
+      const playerData = response.data.player;
 
+      setPlayerDetails({
+        ...playerData,
+        knownAs: playerData.knownAs || "- - -",
+        DOB: new Date(playerData.dateOfBirth),
+      });
+      setImage(playerData.imageUrl || null);
+      fetchAttendanceRate();
+    } catch (error) {
+      console.error(
+        "Failed to fetch player details:",
+        error.response?.data?.error || error.message
+      );
+      Alert.alert("Error", error.response?.data?.error || error.message);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 300);
+    }
+  };
+
+  useEffect(() => {
+    fetchPlayerDetails();
+  }, []);
+
+  useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => <MenuButton onPress={openBottomSheet} />,
     });
   }, [navigation]);
 
-  useEffect(() => {
-    fetchAttendanceRate();
-  }, []);
+  if (loading || !PlayerDetails) {
+    return (
+      <ScrollView
+        contentContainerStyle={styles.container}
+        style={{ backgroundColor: colorScheme.black }}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Skeleton Loader */}
+        <SkeletonPlaceholder />
+      </ScrollView>
+    );
+  }
 
   return (
     <BottomSheetModalProvider>
       <ScrollView
         contentContainerStyle={styles.container}
         style={{ backgroundColor: colorScheme.black }}
+        showsVerticalScrollIndicator={false}
       >
-        <Picture uri={image || imageUrl} pickImage={pickImage} />
+        <Picture uri={image} pickImage={pickImage} />
         <View style={styles.item1}>
           <Text style={styles.title}>Full Name</Text>
           <Text style={styles.text}>{PlayerDetails.name}</Text>
         </View>
         <View style={styles.item2}>
           <Text style={styles.title}>Total Attended Sessions</Text>
-          <Text style={styles.text}>{attendanceCount}</Text>
+          <Text style={styles.text}>{PlayerDetails.attendanceCount}</Text>
         </View>
         <View style={styles.item1}>
           <Text style={styles.title}>Date of Birth</Text>
@@ -209,7 +242,7 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
 
         <View style={styles.buttonContainer}>
           <Button
-            onPress={() => navigation.navigate("AddPayment", { playerId: _id })}
+            onPress={() => navigation.navigate("AddPayment", { playerId })}
             text="Add Payment"
             textStyle={{ color: colorScheme.white, fontSize: 22 }}
             containerStyle={{
@@ -243,21 +276,6 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
         )}
       >
         <BottomSheetView style={styles.contentContainer}>
-          {/* <LightInputField
-            label="Name"
-            value={name}
-            placeholder="Enter the team's name"
-            name="name"
-            handleInputChange={handleInputChange}
-          />
-          <LightInputField
-            label="Known As"
-            value={PlayerDetails.knownAs}
-            placeholder="Enter the team's name"
-            name="knownAs"
-            handleInputChange={handleInputChange}
-          /> */}
-
           <Button
             text="Delete Player"
             onPress={deletePlayer}
@@ -275,6 +293,36 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
 };
 
 export default PlayerDetailsScreen;
+
+const SkeletonPlaceholder = () => {
+  return (
+    <MotiView
+      style={styles.skeletonContainer}
+      transition={{
+        type: "timing",
+      }}
+    >
+      {/* Skeleton for Image */}
+      <Skeleton colorMode="dark" width={210} height={210} radius="round" />
+
+      {/* Skeleton for other fields */}
+      {[...Array(8)].map((_, index) => (
+        <MotiView
+          key={index}
+          style={[
+            styles.skeletonItem,
+            index % 2 === 0 ? styles.item1 : styles.item2,
+          ]}
+        >
+          <Skeleton colorMode="dark" width="80%" height={19} />
+          <Spacer height={8} />
+
+          <Skeleton colorMode="dark" width="50%" height={17.5} />
+        </MotiView>
+      ))}
+    </MotiView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -312,5 +360,22 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
     alignItems: "center",
     gap: 12,
+  },
+  loadingText: {
+    color: colorScheme.white,
+    fontSize: 20,
+  },
+  skeletonContainer: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 20,
+    width: "100%",
+  },
+  skeletonItem: {
+    width: "100%",
+    padding: 10,
+  },
+  bottomSheetBackground: {
+    backgroundColor: colorScheme.black,
   },
 });

@@ -68,14 +68,32 @@ const AddPaymentScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <InputField
-        label="Amount"
-        placeholder="Enter payment amount"
-        name="amount"
-        keyboardType="numeric"
-        value={paymentDetails.amount}
-        handleInputChange={(name, value) => handleInputChange(name, value)}
-      />
+      <View
+        style={{
+          width: "100%",
+          alignItems: "center",
+          flexDirection: "row",
+          gap: 20,
+        }}
+      >
+        <View style={{ width: "65%" }}>
+          <InputField
+            label="Amount"
+            placeholder="Enter payment amount"
+            name="amount"
+            keyboardType="numeric"
+            value={paymentDetails.amount}
+            handleInputChange={(name, value) => handleInputChange(name, value)}
+          />
+        </View>
+        <View style={styles.dateContainer}>
+          <Text style={styles.label}>Payment Date</Text>
+          <DateSelector
+            selectedDate={paymentDetails.paymentDate}
+            setSelectedDate={(date) => handleInputChange("paymentDate", date)}
+          />
+        </View>
+      </View>
       <View style={styles.selectorContainer}>
         <Text style={styles.label}>Payment Type</Text>
         <HorizontalSelector
@@ -88,19 +106,24 @@ const AddPaymentScreen = ({ navigation, route }) => {
           itemStyle={{ backgroundColor: colorScheme.lightGrey }}
         />
       </View>
-      <View style={styles.dateContainer}>
-        <Text style={styles.label}>Payment Date</Text>
-        <DateSelector
-          selectedDate={paymentDetails.paymentDate}
-          setSelectedDate={(date) => handleInputChange("paymentDate", date)}
-        />
-      </View>
+
       <Button
         text="Record Payment"
         onPress={recordPayment}
         loading={loading}
         containerStyle={styles.button}
         textStyle={styles.buttonText}
+      />
+
+      <View
+        style={{
+          height: 0.75,
+          width: "100%",
+          backgroundColor: colorScheme.lightGrey,
+          opacity: 0.2,
+          alignSelf: "center",
+          marginVertical: 20,
+        }}
       />
     </View>
   );
@@ -132,14 +155,11 @@ const styles = StyleSheet.create({
     width: "100%",
     marginVertical: 15,
   },
-  dateContainer: {
-    width: "100%",
-    marginBottom: 15,
-  },
+  dateContainer: {},
   button: {
     backgroundColor: colorScheme.green,
     width: "80%",
-    marginTop: 20,
+    marginTop: 10,
   },
   buttonText: {
     color: colorScheme.white,

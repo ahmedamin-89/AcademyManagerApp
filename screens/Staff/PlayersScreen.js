@@ -176,6 +176,17 @@ const PlayersScreen = ({ navigation }) => {
                   size={"large"}
                 />
               }
+              ItemSeparatorComponent={() => (
+                <View
+                  style={{
+                    height: 0.75,
+                    width: "100%",
+                    backgroundColor: colorScheme.lightGrey,
+                    opacity: 0.2,
+                    alignSelf: "center",
+                  }}
+                />
+              )}
               style={{ flex: 1, width: "100%" }}
               contentContainerStyle={styles.flatlist}
               data={filteredPlayers}
@@ -237,9 +248,8 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   flatlist: {
-    gap: 1,
     zIndex: 10,
-    backgroundColor: colorScheme.white,
+    backgroundColor: colorScheme.black,
   },
   bottomSheetBackground: {
     shadowColor: "white",

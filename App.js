@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
+import "react-native-reanimated";
+import "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import AuthStack from "./navigation/AuthStack";
 import AdminStack from "./navigation/AdminStack";

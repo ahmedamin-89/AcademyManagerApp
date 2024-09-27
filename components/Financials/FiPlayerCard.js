@@ -2,10 +2,20 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import colorScheme from "../../constants/colorScheme";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
-const FiPlayerCard = ({ name, paid, amountPaid, amountDue }) => {
+const FiPlayerCard = ({ playerId, name, paid, amountPaid, amountDue }) => {
+  const navigation = useNavigation();
   return (
     <Pressable
+      onPress={() =>
+        navigation.navigate("PlayerDetails", {
+          player: {
+            name: name,
+            _id: playerId,
+          },
+        })
+      }
       style={({ pressed }) => [styles.container, pressed && { opacity: 0.97 }]}
     >
       <Text style={[styles.text, { width: "49%" }]}>{name}</Text>
