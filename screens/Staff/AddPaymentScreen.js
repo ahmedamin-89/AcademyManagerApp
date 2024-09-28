@@ -1,10 +1,7 @@
 // AddPaymentScreen.js
-import { StyleSheet, Text, View, Alert } from "react-native";
+import { StyleSheet, Text, View, Alert, FlatList } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
-import { ScrollView } from "react-native";
 import Button from "../../components/Buttons/Button";
-import LightInputField from "../../components/UI/LightInputField";
-import DateSelector from "../../components/UI/DateSelector";
 import HorizontalSelector from "../../components/UI/HorizontalSelector";
 import colorScheme from "../../constants/colorScheme";
 import axios from "axios";
@@ -12,18 +9,25 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import backendURL from "../../constants/backendURL";
 import { UserContext } from "../../context/userContext";
 import InputField from "../../components/UI/InputField";
+import DateSelector from "../../components/UI/DateSelector";
 
 const paymentTypes = ["monthly", "quarterly", "half-yearly", "yearly"];
 
 const AddPaymentScreen = ({ navigation, route }) => {
-  const { playerId } = route.params; // Assuming you're passing the playerId via navigation parameters
+  const { playerId, playerDiscount } = route.params;
+  const { academy } = useContext(UserContext);
+
+  // Correct the initial amount calculation
+  const initialAmount = academy.fees * (1 - (playerDiscount || 0) / 100);
+
   const [paymentDetails, setPaymentDetails] = useState({
-    amount: "",
+    amount: initialAmount.toString(), // Convert to string for TextInput
     paymentType: "monthly",
     paymentDate: new Date(),
   });
+
   const [loading, setLoading] = useState(false);
-  const { academy } = useContext(UserContext);
+  const [prevPayments, setPrevPayments] = useState([]);
 
   const handleInputChange = (name, value) => {
     setPaymentDetails((prevState) => ({
@@ -43,7 +47,7 @@ const AddPaymentScreen = ({ navigation, route }) => {
           },
         }
       );
-      console.log(response.data);
+      setPrevPayments(response.data.payments);
     } catch (error) {
       console.error(
         "Error fetching player payments:",
@@ -69,6 +73,7 @@ const AddPaymentScreen = ({ navigation, route }) => {
         `${backendURL}/payments/${playerId}`,
         {
           ...paymentDetails,
+          amount: parseFloat(paymentDetails.amount), // Ensure amount is a number
         },
         {
           headers: {
@@ -95,14 +100,7 @@ const AddPaymentScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          width: "100%",
-          alignItems: "center",
-          flexDirection: "row",
-          gap: 20,
-        }}
-      >
+      <View style={styles.inputRow}>
         <View style={{ width: "65%" }}>
           <InputField
             label="Amount"
@@ -110,7 +108,7 @@ const AddPaymentScreen = ({ navigation, route }) => {
             name="amount"
             keyboardType="numeric"
             value={paymentDetails.amount}
-            handleInputChange={(name, value) => handleInputChange(name, value)}
+            handleInputChange={handleInputChange}
           />
         </View>
         <View style={styles.dateContainer}>
@@ -121,6 +119,11 @@ const AddPaymentScreen = ({ navigation, route }) => {
           />
         </View>
       </View>
+      {!!playerDiscount && (
+        <Text style={styles.note}>
+          Note: This player has a {playerDiscount}% discount.
+        </Text>
+      )}
       <View style={styles.selectorContainer}>
         <Text style={styles.label}>Payment Type</Text>
         <HorizontalSelector
@@ -142,18 +145,23 @@ const AddPaymentScreen = ({ navigation, route }) => {
         textStyle={styles.buttonText}
       />
 
-      <View
-        style={{
-          height: 0.75,
-          width: "100%",
-          backgroundColor: colorScheme.lightGrey,
-          opacity: 0.2,
-          alignSelf: "center",
-          marginVertical: 20,
-        }}
-      />
-      <View style={styles.prvPaymentsContainer}>
+      <View style={styles.separator} />
+      <View style={styles.prevPaymentsContainer}>
         <Text style={styles.title}>Previous Payments</Text>
+        <FlatList
+          data={prevPayments}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <View style={styles.paymentItem}>
+              <Text style={styles.paymentText}>
+                {item.amount} - {item.paymentType}
+              </Text>
+              <Text style={styles.paymentText}>
+                {new Date(item.paymentDate).toLocaleDateString()}
+              </Text>
+            </View>
+          )}
+        />
       </View>
     </View>
   );
@@ -168,11 +176,11 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     alignItems: "center",
   },
-  headerText: {
-    color: colorScheme.white,
-    fontSize: 24,
-    fontFamily: "Condensed-Bold",
-    marginBottom: 20,
+  inputRow: {
+    width: "100%",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 20,
   },
   label: {
     color: colorScheme.white,
@@ -195,11 +203,36 @@ const styles = StyleSheet.create({
     color: colorScheme.white,
     fontSize: 18,
   },
-  prvPaymentsContainer: {},
+  note: {
+    color: colorScheme.white,
+    fontSize: 16,
+    fontFamily: "Condensed-Light",
+    marginTop: 10,
+    opacity: 0.75,
+    alignSelf: "flex-start",
+  },
+  separator: {
+    height: 0.75,
+    width: "100%",
+    backgroundColor: colorScheme.lightGrey,
+    opacity: 0.2,
+    alignSelf: "center",
+    marginVertical: 20,
+  },
+  prevPaymentsContainer: {},
   title: {
     color: colorScheme.white,
     fontSize: 20,
     fontFamily: "Condensed-Black",
     marginBottom: 10,
+  },
+  paymentItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  paymentText: {
+    color: colorScheme.white,
+    fontSize: 16,
   },
 });

@@ -19,6 +19,7 @@ export const UserContext = createContext({
     staffCount: 0,
     teams: [],
     yearsOfBirth: [],
+    fees: 0,
   },
   loading: true,
   setUser: () => {},
@@ -43,6 +44,7 @@ export const UserContextProvider = ({ children }) => {
     staffCount: 0,
     teams: [],
     yearsOfBirth: [],
+    fees: 0,
   });
 
   const [token, setToken] = useState("");
@@ -97,6 +99,7 @@ export const UserContextProvider = ({ children }) => {
       staffCount: 0,
       teams: [],
       yearsOfBirth: [],
+      fees: 0,
     });
   };
 

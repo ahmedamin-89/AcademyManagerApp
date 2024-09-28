@@ -242,7 +242,12 @@ const PlayerDetailsScreen = ({ navigation, route }) => {
 
         <View style={styles.buttonContainer}>
           <Button
-            onPress={() => navigation.navigate("AddPayment", { playerId })}
+            onPress={() =>
+              navigation.navigate("AddPayment", {
+                playerId,
+                playerDiscount: PlayerDetails.appliedDiscountPercent,
+              })
+            }
             text="Add Payment"
             textStyle={{ color: colorScheme.white, fontSize: 22 }}
             containerStyle={{
