@@ -1,1 +1,6 @@
-1. Make the player info editable
+- Add the ability to be able to manage admin accounts
+- Style the prev. payments section
+- Add collected revenue section
+- Add Total Revenue Screen
+- Complete the coaches section
+- Complete the Team Overview Screen

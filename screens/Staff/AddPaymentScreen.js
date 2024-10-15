@@ -10,6 +10,7 @@ import backendURL from "../../constants/backendURL";
 import { UserContext } from "../../context/userContext";
 import InputField from "../../components/UI/InputField";
 import DateSelector from "../../components/UI/DateSelector";
+import PaymentReceipt from "../../components/Financials/PaymentReceipt";
 
 const paymentTypes = ["monthly", "quarterly", "half-yearly", "yearly"];
 
@@ -149,18 +150,10 @@ const AddPaymentScreen = ({ navigation, route }) => {
       <View style={styles.prevPaymentsContainer}>
         <Text style={styles.title}>Previous Payments</Text>
         <FlatList
+          style={{ width: "100%" }}
           data={prevPayments}
           keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
-            <View style={styles.paymentItem}>
-              <Text style={styles.paymentText}>
-                {item.amount} - {item.paymentType}
-              </Text>
-              <Text style={styles.paymentText}>
-                {new Date(item.paymentDate).toLocaleDateString()}
-              </Text>
-            </View>
-          )}
+          renderItem={({ item }) => <PaymentReceipt {...item} />}
         />
       </View>
     </View>
